@@ -1,0 +1,5 @@
+TEMPLATE = subdirs
+#SUBDIRS += imports
+SUBDIRS += src
+CONFIG += ordered
+DEFINES *= QT_USE_QSTRINGBUILDER

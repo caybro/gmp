@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>qml/Library.qml</file>
+        <file>qml/Settings.qml</file>
+        <file>qml/Playlist.qml</file>
+        <file>qml/AlbumView.qml</file>
+        <file>qml/AlbumsOverview.qml</file>
+        <file>translations/gmp_cs.qm</file>
+        <file>qml/CustomItemDelegate.qml</file>
+        <file>qml/GenreOverview.qml</file>
+        <file>qml/Playbar.qml</file>
+        <file>qml/AlbumDelegate.qml</file>
+        <file>icons/ic_album_48px.svg</file>
+        <file>icons/ic_arrow_back_48px.svg</file>
+        <file>icons/ic_history_48px.svg</file>
+        <file>icons/ic_menu_48px.svg</file>
+        <file>icons/ic_pause_48px.svg</file>
+        <file>icons/ic_play_arrow_48px.svg</file>
+        <file>icons/ic_search_48px.svg</file>
+        <file>icons/ic_settings_48px.svg</file>
+        <file>icons/ic_shuffle_48px.svg</file>
+        <file>icons/ic_skip_next_48px.svg</file>
+        <file>icons/ic_skip_previous_48px.svg</file>
+        <file>icons/ic_library_music_48px.svg</file>
+        <file>icons/ic_queue_music_48px.svg</file>
+        <file>qml/ModelTester.qml</file>
+    </qresource>
+</RCC>
