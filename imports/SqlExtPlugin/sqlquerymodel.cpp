@@ -46,6 +46,7 @@ void SqlQueryModel::setDbFileName(const QString &dbFileName)
         return;
 
     m_db.setDatabaseName(dbFileName);
+    m_db.open();
     emit dbFileNameChanged();
 }
 
