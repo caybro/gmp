@@ -1,6 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+import org.gmp.model 1.0
+import org.gmp.sqlext 1.0
+
 Page {
     id: root
     objectName: "LibraryPage"
@@ -68,16 +71,16 @@ Page {
         id: tabbar
         width: parent.width
         TabButton {
-            text: qsTr("Artists (%1)").arg(indexer.artists.length)
+            text: qsTr("Artists (%1)").arg(artistsListView.count)
         }
         TabButton {
-            text: qsTr("Albums (%1)").arg(indexer.albums.length)
+            text: qsTr("Albums (%1)").arg(albumsListView.count)
         }
         TabButton {
-            text: qsTr("Songs (%1)").arg(indexer.tracks.length)
+            text: qsTr("Songs (%1)").arg(tracksListView.count)
         }
         TabButton {
-            text: qsTr("Genres (%1)").arg(indexer.genres.length)
+            text: qsTr("Genres (%1)").arg(genresListView.count)
         }
     }
 
@@ -88,11 +91,15 @@ Page {
         anchors.top: tabbar.bottom
         anchors.bottom: parent.bottom
         clip: true
-        model: indexer.artists
+        model: SqlQueryModel {
+            id: artistsModel
+            db: DbIndexer.dbName
+            query: "SELECT DISTINCT artist, (SELECT COUNT(DISTINCT s.album) FROM Tracks AS s WHERE s.artist=t.artist) AS count FROM Tracks AS t ORDER BY artist"
+        }
         delegate: CustomItemDelegate {
             width: ListView.view.width
             text: modelData
-            secondaryText: qsTr("%n album(s)", "", indexer.albumsForArtist(modelData).length)
+            secondaryText: qsTr("%n album(s)", "", artistsModel.get(index, "count"))
             onClicked: {
                 console.debug("Clicked:", modelData);
                 root.artistSelected(modelData);
@@ -109,12 +116,20 @@ Page {
         anchors.right: parent.right
         anchors.top: tabbar.bottom
         anchors.bottom: parent.bottom
-        model: indexer.albums
+        model: SqlQueryModel {
+            id: albumsModel
+            db: DbIndexer.dbName
+            query: "SELECT DISTINCT album, artist, year, genre, (SELECT COUNT(DISTINCT s.url) FROM Tracks AS s WHERE s.album=t.album) AS count FROM Tracks AS t ORDER BY album"
+        }
         clip: true
         cellWidth: 200
         cellHeight: 240
         delegate: AlbumDelegate {
-            artist: indexer.artistForAlbum(modelData)
+            artist: albumsModel.get(index, "artist")
+            year: albumsModel.get(index, "year")
+            numTracks: albumsModel.get(index, "count")
+            genre: albumsModel.get(index, "genre")
+
             onClicked: {
                 console.debug("Clicked:", modelData);
                 root.albumSelected(modelData);
@@ -131,14 +146,17 @@ Page {
         anchors.right: parent.right
         anchors.top: tabbar.bottom
         anchors.bottom: parent.bottom
-        model: indexer.tracks.length
+        model: SqlQueryModel {
+            id: tracksModel
+            db: DbIndexer.dbName
+            query: "SELECT url, title, album, artist FROM Tracks ORDER BY title"
+        }
         clip: true
         delegate: CustomItemDelegate {
-            readonly property url modelData: indexer.tracks[index]
-            readonly property bool isPlaying: root.currentPlayUrl === modelData
+            readonly property bool isPlaying: root.currentPlayUrl == modelData
             width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") + indexer.metadata(modelData, "title")
-            secondaryText: indexer.metadata(modelData, "artist") + " · " + indexer.metadata(modelData, "album")
+            text: (isPlaying ? "⯈ " : "") + tracksModel.get(index, "title")
+            secondaryText: tracksModel.get(index, "artist") + " · " + tracksModel.get(index, "album")
             highlighted: isPlaying
             onClicked: {
                 console.warn("Clicked:", modelData);
@@ -156,12 +174,16 @@ Page {
         anchors.right: parent.right
         anchors.top: tabbar.bottom
         anchors.bottom: parent.bottom
-        model: indexer.genres
+        model: SqlQueryModel {
+            id: genresModel
+            db: DbIndexer.dbName
+            query: "SELECT DISTINCT genre, (SELECT COUNT(s.url) FROM Tracks AS s WHERE s.genre=t.genre) AS count FROM Tracks AS t ORDER BY genre"
+        }
         clip: true
         delegate: CustomItemDelegate {
             width: ListView.view.width
             text: modelData
-            secondaryText: qsTr("%n track(s)", "", indexer.tracksForGenre(modelData).length)
+            secondaryText: qsTr("%n track(s)", "", genresModel.get(index, "count"))
             onClicked: {
                 console.debug("Clicked:", modelData);
                 root.genreSelected(modelData);

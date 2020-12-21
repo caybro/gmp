@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.12
 import QtMultimedia 5.12
 import QtQuick.VirtualKeyboard 2.4
 
+import org.gmp.model 1.0
+
 ApplicationWindow {
     id: window
     visible: true
@@ -21,6 +23,8 @@ ApplicationWindow {
 //        const songCount = indexer.scanAll();
 //        console.timeEnd("indexing media files");
 //        console.debug("Found %1 audio files".arg(songCount));
+        DbIndexer.parse();
+        console.info("!!! DB name:", DbIndexer.dbName)
     }
 
     function formatSeconds(secs) {

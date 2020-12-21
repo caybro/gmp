@@ -5,11 +5,14 @@ ItemDelegate {
     id: root
 
     property string artist: ""
+    property string year: "????"
+    property string numTracks: "?"
+    property string genre: ""
 
     contentItem: Column {
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            source: indexer.coverArtForAlbum(modelData)
+            source: indexer.coverArtForAlbum(modelData) // FIXME
             asynchronous: true
             width: 150
             height: width
@@ -35,9 +38,9 @@ ItemDelegate {
             horizontalAlignment: Label.AlignHCenter
             maximumLineCount: 1
             elide: Label.ElideRight
-            text: "%1 · %2 𝅘𝅥 · %3".arg(indexer.yearForAlbum(modelData))
-            .arg(indexer.tracksForAlbum(modelData).length)
-            .arg(indexer.genreForAlbum(modelData))
+            text: "%1 · %2 𝅘𝅥 · %3".arg(root.year)
+            .arg(root.numTracks)
+            .arg(root.genre)
         }
     }
 }

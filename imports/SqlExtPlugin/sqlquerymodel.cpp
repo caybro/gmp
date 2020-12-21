@@ -1,13 +1,14 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QDebug>
+#include <QRandomGenerator>
 
 #include "sqlquerymodel.h"
 
 SqlQueryModel::SqlQueryModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), "sqlext");
+    m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), QStringLiteral("sqlext_%1").arg(QRandomGenerator::global()->generate()));
 }
 
 SqlQueryModel::~SqlQueryModel()
