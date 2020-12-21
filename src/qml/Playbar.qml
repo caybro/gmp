@@ -42,7 +42,7 @@ ToolBar {
             Layout.margins: 5
             Layout.fillWidth: true
             Label {
-                text: indexer.metadata(root.currentPlayUrl, "title")
+                text: player.metaData.title
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 maximumLineCount: 1
                 elide: Text.ElideRight
@@ -50,8 +50,8 @@ ToolBar {
             }
             Label {
                 text: "<a href=\"artist:/%1\">%1</a> · <a href=\"album:/%2\">%2</a>"
-                .arg(indexer.metadata(root.currentPlayUrl, "artist"))
-                .arg(indexer.metadata(root.currentPlayUrl, "album"))
+                .arg(player.metaData.composer || player.metaData.albumArtist || player.metaData.author)
+                .arg(player.metaData.albumTitle)
                 width: parent.width
                 maximumLineCount: 1
                 elide: Text.ElideRight
@@ -94,6 +94,7 @@ ToolBar {
             onClicked: playlist.next()
         }
     }
+
     ProgressBar {
         anchors.left: parent.left
         anchors.right: parent.right
