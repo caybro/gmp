@@ -76,6 +76,9 @@ void SqlQueryModel::setQueryString(const QString &query)
     m_query = query;
     if (m_db.isOpen()) {
         setQuery(m_query);
+        if (lastError().isValid())
+             qWarning() << "Error setting model query:" << lastError();
+        // TODO update resulting number of rows property
     }
     emit queryChanged();
 }
