@@ -61,7 +61,7 @@ QString SqlQueryModel::errorMessage() const
 
 QVariant SqlQueryModel::get(int row, const QString &name) const
 {
-    return data(createIndex(row, record().indexOf(name)), Qt::DisplayRole);
+    return data(createIndex(row, record().indexOf(name)));
 }
 
 QString SqlQueryModel::queryString() const

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QSqlQueryModel>
-#include <QSqlQuery>
 #include <QQmlParserStatus>
 #include <QmlTypeAndRevisionsRegistration>
 
@@ -20,15 +19,6 @@ public:
     explicit SqlQueryModel(QObject *parent = nullptr);
     ~SqlQueryModel();
 
-    void classBegin() override;
-    void componentComplete() override;
-
-    QString dbFileName() const;
-    void setDbFileName(const QString &dbFileName);
-
-    QString queryString() const;
-    void setQueryString(const QString &query);
-
     Q_INVOKABLE bool isValid() const;
     Q_INVOKABLE QString errorMessage() const;
 
@@ -38,7 +28,17 @@ signals:
     void dbFileNameChanged();
     void queryChanged();
 
+protected:
+    void classBegin() override;
+    void componentComplete() override;
+
 private:
+    QString dbFileName() const;
+    void setDbFileName(const QString &dbFileName);
+
+    QString queryString() const;
+    void setQueryString(const QString &query);
+
     QSqlDatabase m_db;
     QString m_query;
 };
