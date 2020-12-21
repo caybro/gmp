@@ -2,6 +2,7 @@
 #include <QSqlRecord>
 #include <QDebug>
 #include <QRandomGenerator>
+#include <QSqlQuery>
 
 #include "sqlquerymodel.h"
 
@@ -63,6 +64,20 @@ QString SqlQueryModel::errorMessage() const
 QVariant SqlQueryModel::get(int row, const QString &name) const
 {
     return data(createIndex(row, record().indexOf(name)));
+}
+
+QVariant SqlQueryModel::execHelperQuery(const QString &query) const
+{
+    QSqlQuery q(query, m_db);
+    if (!q.exec()) {
+        qWarning() << "Executing helper query failed:" << q.lastError().text();
+        return {};
+    }
+    if (!q.first()) {
+        qWarning() << "Failed positioning helper query at first result:" << q.lastError().text();
+        return {};
+    }
+    return q.value(0);
 }
 
 QString SqlQueryModel::queryString() const

@@ -24,6 +24,8 @@ public:
 
     Q_INVOKABLE QVariant get(int row, const QString &name) const;
 
+    Q_INVOKABLE QVariant execHelperQuery(const QString &query) const;
+
 signals:
     void dbFileNameChanged();
     void queryChanged();

@@ -52,7 +52,8 @@ Page {
                     text: albumModel.get(0, "genre")
                 }
                 Label {
-                    text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count)).arg(formatSeconds(albumModel.get(0, "total"))) // FIXME total length
+                    text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count))
+                    .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(root.album))))
                 }
                 Label {
                     text: albumModel.get(0, "year")
