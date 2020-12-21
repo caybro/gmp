@@ -119,7 +119,7 @@ Page {
         model: SqlQueryModel {
             id: albumsModel
             db: DbIndexer.dbName
-            query: "SELECT DISTINCT album, artist, year, genre, (SELECT COUNT(DISTINCT s.url) FROM Tracks AS s WHERE s.album=t.album) AS count FROM Tracks AS t ORDER BY album"
+            query: "SELECT album, artist, year, genre, (SELECT COUNT(DISTINCT s.url) FROM Tracks AS s WHERE s.album=t.album) AS count FROM Tracks AS t GROUP BY album"
         }
         clip: true
         cellWidth: 200
