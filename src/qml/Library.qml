@@ -94,7 +94,7 @@ Page {
         model: SqlQueryModel {
             id: artistsModel
             db: DbIndexer.dbName
-            query: "SELECT DISTINCT artist, (SELECT COUNT(DISTINCT s.album) FROM Tracks AS s WHERE s.artist=t.artist) AS count FROM Tracks AS t ORDER BY artist"
+            query: "SELECT artist, (SELECT COUNT(DISTINCT s.album) FROM Tracks AS s WHERE s.artist=t.artist) AS count FROM Tracks AS t GROUP BY artist"
         }
         delegate: CustomItemDelegate {
             width: ListView.view.width
@@ -177,7 +177,7 @@ Page {
         model: SqlQueryModel {
             id: genresModel
             db: DbIndexer.dbName
-            query: "SELECT DISTINCT genre, (SELECT COUNT(s.url) FROM Tracks AS s WHERE s.genre=t.genre) AS count FROM Tracks AS t ORDER BY genre"
+            query: "SELECT genre, (SELECT COUNT(s.url) FROM Tracks AS s WHERE s.genre=t.genre) AS count FROM Tracks AS t GROUP BY genre"
         }
         clip: true
         delegate: CustomItemDelegate {
