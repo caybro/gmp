@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = gmp
 
-QT += gui qml
+QT += gui qml sql
 QT -= widgets
 
 CONFIG += c++14
@@ -15,12 +15,12 @@ QML_IMPORT_MAJOR_VERSION = 1
 QML_IMPORT_PATH = $$OUT_PWD
 
 SOURCES += main.cpp \
-    indexer.cpp \
-    trackmodel.cpp
+    dbindexer.cpp \
+    indexer.cpp
 
 HEADERS += \
-    indexer.h \
-    trackmodel.h
+    dbindexer.h \
+    indexer.h
 
 OTHER_FILES = \
     qml/*.qml \

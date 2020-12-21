@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     QLoggingCategory::setFilterRules("*.debug=true\nqt.*.debug=false");
 
     app.setOrganizationName(QStringLiteral("caybro"));
-    app.setApplicationName(QStringLiteral("G Music Player"));
+    app.setApplicationDisplayName(QStringLiteral("G Music Player"));
     app.setApplicationVersion(QStringLiteral("0.0.1"));
 
     app.setWindowIcon(QIcon(QStringLiteral(":/icons/ic_library_music_48px.svg")));
@@ -32,11 +32,11 @@ int main(int argc, char *argv[])
     appTrans.load(QStringLiteral(":/translations/gmp_") + QLocale::system().name());
     app.installTranslator(&appTrans);
 
-    Indexer *indexer = new Indexer(qApp);
+//    Indexer *indexer = new Indexer(qApp);
     QQmlApplicationEngine engine;
-    QQmlContext *context = engine.rootContext();
-    context->setContextProperty(QStringLiteral("indexer"), indexer);
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+//    QQmlContext *context = engine.rootContext();
+//    context->setContextProperty(QStringLiteral("indexer"), indexer);
+    const QUrl url(QStringLiteral("qrc:/qml/ModelTester.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

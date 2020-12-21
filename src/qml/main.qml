@@ -17,10 +17,10 @@ ApplicationWindow {
     readonly property alias currentPlayUrl: playlist.currentItemSource
 
     Component.onCompleted: {
-        console.time("indexing media files");
-        const songCount = indexer.scanAll();
-        console.timeEnd("indexing media files");
-        console.debug("Found %1 audio files".arg(songCount));
+//        console.time("indexing media files");
+//        const songCount = indexer.scanAll();
+//        console.timeEnd("indexing media files");
+//        console.debug("Found %1 audio files".arg(songCount));
     }
 
     function formatSeconds(secs) {

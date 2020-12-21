@@ -1,0 +1,2 @@
+module org.gmp.sqlext
+plugin SqlExtPlugin
