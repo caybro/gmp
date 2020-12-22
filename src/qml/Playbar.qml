@@ -2,6 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import org.gmp.model 1.0
+import org.gmp.sqlext 1.0
+
 ToolBar {
     id: root
     objectName: "Playbar"
@@ -11,16 +14,31 @@ ToolBar {
     required property var player
     required property url currentPlayUrl // TODO remove, user player.source
     onCurrentPlayUrlChanged: {
-        var cover = indexer.coverArtForFile(currentPlayUrl);
+        var cover = indexer.coverArtForFile(currentPlayUrl); // FIXME cover art
         // @disable-check M126
         if (cover != "")
             coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider
         else
-            coverArt.source = indexer.coverArtForAlbum(player.metaData.albumTitle);
+            coverArt.source = indexer.coverArtForAlbum(metadata("album"));
     }
 
     signal artistSelected(string artist)
     signal albumSelected(string album)
+
+    SqlQueryModel {
+        id: queryModel
+        db: DbIndexer.dbName
+    }
+
+    function metadata(key) {
+        if (root.currentPlayUrl == "")
+            return "";
+
+        return queryModel.execHelperQuery("SELECT %2 FROM Tracks WHERE url='%1'".arg(escapeSingleQuote(root.currentPlayUrl)).arg(key))
+    }
+
+    readonly property string artist: metadata("artist")
+    readonly property string album: metadata("album")
 
     RowLayout {
         id: playbarLayout
@@ -41,24 +59,22 @@ ToolBar {
             Layout.margins: 5
             Layout.fillWidth: true
             Label {
-                text: player.metaData.title
+                text: metadata("title")
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 maximumLineCount: 1
                 elide: Text.ElideRight
                 width: parent.width
             }
             Label {
-                text: "<a href=\"artist:/%1\">%1</a> · <a href=\"album:/%2\">%2</a>"
-                .arg(player.metaData.composer || player.metaData.albumArtist || player.metaData.author)
-                .arg(player.metaData.albumTitle)
+                text: "<a href='artist:/%1'>%2</a> · <a href='album:/%3'>%4</a>".arg(escape(root.artist)).arg(root.artist).arg(escape(root.album)).arg(root.album)
                 width: parent.width
                 maximumLineCount: 1
                 elide: Text.ElideRight
                 onLinkActivated: {
                     if (link.startsWith("artist:/")) {
-                        root.artistSelected(link.substring(link.indexOf("/")+1));
+                        root.artistSelected(unescape(link.substring(link.indexOf("/")+1)));
                     } else if (link.startsWith("album:/")) {
-                        root.albumSelected(link.substring(link.indexOf("/")+1));
+                        root.albumSelected(unescape(link.substring(link.indexOf("/")+1)));
                     }
                 }
             }

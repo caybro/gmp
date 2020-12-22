@@ -41,7 +41,7 @@ ApplicationWindow {
     }
 
     function escapeSingleQuote(input) {
-        return input.replace(/'/g, "''");
+        return String(input).replace(/'/g, "''");
     }
 
     header: ToolBar {
