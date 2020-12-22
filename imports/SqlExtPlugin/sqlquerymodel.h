@@ -26,6 +26,8 @@ public:
 
     Q_INVOKABLE QVariant execHelperQuery(const QString &query) const;
 
+    Q_INVOKABLE QVariantList execListQuery(const QString &query) const;
+
 signals:
     void dbFileNameChanged();
     void queryChanged();

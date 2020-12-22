@@ -69,15 +69,42 @@ QVariant SqlQueryModel::get(int row, const QString &name) const
 QVariant SqlQueryModel::execHelperQuery(const QString &query) const
 {
     QSqlQuery q(query, m_db);
+    QVariant result;
+    if (!q.isSelect()) {
+        qWarning() << "Helper query is not SELECT!";
+        return result;
+    }
     if (!q.exec()) {
-        qWarning() << "Executing helper query failed:" << q.lastError().text();
-        return {};
+        qWarning() << "Executing helper query failed:" << q.lastError();
+        return result;
     }
     if (!q.first()) {
-        qWarning() << "Failed positioning helper query at first result:" << q.lastError().text();
-        return {};
+        qWarning() << "Failed positioning helper query at first result:" << q.lastError();
+        return result;
     }
-    return q.value(0);
+    result = q.value(0);
+    q.finish();
+    return result;
+}
+
+QVariantList SqlQueryModel::execListQuery(const QString &query) const
+{
+    QSqlQuery q(query, m_db);
+    QVariantList result;
+    if (!q.isSelect()) {
+        qWarning() << "List query is not SELECT!";
+        return result;
+    }
+    if (!q.exec()) {
+        qWarning() << "Executing list query failed:" << q.lastError();
+        return result;
+    }
+
+    while (q.next()) {
+        result.push_back(q.value(0));
+    }
+    q.finish();
+    return result;
 }
 
 QString SqlQueryModel::queryString() const
