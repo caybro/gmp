@@ -30,15 +30,10 @@ ToolBar {
         db: DbIndexer.dbName
     }
 
-    function metadata(key) {
-        if (root.currentPlayUrl == "")
-            return "";
-
-        return queryModel.execRowQuery("SELECT %1 FROM Tracks WHERE url=?".arg(key), [root.currentPlayUrl])
-    }
-
-    readonly property string artist: metadata("artist")[0] ?? ""
-    readonly property string album: metadata("album")[0] ?? ""
+    readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
+                                                            [root.currentPlayUrl])
+    readonly property string artist: metadata[1] ?? ""
+    readonly property string album: metadata[2] ?? ""
 
     RowLayout {
         id: playbarLayout
@@ -59,7 +54,7 @@ ToolBar {
             Layout.margins: 5
             Layout.fillWidth: true
             Label {
-                text: metadata("title")[0] ?? ""
+                text: metadata[0] ?? ""
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 maximumLineCount: 1
                 elide: Text.ElideRight
