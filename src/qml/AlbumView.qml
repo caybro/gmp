@@ -20,12 +20,10 @@ Page {
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
 
-
-
     SqlQueryModel {
         id: albumModel
         db: DbIndexer.dbName
-        query: "SELECT url, title, artist, genre, year, length FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album))
+        query: "SELECT url, title, artist, genre, year, length FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(root.album))
     }
 
     ListView {
