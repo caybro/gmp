@@ -9,8 +9,7 @@ ToolBar {
     contentHeight: playbarLayout.implicitHeight
 
     required property var player
-    required property var playlist
-    required property url currentPlayUrl
+    required property url currentPlayUrl // TODO remove, user player.source
     onCurrentPlayUrlChanged: {
         var cover = indexer.coverArtForFile(currentPlayUrl);
         // @disable-check M126
@@ -77,8 +76,8 @@ ToolBar {
         ToolButton {
             id: previousButton
             icon.source: "qrc:/icons/ic_skip_previous_48px.svg"
-            visible: playlist && playlist.itemCount > 1
-            onClicked: playlist.previous()
+            visible: player.playlist && player.playlist.itemCount > 1
+            onClicked: player.playlist.previous()
         }
         
         ToolButton {
@@ -90,8 +89,8 @@ ToolBar {
         ToolButton {
             id: nextButton
             icon.source: "qrc:/icons/ic_skip_next_48px.svg"
-            visible: playlist && playlist.itemCount > 1
-            onClicked: playlist.next()
+            visible: player.playlist && player.playlist.itemCount > 1
+            onClicked: player.playlist.next()
         }
     }
 
