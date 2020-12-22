@@ -19,7 +19,7 @@ ToolBar {
         if (cover != "")
             coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider
         else
-            coverArt.source = indexer.coverArtForAlbum(metadata("album"));
+            coverArt.source = indexer.coverArtForAlbum(root.album);
     }
 
     signal artistSelected(string artist)
@@ -34,11 +34,11 @@ ToolBar {
         if (root.currentPlayUrl == "")
             return "";
 
-        return queryModel.execHelperQuery("SELECT %2 FROM Tracks WHERE url='%1'".arg(escapeSingleQuote(root.currentPlayUrl)).arg(key))
+        return queryModel.execRowQuery("SELECT %1 FROM Tracks WHERE url=?".arg(key), [root.currentPlayUrl])
     }
 
-    readonly property string artist: metadata("artist")
-    readonly property string album: metadata("album")
+    readonly property string artist: metadata("artist")[0] ?? ""
+    readonly property string album: metadata("album")[0] ?? ""
 
     RowLayout {
         id: playbarLayout
@@ -59,14 +59,16 @@ ToolBar {
             Layout.margins: 5
             Layout.fillWidth: true
             Label {
-                text: metadata("title")
+                text: metadata("title")[0] ?? ""
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 maximumLineCount: 1
                 elide: Text.ElideRight
                 width: parent.width
             }
             Label {
-                text: "<a href='artist:/%1'>%2</a> · <a href='album:/%3'>%4</a>".arg(escape(root.artist)).arg(root.artist).arg(escape(root.album)).arg(root.album)
+                text: "<a href=\"artist:/%2\">%1</a> · <a href=\"album:/%4\">%3</a>"
+                    .arg(root.artist).arg(escape(root.artist))
+                    .arg(root.album).arg(escape(root.album))
                 width: parent.width
                 maximumLineCount: 1
                 elide: Text.ElideRight

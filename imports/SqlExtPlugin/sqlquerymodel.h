@@ -28,6 +28,8 @@ public:
 
     Q_INVOKABLE QVariantList execListQuery(const QString &query) const;
 
+    Q_INVOKABLE QVariantList execRowQuery(const QString &query, const QVariantList &args) const;
+
 signals:
     void dbFileNameChanged();
     void queryChanged();

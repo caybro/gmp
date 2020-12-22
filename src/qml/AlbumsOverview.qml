@@ -29,10 +29,10 @@ Page {
         model: albumsModel
         delegate: AlbumDelegate {
             artist: root.artist
-            year: albumsModel.get(index, "year")
+            year: albumsModel.get(index, "year") ?? ""
             numTracks: albumsModel.execHelperQuery("SELECT COUNT(url) FROM Tracks WHERE (album='%1' AND artist='%2')"
                                                    .arg(escapeSingleQuote(modelData)).arg(escapeSingleQuote(root.artist)))
-            genre: albumsModel.get(index, "genre")
+            genre: albumsModel.get(index, "genre") ?? ""
             onClicked: {
                 console.debug("Clicked:", modelData);
                 root.albumSelected(modelData);
