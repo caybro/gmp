@@ -16,7 +16,7 @@ Page {
     SqlQueryModel {
         id: albumsModel
         db: DbIndexer.dbName
-        query: "SELECT album, year, genre FROM Tracks WHERE artist='%1' GROUP BY album".arg(root.artist)
+        query: "SELECT album, year, genre FROM Tracks WHERE artist='%1' GROUP BY album".arg(escapeSingleQuote(root.artist))
     }
 
     GridView {
@@ -28,7 +28,8 @@ Page {
         delegate: AlbumDelegate {
             artist: root.artist
             year: albumsModel.get(index, "year")
-            numTracks: albumsModel.execHelperQuery("SELECT COUNT(url) FROM Tracks WHERE (album='%1' AND artist='%2')".arg(modelData).arg(root.artist))
+            numTracks: albumsModel.execHelperQuery("SELECT COUNT(url) FROM Tracks WHERE (album='%1' AND artist='%2')"
+                                                   .arg(escapeSingleQuote(modelData)).arg(escapeSingleQuote(root.artist)))
             genre: albumsModel.get(index, "genre")
             onClicked: {
                 console.debug("Clicked:", modelData);

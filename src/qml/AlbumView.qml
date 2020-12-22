@@ -20,10 +20,12 @@ Page {
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
 
+
+
     SqlQueryModel {
         id: albumModel
         db: DbIndexer.dbName
-        query: "SELECT url, title, artist, genre, year, length FROM Tracks WHERE album='%1'".arg(root.album)
+        query: "SELECT url, title, artist, genre, year, length FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album))
     }
 
     ListView {
@@ -53,7 +55,7 @@ Page {
                 }
                 Label {
                     text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count))
-                    .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(root.album))))
+                    .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album)))))
                 }
                 Label {
                     text: albumModel.get(0, "year")

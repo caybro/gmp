@@ -39,6 +39,10 @@ ApplicationWindow {
         return (hours !== "00" ? hours + ':' : "") + minutes+':'+seconds;
     }
 
+    function escapeSingleQuote(input) {
+        return input.replace(/'/g, "''");
+    }
+
     header: ToolBar {
         contentHeight: toolButton.implicitHeight
 
