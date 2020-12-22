@@ -24,10 +24,11 @@ Page {
         clip: true
         delegate: CustomItemDelegate {
             readonly property bool isPlaying: playlist.currentItemSource === model.source
+            readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
+                                                                    [model.source])
             width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + queryModel.execHelperQuery("SELECT title FROM Tracks WHERE url='%1'".arg(model.source))
-            secondaryText: queryModel.execHelperQuery("SELECT artist FROM Tracks WHERE url='%1'".arg(model.source)) + " · " +
-                           queryModel.execHelperQuery("SELECT album FROM Tracks WHERE url='%1'".arg(model.source))
+            text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata[0]
+            secondaryText: metadata[1] + " · " + metadata[2]
             highlighted: isPlaying
             onClicked: {
                 console.debug("Clicked:", model.source);
