@@ -1,12 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+import org.gmp.model 1.0
+import org.gmp.sqlext 1.0
+
 Page {
     id: root
     objectName: "GenreOverview"
     title: "%1 · %2".arg(genre).arg(qsTr("%n track(s)", "", listview.count))
-
-    readonly property var globalModel: indexer.tracksForGenre(root.genre)
 
     property string genre
     property url currentPlayUrl
@@ -28,16 +29,21 @@ Page {
     signal playGenre(string genre)
     signal shufflePlayGenre(string genre)
 
+    SqlQueryModel {
+        id: genreModel
+        db: DbIndexer.dbName
+        query: "SELECT url, title, artist, album FROM Tracks WHERE genre='%1'".arg(escapeSingleQuote(root.genre))
+    }
+
     ListView {
         id: listview
         anchors.fill: parent
-        model: globalModel.length
+        model: genreModel
         delegate: CustomItemDelegate {
-            readonly property url modelData: globalModel[index]
-            readonly property bool isPlaying: root.currentPlayUrl === modelData
+            readonly property bool isPlaying: root.currentPlayUrl == modelData
             width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") + indexer.metadata(modelData, "title")
-            secondaryText: indexer.metadata(modelData, "artist") + " · " + indexer.metadata(modelData, "album")
+            text: (isPlaying ? "⯈ " : "") + genreModel.get(index, "title")
+            secondaryText: genreModel.get(index, "artist") + " · " + genreModel.get(index, "album")
             highlighted: isPlaying
             onClicked: {
                 console.debug("Clicked:", modelData);
