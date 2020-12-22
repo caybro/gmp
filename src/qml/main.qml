@@ -6,6 +6,7 @@ import QtMultimedia 5.12
 import QtQuick.VirtualKeyboard 2.4
 
 import org.gmp.model 1.0
+import org.gmp.sqlext 1.0
 
 ApplicationWindow {
     id: window
@@ -83,6 +84,11 @@ ApplicationWindow {
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
     }
 
+    SqlQueryModel {
+        id: helperModel
+        db: DbIndexer.dbName
+    }
+
     Connections {
         id: stackViewConnections
         target: stackView.currentItem
@@ -102,13 +108,15 @@ ApplicationWindow {
         }
         function onPlayAlbum(album, index) {
             playlist.clear();
-            playlist.addItems(indexer.tracksForAlbum(album));
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(album)));
+            playlist.addItems(urls);
             playlist.currentIndex = index;
             player.play();
         }
         function onShufflePlayAlbum(album) {
             playlist.clear();
-            playlist.addItems(indexer.tracksForAlbum(album));
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(album)));
+            playlist.addItems(urls);
             playlist.shuffle();
             player.play();
         }
@@ -118,17 +126,21 @@ ApplicationWindow {
         }
         function onPlayGenre(genre) {
             playlist.clear();
-            playlist.addItems(indexer.tracksForGenre(genre));
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(genre)));
+            playlist.addItems(urls);
             player.play();
         }
         function onShufflePlayGenre(genre) {
             playlist.clear();
-            playlist.addItems(indexer.tracksForGenre(genre));
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(genre)));
+            playlist.addItems(urls);
             playlist.shuffle();
             player.play();
         }
         function onShufflePlay() {
-            playlist.addItems(indexer.tracks);
+            playlist.clear();
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks ORDER BY title");
+            playlist.addItems(urls);
             playlist.shuffle();
             player.play();
         }

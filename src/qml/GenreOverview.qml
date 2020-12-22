@@ -32,7 +32,7 @@ Page {
     SqlQueryModel {
         id: genreModel
         db: DbIndexer.dbName
-        query: "SELECT url, title, artist, album FROM Tracks WHERE genre='%1'".arg(escapeSingleQuote(root.genre))
+        query: "SELECT url, title, artist, album FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(root.genre))
     }
 
     ListView {

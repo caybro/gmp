@@ -13,6 +13,8 @@ Page {
 
     signal albumSelected(string album)
 
+    // TODO provide quick actions to sort by alphabet/oldest first/newest first
+
     SqlQueryModel {
         id: albumsModel
         db: DbIndexer.dbName
