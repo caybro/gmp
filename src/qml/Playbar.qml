@@ -14,7 +14,7 @@ ToolBar {
     required property var player
     required property url currentPlayUrl // TODO remove, user player.source
     onCurrentPlayUrlChanged: {
-        var cover = indexer.coverArtForFile(currentPlayUrl); // FIXME cover art
+        const cover = indexer.coverArtForFile(currentPlayUrl); // FIXME cover art
         // @disable-check M126
         if (cover != "")
             coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider

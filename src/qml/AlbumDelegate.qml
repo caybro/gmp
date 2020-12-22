@@ -30,6 +30,8 @@ ItemDelegate {
         Label {
             width: parent.width
             horizontalAlignment: Label.AlignHCenter
+            maximumLineCount: 1
+            elide: Label.ElideRight
             text: root.artist
             visible: !!text
         }
