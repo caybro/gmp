@@ -181,8 +181,7 @@ ApplicationWindow {
                 icon.source: "qrc:/icons/ic_library_music_48px.svg"
                 width: parent.width
                 onClicked: {
-                    stackView.push("Library.qml",
-                                   {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })});
+                    stackView.pop();
                     drawer.close();
                 }
             }
