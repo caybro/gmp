@@ -206,9 +206,12 @@ ApplicationWindow {
     StackView {
         id: stackView
         anchors.fill: parent
+        focus: true
         Component.onCompleted: stackView.push("Library.qml",
                                               {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })})
 
+        Keys.onEscapePressed: stackView.pop()
+        Keys.onBackPressed: stackView.pop()
     }
 
     InputPanel {
