@@ -69,6 +69,7 @@ ApplicationWindow {
 
     footer: Playbar {
         id: playbar
+        visible: playlist.itemCount
         player: player
         currentPlayUrl: window.currentPlayUrl
         onAlbumSelected: stackViewConnections.onAlbumSelected(album)
