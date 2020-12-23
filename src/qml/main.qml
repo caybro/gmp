@@ -104,6 +104,8 @@ ApplicationWindow {
             playlist.addItems(urls);
             playlist.currentIndex = index;
             player.play();
+            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE album=?", [album]);
+            playlist.duration = Number(duration);
         }
         function onShufflePlayAlbum(album) {
             playlist.clear();
@@ -111,6 +113,8 @@ ApplicationWindow {
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
+            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE album=?", [album]);
+            playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
             stackView.push("GenreOverview.qml",
@@ -121,6 +125,8 @@ ApplicationWindow {
             const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(genre)));
             playlist.addItems(urls);
             player.play();
+            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE genre=?", [genre]);
+            playlist.duration = Number(duration);
         }
         function onShufflePlayGenre(genre) {
             playlist.clear();
@@ -128,6 +134,8 @@ ApplicationWindow {
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
+            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE genre=?", [genre]);
+            playlist.duration = Number(duration);
         }
         function onShufflePlay() {
             playlist.clear();
@@ -135,6 +143,8 @@ ApplicationWindow {
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
+            const duration = helperModel.execHelperQuery("SELECT SUM(length) AS duration FROM Tracks");
+            playlist.duration = Number(duration);
         }
         function onShufflePlayArtist(artist) {
             playlist.clear();
@@ -142,6 +152,8 @@ ApplicationWindow {
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
+            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE artist=?", [artist]);
+            playlist.duration = Number(duration);
         }
     }
 
@@ -153,6 +165,7 @@ ApplicationWindow {
         autoPlay: true
         playlist: Playlist {
             id: playlist
+            property int duration
             playbackMode: Playlist.Sequential
         }
     }

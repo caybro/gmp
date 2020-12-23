@@ -7,21 +7,23 @@ import org.gmp.sqlext 1.0
 
 Page {
     id: root
-    objectName: "Playlist"
-    title: qsTr("Playlist")
+    objectName: "PlaylistPage"
+    title: "%1 · %2 𝅘𝅥 · %3".arg(qsTr("Playlist")).arg(playlist.itemCount)
+        .arg(isEmpty ? formatSeconds(0) : formatSeconds(playlist.duration))
 
+    readonly property bool isEmpty: !playlist.itemCount
     property var playlist
 
     property var toolbarAction: Component {
         Row {
             ToolButton {
                 icon.source: "qrc:/icons/ic_shuffle_48px.svg"
-                enabled: playlist.itemCount
+                enabled: !root.isEmpty
                 onClicked: playlist.shuffle()
             }
             ToolButton {
                 icon.source: "qrc:/icons/clear_all-black-48dp.svg"
-                enabled: playlist.itemCount
+                enabled: !root.isEmpty
                 onClicked: playlist.clear()
             }
         }

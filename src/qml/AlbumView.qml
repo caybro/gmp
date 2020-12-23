@@ -7,7 +7,7 @@ import org.gmp.sqlext 1.0
 
 Page {
     id: root
-    objectName: "AlbumView"
+    objectName: "AlbumViewPage"
     title: "%1 · %2".arg(album).arg(albumModel.get(0, "artist"))
 
     property string album

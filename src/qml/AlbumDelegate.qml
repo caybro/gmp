@@ -12,7 +12,7 @@ ItemDelegate {
     contentItem: Column {
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            source: indexer.coverArtForAlbum(modelData) // FIXME
+            source: indexer.coverArtForAlbum(modelData) // FIXME cover art
             asynchronous: true
             width: 150
             height: width

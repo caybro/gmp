@@ -6,7 +6,7 @@ import org.gmp.sqlext 1.0
 
 Page {
     id: root
-    objectName: "GenreOverview"
+    objectName: "GenreOverviewPage"
     title: "%1 · %2".arg(genre).arg(qsTr("%n track(s)", "", listview.count))
 
     property string genre
