@@ -136,6 +136,13 @@ ApplicationWindow {
             playlist.shuffle();
             player.play();
         }
+        function onShufflePlayArtist(artist) {
+            playlist.clear();
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE artist='%1'".arg(escapeSingleQuote(artist)));
+            playlist.addItems(urls);
+            playlist.shuffle();
+            player.play();
+        }
     }
 
     Audio {

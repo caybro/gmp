@@ -12,8 +12,18 @@ Page {
     property string artist
 
     signal albumSelected(string album)
+    signal shufflePlayArtist(string artist)
 
     // TODO provide quick actions to sort by alphabet/oldest first/newest first
+
+    property var toolbarAction: Component {
+        Row {
+            ToolButton {
+                icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                onClicked: root.shufflePlayArtist(root.artist)
+            }
+        }
+    }
 
     SqlQueryModel {
         id: albumsModel
