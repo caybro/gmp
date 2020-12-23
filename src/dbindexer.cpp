@@ -42,7 +42,7 @@ void DbIndexer::parse()
     QSqlQuery query;
     query.setForwardOnly(true);
     query.prepare(QStringLiteral("INSERT INTO Tracks (path, url, title, artist, album, year, genre, trackNo, length) "
-                                 "VALUES (:path, :url, :title, :artist, :album, :year, :genre, :trackNo, :length);"));
+                                 "VALUES (:path, :url, :title, :artist, :album, :year, :genre, :trackNo, :length)"));
 
     for (const auto &rootPath: qAsConst(m_rootPaths)) { // TODO watch paths for changes
         QDirIterator it(rootPath, {QStringLiteral("*.mp3"), QStringLiteral("*.ogg"), QStringLiteral("*.oga"),
@@ -75,15 +75,15 @@ void DbIndexer::parse()
             QString genre = f.tag()->genre().toCString(true);
             if (genre.isEmpty()) genre = tr("Unknown genre");
 
-            query.bindValue(":path", filePath);
-            query.bindValue(":url", QUrl::fromLocalFile(filePath));
-            query.bindValue(":title", f.tag()->title().toCString(true));
-            query.bindValue(":artist", f.tag()->artist().toCString(true));
-            query.bindValue(":album", album);
-            query.bindValue(":year", f.tag()->year());
-            query.bindValue(":genre", genre);
-            query.bindValue(":trackNo", f.tag()->track() + pos);
-            query.bindValue(":length", f.audioProperties()->lengthInSeconds());
+            query.bindValue(QStringLiteral(":path"), filePath);
+            query.bindValue(QStringLiteral(":url"), QUrl::fromLocalFile(filePath));
+            query.bindValue(QStringLiteral(":title"), f.tag()->title().toCString(true));
+            query.bindValue(QStringLiteral(":artist"), f.tag()->artist().toCString(true));
+            query.bindValue(QStringLiteral(":album"), album);
+            query.bindValue(QStringLiteral(":year"), f.tag()->year());
+            query.bindValue(QStringLiteral(":genre"), genre);
+            query.bindValue(QStringLiteral(":trackNo"), f.tag()->track() + pos);
+            query.bindValue(QStringLiteral(":length"), f.audioProperties()->lengthInSeconds());
             if (!query.exec()) {
                 //qWarning() << "Failed to insert track:" << filePath << "; error:" << query.lastError().text();
             }
@@ -150,16 +150,16 @@ void DbIndexer::setupDatabase()
     QSqlDatabase db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
     db.setDatabaseName(storageLocation + QStringLiteral("/gmp.db"));
     if (!db.open()) {
-        qWarning() << Q_FUNC_INFO << "DB open failed:" << db.lastError().text();
+        qWarning() << "DB open failed:" << db.lastError();
         return;
     }
 
     if (!db.driver()->hasFeature(QSqlDriver::QuerySize)) {
-        qWarning() << "DB driver" << db.driverName() << "doesn't support query size!";
+        qInfo() << "DB driver" << db.driverName() << "doesn't support query size!";
     }
 
     if (!db.open()) {
-        qWarning() << "Error opening the DB:" << db.lastError().text();
+        qWarning() << "Error opening the DB:" << db.lastError();
         return;
     }
 
@@ -174,8 +174,8 @@ void DbIndexer::setupDatabase()
                                    "year INTEGER,"
                                    "genre TEXT,"
                                    "trackNo INTEGER,"
-                                   "length INTEGER);"))) {
-        qWarning() << "Failed to create table 'Tracks':" << query.lastError().text();
+                                   "length INTEGER)"))) {
+        qWarning() << "Failed to create table 'Tracks':" << query.lastError();
         return;
     }
 
