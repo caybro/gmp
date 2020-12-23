@@ -12,6 +12,7 @@
 #include <QHashIterator>
 #include <QUrl>
 #include <QElapsedTimer>
+#include <QImage>
 
 #include <taglib/fileref.h>
 #include <taglib/id3v2tag.h>
@@ -94,6 +95,60 @@ void DbIndexer::parse()
 #ifdef QT_DEBUG
     qDebug() << "!!! Indexing took" << timer.elapsed() << "ms";
 #endif
+}
+
+QUrl DbIndexer::coverArtForFile(const QUrl &fileUrl) const
+{
+    const QString localFile = fileUrl.toLocalFile();
+    const QString result = localFile + QStringLiteral(".png");
+    if (QFile::exists(result))
+        return QUrl::fromLocalFile(result);
+
+    TagLib::MPEG::File f(QFile::encodeName(localFile)); // TODO extend also beyond MP3
+    if (f.hasID3v2Tag()) {
+        TagLib::ID3v2::Tag *tag = f.ID3v2Tag();
+        TagLib::ID3v2::FrameList l = tag->frameList("APIC");
+        if (l.isEmpty())
+            return {};
+
+        TagLib::ID3v2::AttachedPictureFrame *f = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
+        if (!f)
+            return {};
+
+        QImage image;
+        image.loadFromData((const uchar *) f->picture().data(), f->picture().size());
+        image.save(result);
+        return QUrl::fromLocalFile(result);
+    }
+
+    return {};
+}
+
+QUrl DbIndexer::coverArtForAlbum(const QString &album) const
+{
+    QSqlQuery q;
+    q.prepare(QStringLiteral("SELECT url FROM Tracks WHERE album=?"));
+    q.addBindValue(album);
+    if (!q.exec()) {
+        qWarning() << "Failed to get list of tracks for album:" << album << "; error:" << q.lastError();
+        return {};
+    }
+    QList<QUrl> tracks;
+    while (q.next()) {
+        tracks.push_back(q.value(0).toUrl());
+    }
+    q.finish();
+    QUrl result;
+    for (const QUrl &track: tracks) {
+        result = coverArtForFile(track);
+        if (!result.isEmpty())
+            break;
+    }
+
+    if (result.isEmpty())
+        result = QStringLiteral("qrc:/icons/ic_album_48px.svg");
+
+    return result;
 }
 
 QString DbIndexer::dbName() const

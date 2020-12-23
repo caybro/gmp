@@ -20,6 +20,9 @@ public:
 
     Q_INVOKABLE void parse();
 
+    Q_INVOKABLE QUrl coverArtForFile(const QUrl &fileUrl) const;
+    Q_INVOKABLE QUrl coverArtForAlbum(const QString &album) const;
+
 signals:
     void rootPathsChanged(const QStringList &rootPaths);
     void isIndexingChanged(bool indexing);

@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+import org.gmp.model 1.0
+
 ItemDelegate {
     id: root
 
@@ -12,7 +14,7 @@ ItemDelegate {
     contentItem: Column {
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            source: indexer.coverArtForAlbum(modelData) // FIXME cover art
+            source: DbIndexer.coverArtForAlbum(modelData)
             asynchronous: true
             width: 150
             height: width

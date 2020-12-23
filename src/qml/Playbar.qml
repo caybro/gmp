@@ -14,12 +14,12 @@ ToolBar {
     required property var player
     required property url currentPlayUrl // TODO remove, user player.source
     onCurrentPlayUrlChanged: {
-        const cover = indexer.coverArtForFile(currentPlayUrl); // FIXME cover art
+        const cover = DbIndexer.coverArtForFile(currentPlayUrl);
         // @disable-check M126
         if (cover != "")
             coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider
         else
-            coverArt.source = indexer.coverArtForAlbum(root.album);
+            coverArt.source = DbIndexer.coverArtForAlbum(root.album);
     }
 
     signal artistSelected(string artist)

@@ -37,7 +37,7 @@ Page {
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 150
                 Layout.margins: 15
-                source: indexer.coverArtForAlbum(root.album)  // FIXME cover art
+                source: DbIndexer.coverArtForAlbum(root.album)
                 sourceSize: Qt.size(width, height)
             }
             Column {
