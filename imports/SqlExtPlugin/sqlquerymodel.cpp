@@ -71,11 +71,11 @@ QVariant SqlQueryModel::execHelperQuery(const QString &query) const
     QSqlQuery q(query, m_db);
     QVariant result;
     if (!q.isSelect()) {
-        qWarning() << "Helper query is not SELECT!";
+        qWarning() << "Helper query is not SELECT!" << query << q.lastError();
         return result;
     }
     if (!q.first()) {
-        qWarning() << "Failed positioning helper query at first result:" << q.lastError();
+        qWarning() << "Failed positioning helper query at first result:" << query << q.lastError();
         return result;
     }
     result = q.value(0);
@@ -88,7 +88,7 @@ QVariantList SqlQueryModel::execListQuery(const QString &query) const
     QSqlQuery q(query, m_db);
     QVariantList result;
     if (!q.isSelect()) {
-        qWarning() << "List query is not SELECT!";
+        qWarning() << "List query is not SELECT:" << query << q.lastError();
         return result;
     }
     while (q.next()) {
@@ -103,14 +103,14 @@ QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantLis
     QVariantList result;
     QSqlQuery q(m_db);
     if (!q.prepare(query)) {
-        qWarning() << "Failed to prepare row query:" << q.lastError();
+        qWarning() << "Failed to prepare row query:" << query << q.lastError();
         return result;
     }
     for (const auto &arg: args) {
         q.addBindValue(arg);
     }
     if (!q.exec()) {
-        qWarning() << "Executing row query failed:" << q.lastError();
+        qWarning() << "Executing row query failed:" << query << q.lastError();
         return result;
     }
     if (!q.isSelect()) {
@@ -118,7 +118,7 @@ QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantLis
         return result;
     }
     if (!q.first()) {
-        qWarning() << "Failed positioning row query at first result:" << q.lastError();
+        qWarning() << "Failed positioning row query at first result:" << query << q.lastError();
         return result;
     }
 
