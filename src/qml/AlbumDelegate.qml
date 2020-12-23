@@ -42,9 +42,7 @@ ItemDelegate {
             horizontalAlignment: Label.AlignHCenter
             maximumLineCount: 1
             elide: Label.ElideRight
-            text: "%1 · %2 𝅘𝅥 · %3".arg(root.year)
-            .arg(root.numTracks)
-            .arg(root.genre)
+            text: "%1 · %2 𝅘𝅥 · %3".arg(root.year).arg(root.numTracks).arg(root.genre)
         }
     }
 }

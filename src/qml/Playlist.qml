@@ -46,10 +46,7 @@ Page {
             text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata[0]
             secondaryText: metadata[1] + " · " + metadata[2]
             highlighted: isPlaying
-            onClicked: {
-                console.debug("Clicked:", model.source);
-                playlist.currentIndex = index;
-            }
+            onClicked: playlist.currentIndex = index
         }
 
         ScrollIndicator.vertical: ScrollIndicator {}
