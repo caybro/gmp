@@ -6,6 +6,8 @@ Page {
     objectName: "SettingsPage"
     title: qsTr("Settings")
 
+    // TODO implement me
+
     Label {
         anchors.centerIn: parent
         text: root.title

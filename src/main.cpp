@@ -7,6 +7,7 @@
 #include <QLoggingCategory>
 
 #include "indexer.h"
+#include "dbindexer.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,9 @@ int main(int argc, char *argv[])
     QTranslator appTrans;
     appTrans.load(QStringLiteral(":/translations/gmp_") + QLocale::system().name());
     app.installTranslator(&appTrans);
+
+    auto dbindexer = new DbIndexer(qApp);
+    dbindexer->parse();
 
     Indexer *indexer = new Indexer(qApp);
     QQmlApplicationEngine engine;

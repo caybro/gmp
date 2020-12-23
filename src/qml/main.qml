@@ -19,15 +19,6 @@ ApplicationWindow {
 
     readonly property alias currentPlayUrl: playlist.currentItemSource
 
-    Component.onCompleted: {
-//        console.time("indexing media files");
-//        const songCount = indexer.scanAll();
-//        console.timeEnd("indexing media files");
-//        console.debug("Found %1 audio files".arg(songCount));
-        DbIndexer.parse();
-        console.info("!!! DB name:", DbIndexer.dbName)
-    }
-
     function formatSeconds(secs) {
         var sec_num = parseInt(secs, 10);
         var hours   = Math.floor(sec_num / 3600);
@@ -180,7 +171,7 @@ ApplicationWindow {
                 icon.source: "qrc:/icons/ic_history_48px.svg"
                 width: parent.width
                 onClicked: {
-                    stackView.push("Last.qml");
+                    stackView.push("Last.qml"); // TODO implement me
                     drawer.close();
                 }
             }

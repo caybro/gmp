@@ -67,20 +67,32 @@ Page {
         }
     }
 
+    SqlQueryModel {
+        id: queryModel
+        db: DbIndexer.dbName
+    }
+
+    Component.onCompleted: {
+        artistsButton.text = qsTr("Artists") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT artist) FROM Tracks") + ")" ?? "");
+        albumsButton.text = qsTr("Albums") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT album) FROM Tracks") + ")" ?? "");
+        songsButton.text = qsTr("Songs") + (" (" + queryModel.execHelperQuery("SELECT COUNT(url) FROM Tracks") + ")" ?? "");
+        genresButton.text = qsTr("Genres") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT genre) FROM Tracks") + ")" ?? "");
+    }
+
     TabBar {
         id: tabbar
         width: parent.width
         TabButton {
-            text: qsTr("Artists (%1)").arg(artistsListView.count)
+            id: artistsButton
         }
         TabButton {
-            text: qsTr("Albums (%1)").arg(albumsListView.count)
+            id: albumsButton
         }
         TabButton {
-            text: qsTr("Songs (%1)").arg(tracksListView.count)
+            id: songsButton
         }
         TabButton {
-            text: qsTr("Genres (%1)").arg(genresListView.count)
+            id: genresButton
         }
     }
 
