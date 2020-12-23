@@ -12,6 +12,21 @@ Page {
 
     property var playlist
 
+    property var toolbarAction: Component {
+        Row {
+            ToolButton {
+                icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                enabled: playlist.itemCount
+                onClicked: playlist.shuffle()
+            }
+            ToolButton {
+                icon.source: "qrc:/icons/clear_all-black-48dp.svg"
+                enabled: playlist.itemCount
+                onClicked: playlist.clear()
+            }
+        }
+    }
+
     SqlQueryModel {
         id: queryModel
         db: DbIndexer.dbName
@@ -24,8 +39,7 @@ Page {
         clip: true
         delegate: CustomItemDelegate {
             readonly property bool isPlaying: playlist.currentItemSource === model.source
-            readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
-                                                                    [model.source])
+            readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?", [model.source])
             width: ListView.view.width
             text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata[0]
             secondaryText: metadata[1] + " · " + metadata[2]
