@@ -107,7 +107,7 @@ ApplicationWindow {
         }
         function onShufflePlayAlbum(album) {
             playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(album)));
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(album)));
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
@@ -124,14 +124,14 @@ ApplicationWindow {
         }
         function onShufflePlayGenre(genre) {
             playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(genre)));
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1'".arg(escapeSingleQuote(genre)));
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
         }
         function onShufflePlay() {
             playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks ORDER BY title");
+            const urls = helperModel.execListQuery("SELECT url FROM Tracks");
             playlist.addItems(urls);
             playlist.shuffle();
             player.play();
