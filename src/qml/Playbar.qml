@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
+import QtMultimedia 5.15
 
 import org.gmp.model 1.0
 import org.gmp.sqlext 1.0
@@ -8,18 +9,20 @@ import org.gmp.sqlext 1.0
 ToolBar {
     id: root
     objectName: "Playbar"
-
     contentHeight: playbarLayout.implicitHeight
 
-    required property var player
-    required property url currentPlayUrl // TODO remove, user player.source
-    onCurrentPlayUrlChanged: {
-        const cover = DbIndexer.coverArtForFile(currentPlayUrl);
-        // @disable-check M126
-        if (cover != "")
-            coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider
-        else
-            coverArt.source = DbIndexer.coverArtForAlbum(root.album);
+    required property Audio player
+
+    Connections {
+        target: root.player.playlist
+        function onCurrentItemSourceChanged() {
+            const cover = DbIndexer.coverArtForFile(player.playlist.currentItemSource);
+            // @disable-check M126
+            if (cover != "")
+                coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider
+            else
+                coverArt.source = DbIndexer.coverArtForAlbum(root.album);
+        }
     }
 
     signal artistSelected(string artist)
@@ -31,7 +34,7 @@ ToolBar {
     }
 
     readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
-                                                            [root.currentPlayUrl])
+                                                            [player.playlist.currentItemSource])
     readonly property string artist: metadata[1] ?? ""
     readonly property string album: metadata[2] ?? ""
 

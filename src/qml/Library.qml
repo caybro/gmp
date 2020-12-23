@@ -21,7 +21,7 @@ Page {
         Row {
             width: searchField.visible ? searchField.width + searchButton.width + shufflePlayButton.width
                                        : searchButton.width + shufflePlayButton.width
-            Behavior on width { PropertyAnimation {duration: 100} }
+            Behavior on width { PropertyAnimation { duration: 100 } }
             TextField {
                 id: searchField
                 placeholderText: qsTr("Type to search...")
