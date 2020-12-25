@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtMultimedia 5.12
 import QtQuick.VirtualKeyboard 2.4
+import Qt.labs.settings 1.0
 
 import org.gmp.model 1.0
 import org.gmp.sqlext 1.0
@@ -33,6 +34,13 @@ ApplicationWindow {
 
     function escapeSingleQuote(input) {
         return String(input).replace(/'/g, "''");
+    }
+
+    Settings {
+        property alias x: window.x
+        property alias y: window.y
+        property alias width: window.width
+        property alias height: window.height
     }
 
     header: ToolBar {
