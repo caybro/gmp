@@ -96,10 +96,11 @@ ToolBar {
             onClicked: player.playlist.previous()
         }
         
-        ToolButton {
+        RoundButton {
             id: playButton
             icon.source: player.playing ? "qrc:/icons/ic_pause_48px.svg" : "qrc:/icons/ic_play_arrow_48px.svg"
             onClicked: player.playing ? player.pause() : player.play()
+            highlighted: true
         }
         
         ToolButton {
