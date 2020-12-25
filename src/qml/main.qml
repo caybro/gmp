@@ -15,8 +15,8 @@ ApplicationWindow {
     width: 800
     height: 600
 
-//    Material.primary: Material.DeepOrange
-//    Material.accent: Material.Orange
+    //    Material.primary: Material.DeepOrange
+    //    Material.accent: Material.Orange
 
     readonly property alias currentPlayUrl: playlist.currentItemSource
 
@@ -44,34 +44,32 @@ ApplicationWindow {
     }
 
     header: ToolBar {
-        contentHeight: toolButton.implicitHeight
-
-        ToolButton {
-            id: toolButton
-            anchors.verticalCenter: parent.verticalCenter
-            icon.source: stackView.depth > 1 ? "qrc:/icons/ic_arrow_back_48px.svg" : "qrc:/icons/ic_menu_48px.svg"
-            font.pixelSize: Qt.application.font.pixelSize * 1.5
-            onClicked: {
-                if (stackView.depth > 1) {
-                    stackView.pop()
-                } else {
-                    drawer.open()
+        RowLayout {
+            width: parent.width
+            ToolButton {
+                icon.source: stackView.depth > 1 ? "qrc:/icons/ic_arrow_back_48px.svg" : "qrc:/icons/ic_menu_48px.svg"
+                font.pixelSize: Qt.application.font.pixelSize * 1.5
+                onClicked: {
+                    if (stackView.depth > 1) {
+                        stackView.pop()
+                    } else {
+                        drawer.open()
+                    }
                 }
             }
-        }
 
-        Label {
-            text: stackView.currentItem.title
-            font.pixelSize: Qt.application.font.pixelSize * 1.5
-            anchors.centerIn: parent
-        }
+            Label {
+                Layout.fillWidth: true
+                horizontalAlignment: Label.AlignHCenter
+                text: stackView.currentItem.title
+                font.pixelSize: Qt.application.font.pixelSize * 1.5
+            }
 
-        Loader {
-            id: toolbarAction
-            active: stackView.currentItem && typeof stackView.currentItem.toolbarAction !== 'undefined'
-            sourceComponent: stackView.currentItem.toolbarAction
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
+            Loader {
+                id: toolbarAction
+                active: stackView.currentItem && typeof stackView.currentItem.toolbarAction !== 'undefined'
+                sourceComponent: stackView.currentItem.toolbarAction
+            }
         }
     }
 
