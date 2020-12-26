@@ -203,7 +203,7 @@ ApplicationWindow {
                 text: qsTr("Playlist")
                 icon.source: "qrc:/icons/ic_queue_music_48px.svg"
                 onClicked: {
-                    stackView.push("Playlist.qml", {"playlist": Qt.binding(function() { return playlist; })});
+                    stackView.replace(null, "Playlist.qml", {"playlist": Qt.binding(function() { return playlist; })});
                     drawer.close();
                 }
             }
@@ -212,7 +212,7 @@ ApplicationWindow {
                 text: qsTr("Last Played")
                 icon.source: "qrc:/icons/ic_history_48px.svg"
                 onClicked: {
-                    stackView.push("Last.qml"); // TODO implement me
+                    stackView.replace(null, "Last.qml"); // TODO implement me
                     drawer.close();
                 }
             }
@@ -221,7 +221,7 @@ ApplicationWindow {
                 text: qsTr("Library")
                 icon.source: "qrc:/icons/ic_library_music_48px.svg"
                 onClicked: {
-                    stackView.pop();
+                    stackView.replace(null, "Library.qml", {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })})
                     drawer.close();
                 }
             }
@@ -230,7 +230,7 @@ ApplicationWindow {
                 text: qsTr("Settings")
                 icon.source: "qrc:/icons/ic_settings_48px.svg"
                 onClicked: {
-                    stackView.push("Settings.qml");
+                    stackView.replace(null, "Settings.qml");
                     drawer.close();
                 }
             }
