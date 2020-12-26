@@ -191,43 +191,44 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: window.width * 0.5
+        width: drawerLayout.childrenRect.width * 1.1
         height: window.height
 
         ColumnLayout {
+            id: drawerLayout
             anchors.fill: parent
 
             ItemDelegate {
-                text: qsTr("Currently Playing / Playlist")
+                Layout.fillWidth: true
+                text: qsTr("Playlist")
                 icon.source: "qrc:/icons/ic_queue_music_48px.svg"
-                width: parent.width
                 onClicked: {
                     stackView.push("Playlist.qml", {"playlist": Qt.binding(function() { return playlist; })});
                     drawer.close();
                 }
             }
             ItemDelegate {
+                Layout.fillWidth: true
                 text: qsTr("Last Played")
                 icon.source: "qrc:/icons/ic_history_48px.svg"
-                width: parent.width
                 onClicked: {
                     stackView.push("Last.qml"); // TODO implement me
                     drawer.close();
                 }
             }
             ItemDelegate {
+                Layout.fillWidth: true
                 text: qsTr("Library")
                 icon.source: "qrc:/icons/ic_library_music_48px.svg"
-                width: parent.width
                 onClicked: {
                     stackView.pop();
                     drawer.close();
                 }
             }
             ItemDelegate {
+                Layout.fillWidth: true
                 text: qsTr("Settings")
                 icon.source: "qrc:/icons/ic_settings_48px.svg"
-                width: parent.width
                 onClicked: {
                     stackView.push("Settings.qml");
                     drawer.close();
@@ -236,7 +237,9 @@ ApplicationWindow {
             Item { Layout.fillHeight: true }
             Label {
                 Layout.margins: 5
-                Layout.alignment: Qt.AlignHCenter
+                Layout.fillWidth: true
+                horizontalAlignment: Label.AlignHCenter
+                elide: Label.ElideMiddle
                 text: "%1 · %2 · (c) %3 2020".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
             }
         }
