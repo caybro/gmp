@@ -36,6 +36,18 @@ ApplicationWindow {
         return String(input).replace(/'/g, "''");
     }
 
+    Component.onCompleted: {
+        parseTimer.start();
+    }
+
+    Timer {
+        id: parseTimer
+        interval: 100
+        onTriggered: {
+            DbIndexer.parse();
+        }
+    }
+
     Settings {
         property alias x: window.x
         property alias y: window.y
@@ -61,6 +73,7 @@ ApplicationWindow {
             Label {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
+                elide: Label.ElideMiddle
                 text: stackView.currentItem.title
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
             }
@@ -83,13 +96,14 @@ ApplicationWindow {
 
     SqlQueryModel {
         id: helperModel
-        db: DbIndexer.dbName
+        db: "" // inited later when parsing finishes
     }
 
     Connections {
         id: stackViewConnections
         target: stackView.currentItem
         ignoreUnknownSignals: true
+
         function onPlayRequested(playFileUrl) {
             playlist.clear();
             playlist.addItem(playFileUrl);
@@ -228,15 +242,29 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: DbIndexer
+        function onIndexingChanged() {
+            console.info("!!! INDEXING CHANGED:", DbIndexer.indexing);
+            if (!DbIndexer.indexing) {
+                helperModel.db = DbIndexer.dbName;
+                stackView.replace(null, "Library.qml", {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })})
+            }
+        }
+    }
+
     StackView {
         id: stackView
         anchors.fill: parent
         focus: true
-        Component.onCompleted: stackView.push("Library.qml",
-                                              {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })})
-
         Keys.onEscapePressed: stackView.pop()
         Keys.onBackPressed: stackView.pop()
+        initialItem: BusyIndicator {
+            anchors.centerIn: parent
+            running: true
+            width: 200
+            height: 200
+        }
     }
 
     InputPanel {
