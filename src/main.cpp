@@ -7,7 +7,6 @@
 #include <QLoggingCategory>
 
 #include "indexer.h"
-#include "dbindexer.h"
 
 int main(int argc, char *argv[])
 {
@@ -33,13 +32,7 @@ int main(int argc, char *argv[])
     appTrans.load(QStringLiteral(":/translations/gmp_") + QLocale::system().name());
     app.installTranslator(&appTrans);
 
-    auto dbindexer = new DbIndexer(qApp);
-    dbindexer->parse();
-
-    Indexer *indexer = new Indexer(qApp);
     QQmlApplicationEngine engine;
-    QQmlContext *context = engine.rootContext();
-    context->setContextProperty(QStringLiteral("indexer"), indexer);
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
