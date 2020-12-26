@@ -35,8 +35,8 @@ ToolBar {
 
     readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
                                                             [player.playlist.currentItemSource])
-    readonly property string artist: metadata[1] ?? ""
-    readonly property string album: metadata[2] ?? ""
+    readonly property string artist: metadata[1] ?? "";
+    readonly property string album: metadata[2] ?? "";
 
     RowLayout {
         id: playbarLayout

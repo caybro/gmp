@@ -17,6 +17,11 @@ Page {
     signal genreSelected(string genre)
     signal shufflePlay()
 
+    QtObject {
+        id: priv
+        property string searchText
+    }
+
     property var toolbarAction: Component {
         Row {
             width: searchField.visible ? searchField.width + searchButton.width + shufflePlayButton.width
@@ -27,26 +32,7 @@ Page {
                 placeholderText: qsTr("Type to search...")
                 visible: false
                 onTextChanged: {
-                    switch (tabbar.currentIndex) {
-                    case 0:
-                        artistsListView.model = indexer.filterArtists(text);
-                        break;
-                    case 1:
-                        albumsListView.model = indexer.filterAlbums(text);
-                        break;
-                    case 2:
-                        tracksListView.model = indexer.filterTracks(text);
-                        break;
-                    case 3:
-                        genresListView.model = indexer.filterGenres(text);
-                        break;
-                    }
-                }
-                onActiveFocusChanged: {
-                    if (!activeFocus) {
-                        visible = false;
-                        clear();
-                    }
+                    priv.searchText = text;
                 }
             }
             ToolButton {
@@ -56,6 +42,8 @@ Page {
                     searchField.visible = !searchField.visible;
                     if (searchField.visible)
                         searchField.forceActiveFocus();
+                    else
+                        searchField.clear();
                 }
             }
             ToolButton {
@@ -96,113 +84,129 @@ Page {
         }
     }
 
-    ListView {
-        id: artistsListView
+    Loader {
+        id: loader
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: tabbar.bottom
         anchors.bottom: parent.bottom
-        clip: true
-        model: SqlQueryModel {
-            id: artistsModel
-            db: DbIndexer.dbName
-            query: "SELECT artist, (SELECT COUNT(DISTINCT s.album) FROM Tracks AS s WHERE s.artist=t.artist) AS count FROM Tracks AS t GROUP BY artist"
-        }
-        delegate: CustomItemDelegate {
-            width: ListView.view.width
-            text: modelData
-            secondaryText: qsTr("%n album(s)", "", artistsModel.get(index, "count"))
-            onClicked: {
-                console.debug("Clicked:", modelData);
-                root.artistSelected(modelData);
+        sourceComponent: {
+            switch (tabbar.currentIndex) {
+            case 0:
+                return artistsListViewComponent;
+            case 1:
+                return albumsListViewComponent;
+            case 2:
+                return tracksListViewComponent;
+            case 3:
+                return genresListViewComponent;
             }
         }
-        visible: tabbar.currentIndex === 0
-
-        ScrollIndicator.vertical: ScrollIndicator {}
     }
 
-    GridView {
-        id: albumsListView
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: tabbar.bottom
-        anchors.bottom: parent.bottom
-        model: SqlQueryModel {
-            id: albumsModel
-            db: DbIndexer.dbName
-            query: "SELECT album, artist, year, genre, (SELECT COUNT(DISTINCT s.url) FROM Tracks AS s WHERE s.album=t.album) AS count FROM Tracks AS t GROUP BY album"
-        }
-        clip: true
-        cellWidth: 200
-        cellHeight: 240
-        delegate: AlbumDelegate {
-            artist: albumsModel.get(index, "artist")
-            year: albumsModel.get(index, "year")
-            numTracks: albumsModel.get(index, "count")
-            genre: albumsModel.get(index, "genre")
-
-            onClicked: {
-                console.debug("Clicked:", modelData);
-                root.albumSelected(modelData);
+    Component {
+        id: artistsListViewComponent
+        ListView {
+            id: artistsListView
+            clip: true
+            model: SqlQueryModel {
+                id: artistsModel
+                db: DbIndexer.dbName
+                query: "SELECT artist, (SELECT COUNT(DISTINCT s.album) FROM Tracks AS s WHERE s.artist=t.artist) AS count FROM Tracks AS t %1 GROUP BY artist"
+                .arg(priv.searchText ? "WHERE artist LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
             }
-        }
-        visible: tabbar.currentIndex === 1
+            delegate: CustomItemDelegate {
+                width: ListView.view.width
+                text: modelData
+                secondaryText: qsTr("%n album(s)", "", Number(artistsModel.get(index, "count")))
+                onClicked: {
+                    console.debug("Clicked artist:", modelData);
+                    root.artistSelected(modelData);
+                }
+            }
 
-        ScrollIndicator.vertical: ScrollIndicator {}
+            ScrollIndicator.vertical: ScrollIndicator {}
+        }
     }
 
-    ListView {
-        id: tracksListView
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: tabbar.bottom
-        anchors.bottom: parent.bottom
-        model: SqlQueryModel {
-            id: tracksModel
-            db: DbIndexer.dbName
-            query: "SELECT url, title, album, artist FROM Tracks ORDER BY title"
-        }
-        clip: true
-        delegate: CustomItemDelegate {
-            readonly property bool isPlaying: root.currentPlayUrl == modelData
-            width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") + tracksModel.get(index, "title")
-            secondaryText: tracksModel.get(index, "artist") + " · " + tracksModel.get(index, "album")
-            highlighted: isPlaying
-            onClicked: {
-                console.warn("Clicked:", modelData);
-                root.playRequested(modelData);
+    Component {
+        id: albumsListViewComponent
+        GridView {
+            id: albumsListView
+            model: SqlQueryModel {
+                id: albumsModel
+                db: DbIndexer.dbName
+                query: "SELECT album, artist, year, genre, (SELECT COUNT(DISTINCT s.url) FROM Tracks AS s WHERE s.album=t.album) AS count FROM Tracks AS t %1 GROUP BY album"
+                .arg(priv.searchText ? "WHERE album LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
             }
-        }
-        visible: tabbar.currentIndex === 2
+            clip: true
+            cellWidth: 200
+            cellHeight: 240
+            delegate: AlbumDelegate {
+                artist: albumsModel.get(index, "artist")
+                year: albumsModel.get(index, "year")
+                numTracks: albumsModel.get(index, "count")
+                genre: albumsModel.get(index, "genre")
 
-        ScrollIndicator.vertical: ScrollIndicator {}
+                onClicked: {
+                    console.debug("Clicked album:", modelData);
+                    root.albumSelected(modelData);
+                }
+            }
+
+            ScrollIndicator.vertical: ScrollIndicator {}
+        }
     }
 
-    ListView {
-        id: genresListView
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: tabbar.bottom
-        anchors.bottom: parent.bottom
-        model: SqlQueryModel {
-            id: genresModel
-            db: DbIndexer.dbName
-            query: "SELECT genre, (SELECT COUNT(s.url) FROM Tracks AS s WHERE s.genre=t.genre) AS count FROM Tracks AS t GROUP BY genre"
-        }
-        clip: true
-        delegate: CustomItemDelegate {
-            width: ListView.view.width
-            text: modelData
-            secondaryText: qsTr("%n track(s)", "", genresModel.get(index, "count"))
-            onClicked: {
-                console.debug("Clicked:", modelData);
-                root.genreSelected(modelData);
+    Component {
+        id: tracksListViewComponent
+        ListView {
+            id: tracksListView
+            model: SqlQueryModel {
+                id: tracksModel
+                db: DbIndexer.dbName
+                query: "SELECT url, title, album, artist FROM Tracks %1 ORDER BY title"
+                .arg(priv.searchText ? "WHERE title LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
             }
-        }
-        visible: tabbar.currentIndex === 3
+            clip: true
+            delegate: CustomItemDelegate {
+                readonly property bool isPlaying: root.currentPlayUrl == modelData
+                width: ListView.view.width
+                text: (isPlaying ? "⯈ " : "") + tracksModel.get(index, "title")
+                secondaryText: tracksModel.get(index, "artist") + " · " + tracksModel.get(index, "album")
+                highlighted: isPlaying
+                onClicked: {
+                    console.debug("Clicked track:", modelData);
+                    root.playRequested(modelData);
+                }
+            }
 
-        ScrollIndicator.vertical: ScrollIndicator {}
+            ScrollIndicator.vertical: ScrollIndicator {}
+        }
+    }
+
+    Component {
+        id: genresListViewComponent
+        ListView {
+            id: genresListView
+            model: SqlQueryModel {
+                id: genresModel
+                db: DbIndexer.dbName
+                query: "SELECT genre, (SELECT COUNT(s.url) FROM Tracks AS s WHERE s.genre=t.genre) AS count FROM Tracks AS t %1 GROUP BY genre"
+                .arg(priv.searchText ? "WHERE genre LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
+            }
+            clip: true
+            delegate: CustomItemDelegate {
+                width: ListView.view.width
+                text: modelData
+                secondaryText: qsTr("%n track(s)", "", genresModel.get(index, "count"))
+                onClicked: {
+                    console.debug("Clicked genre:", modelData);
+                    root.genreSelected(modelData);
+                }
+            }
+
+            ScrollIndicator.vertical: ScrollIndicator {}
+        }
     }
 }
