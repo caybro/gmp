@@ -43,7 +43,9 @@ void DbIndexer::parse()
     QSqlQuery query;
     query.setForwardOnly(true);
     query.prepare(QStringLiteral("INSERT INTO Tracks (path, url, title, artist, album, year, genre, trackNo, length) "
-                                 "VALUES (:path, :url, :title, :artist, :album, :year, :genre, :trackNo, :length)"));
+                                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"));
+
+    QVariantList paths, urls, titles, artists, albums, years, genres, trackNos, lengths;
 
     for (const auto &rootPath: qAsConst(m_rootPaths)) { // TODO watch paths for changes
         QDirIterator it(rootPath, {QStringLiteral("*.mp3"), QStringLiteral("*.ogg"), QStringLiteral("*.oga"),
@@ -76,22 +78,33 @@ void DbIndexer::parse()
             QString genre = f.tag()->genre().toCString(true);
             if (genre.isEmpty()) genre = tr("Unknown genre");
 
-            query.bindValue(QStringLiteral(":path"), filePath);
-            query.bindValue(QStringLiteral(":url"), QUrl::fromLocalFile(filePath));
-            query.bindValue(QStringLiteral(":title"), f.tag()->title().toCString(true));
-            query.bindValue(QStringLiteral(":artist"), f.tag()->artist().toCString(true));
-            query.bindValue(QStringLiteral(":album"), album);
-            query.bindValue(QStringLiteral(":year"), f.tag()->year());
-            query.bindValue(QStringLiteral(":genre"), genre);
-            query.bindValue(QStringLiteral(":trackNo"), f.tag()->track() + pos);
-            query.bindValue(QStringLiteral(":length"), f.audioProperties()->lengthInSeconds());
-            if (!query.exec()) {
-                //qWarning() << "Failed to insert track:" << filePath << "; error:" << query.lastError().text();
-            }
-            query.finish();
+            paths.append(filePath);
+            urls.append(QUrl::fromLocalFile(filePath));
+            titles.append(f.tag()->title().toCString(true));
+            artists.append(f.tag()->artist().toCString(true));
+            albums.append(album);
+            years.append(f.tag()->year());
+            genres.append(genre);
+            trackNos.append(f.tag()->track() + pos);
+            lengths.append(f.audioProperties()->lengthInSeconds());
         }
     }
 
+    query.addBindValue(paths);
+    query.addBindValue(urls);
+    query.addBindValue(titles);
+    query.addBindValue(artists);
+    query.addBindValue(albums);
+    query.addBindValue(years);
+    query.addBindValue(genres);
+    query.addBindValue(trackNos);
+    query.addBindValue(lengths);
+
+    if (!query.execBatch()) {
+        qWarning() << "Failed to batch insert; error:" << query.lastError();
+    }
+
+    query.finish();
     query.clear();
     setIndexing(false);
 #ifdef QT_DEBUG
