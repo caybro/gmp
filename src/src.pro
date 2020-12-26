@@ -15,12 +15,10 @@ QML_IMPORT_MAJOR_VERSION = 1
 QML_IMPORT_PATH = $$OUT_PWD
 
 SOURCES += main.cpp \
-    dbindexer.cpp \
-    indexer.cpp
+    dbindexer.cpp
 
 HEADERS += \
-    dbindexer.h \
-    indexer.h
+    dbindexer.h
 
 OTHER_FILES = \
     qml/*.qml \

@@ -6,8 +6,6 @@
 #include <QQmlContext>
 #include <QLoggingCategory>
 
-#include "indexer.h"
-
 int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArrayLiteral("qtvirtualkeyboard"));
