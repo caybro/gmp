@@ -16,6 +16,7 @@ Page {
     signal albumSelected(string album)
     signal genreSelected(string genre)
     signal shufflePlay()
+    signal playAlbum(string album, int index)
 
     QtObject {
         id: priv
@@ -152,6 +153,7 @@ Page {
                     console.debug("Clicked album:", modelData);
                     root.albumSelected(modelData);
                 }
+                onPlayAlbum: root.playAlbum(album, index)
             }
 
             ScrollIndicator.vertical: ScrollIndicator {}

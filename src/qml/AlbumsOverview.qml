@@ -13,6 +13,7 @@ Page {
 
     signal albumSelected(string album)
     signal shufflePlayArtist(string artist)
+    signal playAlbum(string album, int index)
 
     // TODO provide quick actions to sort by alphabet/oldest first/newest first
 
@@ -46,6 +47,7 @@ Page {
                 console.debug("Clicked:", modelData);
                 root.albumSelected(modelData);
             }
+            onPlayAlbum: root.playAlbum(album, index)
         }
 
         ScrollIndicator.vertical: ScrollIndicator {}

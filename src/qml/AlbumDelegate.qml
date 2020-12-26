@@ -11,6 +11,8 @@ ItemDelegate {
     property string numTracks: "?"
     property string genre: ""
 
+    signal playAlbum(string album, int index)
+
     contentItem: Column {
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -19,6 +21,19 @@ ItemDelegate {
             width: 150
             height: width
             sourceSize: Qt.size(width, height)
+
+            RoundButton {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: 5
+                width: 48
+                height: 48
+                icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
+                onClicked: {
+                    root.playAlbum(modelData, 0);
+                }
+                highlighted: true
+            }
         }
 
         Label {
