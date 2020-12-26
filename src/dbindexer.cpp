@@ -34,7 +34,7 @@ void DbIndexer::parse()
 {
     setIndexing(true);
 #ifdef QT_DEBUG
-    qDebug() << "!!! Indexing";
+    qDebug() << "!!! Start indexing...";
     QElapsedTimer timer;
     timer.start();
 #endif
@@ -88,9 +88,11 @@ void DbIndexer::parse()
             if (!query.exec()) {
                 //qWarning() << "Failed to insert track:" << filePath << "; error:" << query.lastError().text();
             }
+            query.finish();
         }
     }
 
+    query.clear();
     setIndexing(false);
 #ifdef QT_DEBUG
     qDebug() << "!!! Indexing took" << timer.elapsed() << "ms";
