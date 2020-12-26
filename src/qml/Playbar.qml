@@ -38,6 +38,20 @@ ToolBar {
     readonly property string artist: metadata[1] ?? "";
     readonly property string album: metadata[2] ?? "";
 
+    Slider {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: -height/2
+        padding: 0
+        live: false
+        from: 0
+        to: player.duration
+        value: player.position
+        visible: player.hasAudio && player.source !== ""
+        onMoved: player.seek(valueAt(position))
+    }
+
     RowLayout {
         id: playbarLayout
         anchors.fill: parent
@@ -108,24 +122,6 @@ ToolBar {
             icon.source: "qrc:/icons/ic_skip_next_48px.svg"
             visible: player.playlist && player.playlist.itemCount > 1
             onClicked: player.playlist.next()
-        }
-    }
-
-    ProgressBar {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        from: 0
-        to: player.duration
-        value: player.position
-        visible: player.hasAudio && player.source !== ""
-        MouseArea {
-            anchors.fill: parent
-            visible: player.seekable
-            enabled: visible
-            onClicked: {
-                player.seek(player.duration/parent.width * mouse.x);
-            }
         }
     }
 }
