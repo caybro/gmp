@@ -124,9 +124,6 @@ QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantLis
             result.push_back(q.value(i).toString());
         }
     } else {
-        qDebug() << "!!! RESET MODEL";
-        beginResetModel();
-        endResetModel();
         result.push_back(q.numRowsAffected());
     }
     q.finish();
