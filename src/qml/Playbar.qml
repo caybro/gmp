@@ -27,7 +27,7 @@ ToolBar {
     }
 
     signal artistSelected(string artist)
-    signal albumSelected(string album)
+    signal albumSelected(string album, string artist)
 
     SqlQueryModel {
         id: queryModel
@@ -87,9 +87,9 @@ ToolBar {
                 elide: Text.ElideRight
                 onLinkActivated: {
                     if (link.startsWith("artist:/")) {
-                        root.artistSelected(unescape(link.substring(link.indexOf("/")+1)));
+                        root.artistSelected(root.artist);
                     } else if (link.startsWith("album:/")) {
-                        root.albumSelected(unescape(link.substring(link.indexOf("/")+1)));
+                        root.albumSelected(root.album, root.artist);
                     }
                 }
             }

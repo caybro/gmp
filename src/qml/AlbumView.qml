@@ -8,9 +8,10 @@ import org.gmp.sqlext 1.0
 Page {
     id: root
     objectName: "AlbumViewPage"
-    title: "%1 · %2".arg(album).arg(albumModel.get(0, "artist"))
+    title: "%1 · %2".arg(album).arg(artist)
 
     property string album
+    property string artist
     property int currentPlaylistIndex
     property url currentPlayUrl
     onCurrentPlayUrlChanged: {
@@ -24,7 +25,8 @@ Page {
     SqlQueryModel {
         id: albumModel
         db: DbIndexer.dbName
-        query: "SELECT url, title, artist, genre, year, length FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(root.album))
+        query: "SELECT url, title, genre, year, length FROM Tracks WHERE (album='%1' AND artist='%2') ORDER BY trackNo"
+            .arg(escapeSingleQuote(root.album)).arg(escapeSingleQuote(root.artist))
     }
 
     ListView {
@@ -47,7 +49,7 @@ Page {
                     font.pixelSize: root.font.pixelSize * 1.2
                 }
                 Label {
-                    text: albumModel.get(0, "artist")
+                    text: root.artist
                 }
                 Label {
                     text: albumModel.get(0, "genre")

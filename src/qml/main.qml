@@ -90,7 +90,7 @@ ApplicationWindow {
         id: playbar
         visible: playlist.itemCount
         player: player
-        onAlbumSelected: stackViewConnections.onAlbumSelected(album)
+        onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
     }
 
@@ -109,9 +109,9 @@ ApplicationWindow {
             playlist.addItem(playFileUrl);
             player.play();
         }
-        function onAlbumSelected(album) {
+        function onAlbumSelected(album, artist) {
             stackView.push("AlbumView.qml",
-                           {"album": album, "currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; }),
+                           {"album": album, "artist": artist, "currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; }),
                                "currentPlaylistIndex": Qt.binding(function() { return playlist.currentIndex; })});
         }
         function onArtistSelected(artist) {

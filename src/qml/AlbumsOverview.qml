@@ -11,7 +11,7 @@ Page {
 
     property string artist
 
-    signal albumSelected(string album)
+    signal albumSelected(string album, string artist)
     signal shufflePlayArtist(string artist)
     signal playAlbum(string album, int index)
 
@@ -45,7 +45,7 @@ Page {
             genre: albumsModel.get(index, "genre") ?? ""
             onClicked: {
                 console.debug("Clicked:", modelData);
-                root.albumSelected(modelData);
+                root.albumSelected(modelData, root.artist);
             }
             onPlayAlbum: root.playAlbum(album, index)
         }
