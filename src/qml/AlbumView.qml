@@ -19,6 +19,7 @@ Page {
 
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
+    signal editTrackMetadata(url track)
 
     SqlQueryModel {
         id: albumModel
@@ -93,6 +94,9 @@ Page {
             onClicked: {
                 console.debug("Clicked track:", modelData);
                 root.playAlbum(root.album, index);
+            }
+            onPressAndHold: {
+                root.editTrackMetadata(modelData)
             }
         }
 

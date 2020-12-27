@@ -10,6 +10,7 @@ ToolBar {
     id: root
     objectName: "Playbar"
     contentHeight: playbarLayout.implicitHeight
+    focusPolicy: Qt.NoFocus
 
     required property Audio player
 

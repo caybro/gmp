@@ -28,6 +28,7 @@ Page {
     signal playRequested(url playFileUrl)
     signal playGenre(string genre)
     signal shufflePlayGenre(string genre)
+    signal editTrackMetadata(url track)
 
     SqlQueryModel {
         id: genreModel
@@ -48,6 +49,9 @@ Page {
             onClicked: {
                 console.debug("Clicked:", modelData);
                 root.playRequested(modelData);
+            }
+            onPressAndHold: {
+                root.editTrackMetadata(modelData)
             }
         }
     }

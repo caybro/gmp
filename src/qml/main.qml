@@ -174,6 +174,85 @@ ApplicationWindow {
             const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE artist=?", [artist]);
             playlist.duration = Number(duration);
         }
+        function onEditTrackMetadata(trackUrl) {
+            console.debug("Edit track metadata:", trackUrl);
+            editMetaDialog.trackUrl = trackUrl;
+            editMetaDialog.open();
+        }
+    }
+
+    Dialog {
+        id: editMetaDialog
+        width: window.width * 2 / 3
+
+        property url trackUrl
+        property var metadata
+
+        anchors.centerIn: parent
+        title: qsTr("Edit Track Metadata")
+        standardButtons: Dialog.Save | Dialog.Cancel
+        modal: true
+        focus: true
+
+        GridLayout {
+            anchors.fill: parent
+            columns: 2
+            Label {
+                text: qsTr("Title:")
+            }
+            TextField {
+                id: titleEdit
+                Layout.fillWidth: true
+                text: editMetaDialog.metadata ? editMetaDialog.metadata[0] : ""
+                placeholderText: qsTr("Track Title")
+            }
+            Label {
+                text: qsTr("Artist:")
+            }
+            TextField {
+                id: artistEdit
+                Layout.fillWidth: true
+                text: editMetaDialog.metadata ? editMetaDialog.metadata[1] : ""
+                placeholderText: qsTr("Track Artist")
+            }
+            Label {
+                text: qsTr("Album:")
+            }
+            TextField {
+                id: albumEdit
+                Layout.fillWidth: true
+                text: editMetaDialog.metadata ? editMetaDialog.metadata[2] : ""
+                placeholderText: qsTr("Track Album")
+            }
+            Label {
+                text: qsTr("Year:")
+            }
+            TextField {
+                id: yearEdit
+                Layout.fillWidth: true
+                text: editMetaDialog.metadata ? editMetaDialog.metadata[3] : ""
+                placeholderText: qsTr("Track Year")
+            }
+            Label {
+                text: qsTr("Genre:")
+            }
+            TextField {
+                id: genreEdit
+                Layout.fillWidth: true
+                text: editMetaDialog.metadata ? editMetaDialog.metadata[4] : ""
+                placeholderText: qsTr("Track Genre")
+            }
+        }
+
+        onAboutToShow: {
+            console.log("Dialog about to show")
+            metadata = helperModel.execRowQuery("SELECT title, artist, album, year, genre FROM Tracks WHERE url=?", [trackUrl]);
+        }
+        onAccepted: {
+            const saveQuery = helperModel.execRowQuery("UPDATE Tracks SET title=?, artist=?, album=?, year=?, genre=? WHERE url=?",
+                                                       [titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.text, genreEdit.text, trackUrl]);
+            console.log("Save clicked, result:", saveQuery[0])
+        }
     }
 
     Audio {
@@ -196,8 +275,6 @@ ApplicationWindow {
 
         ColumnLayout {
             id: drawerLayout
-            anchors.fill: parent
-
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Playlist")

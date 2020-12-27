@@ -14,6 +14,8 @@ Page {
     readonly property bool isEmpty: !playlist.itemCount
     property var playlist
 
+    signal editTrackMetadata(url track)
+
     property var toolbarAction: Component {
         Row {
             ToolButton {
@@ -47,6 +49,9 @@ Page {
             secondaryText: metadata[1] + " · " + metadata[2]
             highlighted: isPlaying
             onClicked: playlist.currentIndex = index
+            onPressAndHold: {
+                root.editTrackMetadata(modelData)
+            }
         }
 
         ScrollIndicator.vertical: ScrollIndicator {}

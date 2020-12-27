@@ -12,7 +12,7 @@ class SqlQueryModel : public QSqlQueryModel, public QQmlParserStatus
     QML_ELEMENT
 
     Q_PROPERTY(QString db READ dbFileName WRITE setDbFileName NOTIFY dbFileNameChanged REQUIRED)
-    Q_PROPERTY(QString query READ queryString WRITE setQueryString NOTIFY queryChanged REQUIRED)
+    Q_PROPERTY(QString query READ queryString WRITE setQueryString NOTIFY queryChanged)
     // TODO user, password, hostname, port
 
 public:
@@ -28,7 +28,7 @@ public:
 
     Q_INVOKABLE QVariantList execListQuery(const QString &query) const;
 
-    Q_INVOKABLE QVariantList execRowQuery(const QString &query, const QVariantList &args) const;
+    Q_INVOKABLE QVariantList execRowQuery(const QString &query, const QVariantList &args);
 
 signals:
     void dbFileNameChanged();

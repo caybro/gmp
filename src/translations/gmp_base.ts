@@ -4,7 +4,7 @@
 <context>
     <name>AlbumView</name>
     <message numerus="yes">
-        <location filename="../qml/AlbumView.qml" line="55"/>
+        <location filename="../qml/AlbumView.qml" line="56"/>
         <source>%n track(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -45,19 +45,6 @@
     </message>
 </context>
 <context>
-    <name>Indexer</name>
-    <message>
-        <location filename="../indexer.cpp" line="155"/>
-        <source>Unknown album</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../indexer.cpp" line="157"/>
-        <source>Unknown genre</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Library</name>
     <message>
         <location filename="../qml/Library.qml" line="10"/>
@@ -65,39 +52,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="33"/>
+        <location filename="../qml/Library.qml" line="34"/>
         <source>Type to search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="65"/>
+        <location filename="../qml/Library.qml" line="66"/>
         <source>Artists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="66"/>
+        <location filename="../qml/Library.qml" line="67"/>
         <source>Albums</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="67"/>
+        <location filename="../qml/Library.qml" line="68"/>
         <source>Songs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="68"/>
+        <location filename="../qml/Library.qml" line="69"/>
         <source>Genres</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/Library.qml" line="122"/>
+        <location filename="../qml/Library.qml" line="123"/>
         <source>%n album(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/Library.qml" line="204"/>
+        <location filename="../qml/Library.qml" line="208"/>
         <source>%n track(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -123,22 +110,77 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="203"/>
+        <location filename="../qml/main.qml" line="192"/>
+        <source>Edit Track Metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="201"/>
+        <source>Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="207"/>
+        <source>Track Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="210"/>
+        <source>Artist:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="216"/>
+        <source>Track Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="219"/>
+        <source>Album:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="225"/>
+        <source>Track Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="228"/>
+        <source>Year:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="234"/>
+        <source>Track Year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="237"/>
+        <source>Genre:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="243"/>
+        <source>Track Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="280"/>
         <source>Playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="212"/>
+        <location filename="../qml/main.qml" line="289"/>
         <source>Last Played</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="221"/>
+        <location filename="../qml/main.qml" line="298"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="230"/>
+        <location filename="../qml/main.qml" line="307"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>

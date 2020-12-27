@@ -17,6 +17,7 @@ Page {
     signal genreSelected(string genre)
     signal shufflePlay()
     signal playAlbum(string album, int index)
+    signal editTrackMetadata(url track)
 
     QtObject {
         id: priv
@@ -180,6 +181,9 @@ Page {
                 onClicked: {
                     console.debug("Clicked track:", modelData);
                     root.playRequested(modelData);
+                }
+                onPressAndHold: {
+                    root.editTrackMetadata(modelData)
                 }
             }
 

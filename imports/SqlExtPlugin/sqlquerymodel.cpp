@@ -98,10 +98,10 @@ QVariantList SqlQueryModel::execListQuery(const QString &query) const
     return result;
 }
 
-QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantList &args) const
+QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantList &args)
 {
     QVariantList result;
-    QSqlQuery q(m_db);
+    QSqlQuery q;
     if (!q.prepare(query)) {
         qWarning() << "Failed to prepare row query:" << query << q.lastError();
         return result;
@@ -110,21 +110,24 @@ QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantLis
         q.addBindValue(arg);
     }
     if (!q.exec()) {
-        qWarning() << "Executing row query failed:" << query << q.lastError();
+        qWarning() << "Executing row query failed:" << q.executedQuery() << q.lastError();
         return result;
     }
-    if (!q.isSelect()) {
-        qWarning() << "Row query is not SELECT!";
-        return result;
-    }
-    if (!q.first()) {
-        qWarning() << "Failed positioning row query at first result:" << query << q.lastError();
-        return result;
-    }
+    if (q.isSelect()) {
+        if (!q.first()) {
+            qWarning() << "Failed positioning row query at first result:" << query << q.lastError();
+            return result;
+        }
 
-    const auto record = q.record();
-    for (int i = 0; i < record.count(); i++) {
-        result.push_back(q.value(i).toString());
+        const auto record = q.record();
+        for (int i = 0; i < record.count(); i++) {
+            result.push_back(q.value(i).toString());
+        }
+    } else {
+        qDebug() << "!!! RESET MODEL";
+        beginResetModel();
+        endResetModel();
+        result.push_back(q.numRowsAffected());
     }
     q.finish();
     return result;
@@ -144,7 +147,7 @@ void SqlQueryModel::setQueryString(const QString &query)
     if (m_db.isOpen()) {
         setQuery(m_query, m_db);
         if (lastError().isValid())
-             qWarning() << "Error setting model query:" << lastError();
+            qWarning() << "Error setting model query:" << lastError();
         // TODO update resulting number of rows property
     }
     emit queryChanged();
