@@ -22,6 +22,8 @@ public:
 
     Q_INVOKABLE QUrl coverArtForFile(const QUrl &fileUrl) const;
     Q_INVOKABLE QUrl coverArtForAlbum(const QString &album) const;
+    Q_INVOKABLE bool saveMetadata(const QUrl &url, const QString &title, const QString &artist, const QString &album,
+                                  int year, const QString &genre);
 
 signals:
     void rootPathsChanged(const QStringList &rootPaths);

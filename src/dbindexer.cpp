@@ -19,6 +19,10 @@
 #include <taglib/attachedpictureframe.h>
 #include <taglib/mpegfile.h>
 
+TagLib::String toTString(const QString &str) {
+    return TagLib::String(str.toUtf8().constData(), TagLib::String::UTF8);
+}
+
 DbIndexer::DbIndexer(QObject *parent)
     : QObject(parent)
 {
@@ -163,6 +167,31 @@ QUrl DbIndexer::coverArtForAlbum(const QString &album) const
     if (result.isEmpty())
         result = QStringLiteral("qrc:/icons/ic_album_48px.svg");
 
+    return result;
+}
+
+bool DbIndexer::saveMetadata(const QUrl &url, const QString &title, const QString &artist, const QString &album,
+                             int year, const QString &genre)
+{
+    auto f = TagLib::FileRef(QFile::encodeName(url.toLocalFile()));
+    f.tag()->setTitle(toTString(title));
+    f.tag()->setArtist(toTString(artist));
+    f.tag()->setAlbum(toTString(album));
+    f.tag()->setYear(year);
+    f.tag()->setGenre(toTString(genre));
+    bool result = f.save();
+
+    QSqlQuery query;
+    query.prepare(QStringLiteral("UPDATE Tracks SET title=?, artist=?, album=?, year=?, genre=? WHERE url=?"));
+    query.addBindValue(title);
+    query.addBindValue(artist);
+    query.addBindValue(album);
+    query.addBindValue(year);
+    query.addBindValue(genre);
+    query.addBindValue(url);
+    result = result && query.exec();
+
+    qDebug() << "Saved metadata for url:" << url << "; status:" << result;
     return result;
 }
 

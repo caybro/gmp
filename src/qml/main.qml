@@ -249,9 +249,8 @@ ApplicationWindow {
             metadata = helperModel.execRowQuery("SELECT title, artist, album, year, genre FROM Tracks WHERE url=?", [trackUrl]);
         }
         onAccepted: {
-            const saveQuery = helperModel.execRowQuery("UPDATE Tracks SET title=?, artist=?, album=?, year=?, genre=? WHERE url=?",
-                                                       [titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.text, genreEdit.text, trackUrl]);
-            console.log("Save clicked, result:", saveQuery[0])
+            console.log("Save clicked");
+            DbIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, parseInt(yearEdit.text, 10), genreEdit.text);
         }
     }
 
