@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QQmlContext>
 #include <QLoggingCategory>
+#include <QTouchDevice>
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QGuiApplication app(argc, argv);
+
+    if (QTouchDevice::devices().isEmpty()) {
+        qputenv("QT_QUICK_CONTROLS_MATERIAL_VARIANT", "Dense"); // denser variant for desktop
+    }
 
     QLoggingCategory::setFilterRules("*.debug=true\nqt.*.debug=false");
 
