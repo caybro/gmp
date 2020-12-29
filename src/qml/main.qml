@@ -352,6 +352,8 @@ ApplicationWindow {
         x: 0
         y: window.height
         width: window.width
+        enabled: ["ios", "android"].includes(Qt.platform.os)
+        visible: enabled
 
         states: State {
             name: "visible"
@@ -365,12 +367,10 @@ ApplicationWindow {
             from: ""
             to: "visible"
             reversible: true
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.InOutQuad
-                }
+            NumberAnimation {
+                properties: "y"
+                duration: 250
+                easing.type: Easing.InOutQuad
             }
         }
     }
