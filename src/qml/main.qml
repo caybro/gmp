@@ -1,10 +1,11 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtMultimedia 5.12
-import QtQuick.VirtualKeyboard 2.4
-import Qt.labs.settings 1.0
+import QtQuick.VirtualKeyboard 2.12
+import Qt.labs.settings 1.1
+import Qt.labs.platform 1.1 as Platform
 
 import org.gmp.model 1.0
 import org.gmp.sqlext 1.0
@@ -92,6 +93,7 @@ ApplicationWindow {
         player: player
         onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
+        onCurrentTrackChanged: trayIcon.showMessage(Qt.application.name, qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
     }
 
     SqlQueryModel {
@@ -371,6 +373,61 @@ ApplicationWindow {
                 properties: "y"
                 duration: 250
                 easing.type: Easing.InOutQuad
+            }
+        }
+    }
+
+    Platform.SystemTrayIcon {
+        id: trayIcon
+        visible: true
+        icon {
+            name: player.playing ? "media-playback-start" : "media-playback-stop"
+        }
+        tooltip: Qt.application.displayName
+        onActivated: {
+            window.show()
+            window.raise()
+            window.requestActivate()
+        }
+        menu: Platform.Menu {
+            Platform.MenuItem {
+                visible: playlist.itemCount > 0
+                enabled: playbar.canPlayPrevious
+                text: "⏮ " + qsTr("P&revious")
+                onTriggered: player.playlist.previous()
+            }
+            Platform.MenuItem {
+                visible: playlist.itemCount > 0
+                text: player.playing ? "⏸ " + qsTr("&Pause") : "⯈ " + qsTr("&Play")
+                onTriggered: player.playing ? player.pause() : player.play()
+            }
+            Platform.MenuItem {
+                visible: playlist.itemCount > 0
+                enabled: playbar.canPlayNext
+                text: "⏭ " + qsTr("&Next")
+                onTriggered: player.playlist.next()
+            }
+            Platform.MenuSeparator {}
+            Platform.MenuItem {
+                text: qsTr("&Show")
+                visible: !window.visible
+                onTriggered: {
+                    window.show();
+                    window.raise();
+                    window.requestActivate();
+                }
+            }
+            Platform.MenuItem {
+                text: qsTr("&Hide")
+                visible: window.visible
+                onTriggered: {
+                    window.hide();
+                }
+            }
+            Platform.MenuItem {
+                text: qsTr("&Quit")
+                onTriggered: Qt.quit()
+                role: Platform.MenuItem.QuitRole
             }
         }
     }

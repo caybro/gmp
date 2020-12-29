@@ -1,8 +1,7 @@
 TEMPLATE = app
 TARGET = gmp
 
-QT += gui qml sql
-QT -= widgets
+QT += gui qml sql widgets
 
 CONFIG += c++14
 

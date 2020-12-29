@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QTranslator>
 #include <QLibraryInfo>
@@ -10,9 +10,10 @@ int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArrayLiteral("qtvirtualkeyboard"));
 
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    QGuiApplication app(argc, argv);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QApplication app(argc, argv);
+    app.setQuitOnLastWindowClosed(false);
 
     QLoggingCategory::setFilterRules("*.debug=true\nqt.*.debug=false");
 
