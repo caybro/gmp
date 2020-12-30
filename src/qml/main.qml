@@ -39,6 +39,12 @@ ApplicationWindow {
         parseTimer.start();
     }
 
+    Binding {
+        target: Qt.styleHints
+        property: "useHoverEffects"
+        value: !["ios", "android", "winrt"].includes(Qt.platform.os)
+    }
+
     Timer {
         id: parseTimer
         interval: 100
@@ -336,7 +342,7 @@ ApplicationWindow {
         x: 0
         y: window.height
         width: window.width
-        enabled: ["ios", "android"].includes(Qt.platform.os)
+        enabled: ["ios", "android", "winrt"].includes(Qt.platform.os)
         visible: enabled
 
         states: State {
