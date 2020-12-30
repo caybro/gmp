@@ -8,11 +8,10 @@ import org.gmp.sqlext 1.0
 Page {
     id: root
     objectName: "PlaylistPage"
-    title: "%1 · %2 𝅘𝅥 · %3".arg(qsTr("Playlist")).arg(playlist.itemCount)
-        .arg(isEmpty ? formatSeconds(0) : formatSeconds(playlist.duration))
+    title: "%1 · %2 𝅘𝅥 · %3".arg(qsTr("Playlist")).arg(Player.playlist.itemCount)
+        .arg(isEmpty ? formatSeconds(0) : formatSeconds(Player.playlist.duration))
 
-    readonly property bool isEmpty: !playlist.itemCount
-    property var playlist
+    readonly property bool isEmpty: !Player.playlist.itemCount
 
     signal editTrackMetadata(url track)
 
@@ -21,12 +20,12 @@ Page {
             ToolButton {
                 icon.source: "qrc:/icons/ic_shuffle_48px.svg"
                 enabled: !root.isEmpty
-                onClicked: playlist.shuffle()
+                onClicked: Player.playlist.shuffle()
             }
             ToolButton {
                 icon.source: "qrc:/icons/clear_all-black-48dp.svg"
                 enabled: !root.isEmpty
-                onClicked: playlist.clear()
+                onClicked: Player.playlist.clear()
             }
         }
     }
@@ -39,16 +38,16 @@ Page {
     ListView {
         id: tracksListView
         anchors.fill: parent
-        model: root.playlist
+        model: Player.playlist
         clip: true
         delegate: CustomItemDelegate {
-            readonly property bool isPlaying: playlist.currentItemSource === model.source
+            readonly property bool isPlaying: Player.currentPlayUrl === model.source
             readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?", [model.source])
             width: ListView.view.width
             text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata[0]
             secondaryText: metadata[1] + " · " + metadata[2]
             highlighted: isPlaying
-            onClicked: playlist.currentIndex = index
+            onClicked: Player.playlist.currentIndex = index
             onPressAndHold: {
                 root.editTrackMetadata(modelData)
             }

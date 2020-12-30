@@ -11,7 +11,8 @@ PKGCONFIG += taglib
 CONFIG += qmltypes
 QML_IMPORT_NAME = org.gmp.model
 QML_IMPORT_MAJOR_VERSION = 1
-QML_IMPORT_PATH = $$OUT_PWD
+QML_IMPORT_PATH += $$PWD/qml
+QML_IMPORT_PATH += $$OUT_PWD
 
 SOURCES += main.cpp \
     dbindexer.cpp

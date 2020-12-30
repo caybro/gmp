@@ -10,7 +10,6 @@ Page {
     title: "%1 · %2".arg(genre).arg(qsTr("%n track(s)", "", listview.count))
 
     property string genre
-    property url currentPlayUrl
 
     property var toolbarAction: Component {
         Row {
@@ -41,7 +40,7 @@ Page {
         anchors.fill: parent
         model: genreModel
         delegate: CustomItemDelegate {
-            readonly property bool isPlaying: root.currentPlayUrl == modelData
+            readonly property bool isPlaying: Player.currentPlayUrl == modelData
             width: ListView.view.width
             text: (isPlaying ? "⯈ " : "") + genreModel.get(index, "title")
             secondaryText: genreModel.get(index, "artist") + " · " + genreModel.get(index, "album")

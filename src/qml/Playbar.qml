@@ -13,26 +13,19 @@ ToolBar {
     focusPolicy: Qt.NoFocus
 
     readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
-                                                            [player.playlist.currentItemSource])
+                                                            [Player.currentPlayUrl])
     readonly property string title: metadata[0] ?? "";
     readonly property string artist: metadata[1] ?? "";
     readonly property string album: metadata[2] ?? "";
-
-    readonly property bool canPlayPrevious: player.playlist && player.playlist.itemCount > 1 &&
-                                            player.playlist.currentIndex > 0
-    readonly property bool canPlayNext: player.playlist && player.playlist.itemCount > 1 &&
-                                        player.playlist.currentIndex < player.playlist.itemCount - 1
-
-    required property Audio player
 
     signal currentTrackChanged(string title, string artist, string album)
     signal artistSelected(string artist)
     signal albumSelected(string album, string artist)
 
     Connections {
-        target: root.player.playlist
+        target: Player.playlist
         function onCurrentItemSourceChanged() {
-            const trackUrl = player.playlist.currentItemSource;
+            const trackUrl = Player.currentPlayUrl;
             const cover = DbIndexer.coverArtForFile(trackUrl);
             // @disable-check M126
             if (cover != "")
@@ -59,16 +52,16 @@ ToolBar {
         padding: 0
         live: false
         from: 0
-        to: player.duration
-        value: player.position
-        visible: player.hasAudio && player.source !== "" && player.seekable
-        onMoved: player.seek(valueAt(position))
+        to: Player.duration
+        value: Player.position
+        visible: Player.hasAudio && Player.source !== "" && Player.seekable
+        onMoved: Player.seek(valueAt(position))
     }
 
     RowLayout {
         id: playbarLayout
         anchors.fill: parent
-        visible: player.hasAudio && player.source !== ""
+        visible: Player.hasAudio && Player.source !== ""
         
         Image {
             Layout.margins: 5
@@ -113,25 +106,25 @@ ToolBar {
         
         Label {
             id: timeString
-            text: "%1 / %2".arg(formatSeconds(player.position/1000)).arg(formatSeconds(player.duration/1000))
+            text: "%1 / %2".arg(formatSeconds(Player.position/1000)).arg(formatSeconds(Player.duration/1000))
         }
         
         ToolButton {
             icon.source: "qrc:/icons/ic_skip_previous_48px.svg"
-            enabled: root.canPlayPrevious
-            onClicked: player.playlist.previous()
+            enabled: Player.canPlayPrevious
+            onClicked: Player.playlist.previous()
         }
         
         RoundButton {
-            icon.source: player.playing ? "qrc:/icons/ic_pause_48px.svg" : "qrc:/icons/ic_play_arrow_48px.svg"
-            onClicked: player.playing ? player.pause() : player.play()
+            icon.source: Player.playing ? "qrc:/icons/ic_pause_48px.svg" : "qrc:/icons/ic_play_arrow_48px.svg"
+            onClicked: Player.playing ? Player.pause() : Player.play()
             highlighted: true
         }
         
         ToolButton {
             icon.source: "qrc:/icons/ic_skip_next_48px.svg"
-            enabled: root.canPlayNext
-            onClicked: player.playlist.next()
+            enabled: Player.canPlayNext
+            onClicked: Player.playlist.next()
         }
     }
 }

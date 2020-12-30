@@ -12,10 +12,12 @@ Page {
 
     property string album
     property string artist
-    property int currentPlaylistIndex
-    property url currentPlayUrl
-    onCurrentPlayUrlChanged: {
-        listview.positionViewAtIndex(root.currentPlaylistIndex, ListView.Contain);
+
+    Connections {
+        target: Player
+        function onCurrentPlayUrlChanged(url) {
+            listview.positionViewAtIndex(Player.currentPlaylistIndex, ListView.Contain);
+        }
     }
 
     signal playAlbum(string album, int index)
@@ -87,7 +89,7 @@ Page {
         }
 
         delegate: CustomItemDelegate {
-            readonly property bool isPlaying: root.currentPlayUrl == modelData
+            readonly property bool isPlaying: Player.currentPlayUrl == modelData
             width: ListView.view.width
             text: (isPlaying ? "⯈ " : "") +
                   (index + 1) + " · " + albumModel.get(index, "title")

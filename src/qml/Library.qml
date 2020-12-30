@@ -9,8 +9,6 @@ Page {
     objectName: "LibraryPage"
     title: qsTr("Library")
 
-    property url currentPlayUrl: ""
-
     signal playRequested(url playFileUrl)
     signal artistSelected(string artist)
     signal albumSelected(string album, string artist)
@@ -173,7 +171,7 @@ Page {
             }
             clip: true
             delegate: CustomItemDelegate {
-                readonly property bool isPlaying: root.currentPlayUrl == modelData
+                readonly property bool isPlaying: Player.currentPlayUrl == modelData
                 width: ListView.view.width
                 text: (isPlaying ? "⯈ " : "") + tracksModel.get(index, "title")
                 secondaryText: tracksModel.get(index, "artist") + " · " + tracksModel.get(index, "album")

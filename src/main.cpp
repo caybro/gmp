@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     appTrans.load(QStringLiteral(":/translations/gmp_") + QLocale::system().name());
     app.installTranslator(&appTrans);
 
+    qmlRegisterSingletonType(QUrl("qrc:/qml/Player.qml"), "org.gmp.player", 1, 0, "Player");
+
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

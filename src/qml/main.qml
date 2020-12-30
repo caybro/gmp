@@ -19,8 +19,6 @@ ApplicationWindow {
     //    Material.primary: Material.DeepOrange
     //    Material.accent: Material.Orange
 
-    readonly property alias currentPlayUrl: playlist.currentItemSource
-
     function formatSeconds(secs) {
         var sec_num = parseInt(secs, 10);
         var hours   = Math.floor(sec_num / 3600);
@@ -89,11 +87,11 @@ ApplicationWindow {
 
     footer: Playbar {
         id: playbar
-        visible: playlist.itemCount
-        player: player
+        visible: Player.playlist.itemCount
         onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
-        onCurrentTrackChanged: trayIcon.showMessage(Qt.application.name, qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
+        onCurrentTrackChanged: trayIcon.showMessage(Qt.application.name,
+                                                    qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
     }
 
     SqlQueryModel {
@@ -107,74 +105,71 @@ ApplicationWindow {
         ignoreUnknownSignals: true
 
         function onPlayRequested(playFileUrl) {
-            playlist.clear();
-            playlist.addItem(playFileUrl);
-            player.play();
+            Player.playlist.clear();
+            Player.playlist.addItem(playFileUrl);
+            Player.play();
         }
         function onAlbumSelected(album, artist) {
-            stackView.push("AlbumView.qml",
-                           {"album": album, "artist": artist, "currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; }),
-                               "currentPlaylistIndex": Qt.binding(function() { return playlist.currentIndex; })});
+            stackView.push("AlbumView.qml", {"album": album, "artist": artist});
         }
         function onArtistSelected(artist) {
             stackView.push("AlbumsOverview.qml", {"artist": artist});
         }
         function onPlayAlbum(album, index) {
-            playlist.clear();
+            Player.playlist.clear();
             const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(album)));
-            playlist.addItems(urls);
-            playlist.currentIndex = index;
-            player.play();
+            Player.playlist.addItems(urls);
+            Player.currentPlaylistIndex = index;
+            Player.play();
             const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE album=?", [album]);
-            playlist.duration = Number(duration);
+            Player.playlist.duration = Number(duration);
         }
         function onShufflePlayAlbum(album) {
-            playlist.clear();
+            Player.playlist.clear();
             const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(album)));
-            playlist.addItems(urls);
-            playlist.shuffle();
-            player.play();
+            Player.playlist.addItems(urls);
+            Player.playlist.shuffle();
+            Player.play();
             const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE album=?", [album]);
-            playlist.duration = Number(duration);
+            Player.playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
-            stackView.push("GenreOverview.qml",
-                           {"genre": genre, "currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })});
+            stackView.push("GenreOverview.qml");
         }
         function onPlayGenre(genre) {
-            playlist.clear();
+            Player.playlist.clear();
             const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(genre)));
-            playlist.addItems(urls);
-            player.play();
+            Player.playlist.addItems(urls);
+            Player.play();
             const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE genre=?", [genre]);
-            playlist.duration = Number(duration);
+            Player.playlist.duration = Number(duration);
         }
         function onShufflePlayGenre(genre) {
-            playlist.clear();
+            Player.playlist.clear();
             const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1'".arg(escapeSingleQuote(genre)));
-            playlist.addItems(urls);
-            playlist.shuffle();
-            player.play();
+            Player.playlist.addItems(urls);
+            Player.playlist.shuffle();
+            Player.play();
             const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE genre=?", [genre]);
-            playlist.duration = Number(duration);
+            Player.playlist.duration = Number(duration);
         }
         function onShufflePlay() {
-            playlist.clear();
+            Player.playlist.clear();
             const urls = helperModel.execListQuery("SELECT url FROM Tracks");
-            playlist.addItems(urls);
-            playlist.shuffle();
-            player.play();
+            Player.playlist.addItems(urls);
+            Player.playlist.shuffle();
+            Player.play();
             const duration = helperModel.execHelperQuery("SELECT SUM(length) AS duration FROM Tracks");
-            playlist.duration = Number(duration);
+            Player.playlist.duration = Number(duration);
         }
         function onShufflePlayArtist(artist) {
-            playlist.clear();
+            Player.playlist.clear();
             const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE artist='%1'".arg(escapeSingleQuote(artist)));
-            playlist.addItems(urls);
-            playlist.shuffle();
-            player.play();
+            Player.playlist.addItems(urls);
+            Player.playlist.shuffle();
+            Player.play();
             const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE artist=?", [artist]);
-            playlist.duration = Number(duration);
+            Player.playlist.duration = Number(duration);
         }
         function onEditTrackMetadata(trackUrl) {
             console.debug("Edit track metadata:", trackUrl);
@@ -256,19 +251,6 @@ ApplicationWindow {
         }
     }
 
-    Audio {
-        readonly property bool playing: playbackState === MediaPlayer.PlayingState
-
-        id: player
-        audioRole: MediaPlayer.MusicRole
-        autoPlay: true
-        playlist: Playlist {
-            id: playlist
-            property int duration
-            playbackMode: Playlist.Sequential
-        }
-    }
-
     Drawer {
         id: drawer
         width: drawerLayout.childrenRect.width * 1.1
@@ -281,7 +263,7 @@ ApplicationWindow {
                 text: qsTr("Playlist")
                 icon.source: "qrc:/icons/ic_queue_music_48px.svg"
                 onClicked: {
-                    stackView.replace(null, "Playlist.qml", {"playlist": Qt.binding(function() { return playlist; })});
+                    stackView.replace(null, "Playlist.qml");
                     drawer.close();
                 }
             }
@@ -299,7 +281,7 @@ ApplicationWindow {
                 text: qsTr("Library")
                 icon.source: "qrc:/icons/ic_library_music_48px.svg"
                 onClicked: {
-                    stackView.replace(null, "Library.qml", {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })})
+                    stackView.replace(null, "Library.qml");
                     drawer.close();
                 }
             }
@@ -329,7 +311,7 @@ ApplicationWindow {
             console.info("!!! INDEXING CHANGED:", DbIndexer.indexing);
             if (!DbIndexer.indexing) {
                 helperModel.db = DbIndexer.dbName;
-                stackView.replace(null, "Library.qml", {"currentPlayUrl": Qt.binding(function() { return window.currentPlayUrl; })})
+                stackView.replace(null, "Library.qml");
             }
         }
     }
@@ -381,31 +363,31 @@ ApplicationWindow {
         id: trayIcon
         visible: true
         icon {
-            name: player.playing ? "media-playback-start" : "media-playback-stop"
+            name: Player.playing ? "media-playback-start" : "media-playback-stop"
         }
         tooltip: Qt.application.displayName
         onActivated: {
-            window.show()
-            window.raise()
-            window.requestActivate()
+            window.show();
+            window.raise();
+            window.requestActivate();
         }
         menu: Platform.Menu {
             Platform.MenuItem {
-                visible: playlist.itemCount > 0
-                enabled: playbar.canPlayPrevious
+                visible: Player.playlist.itemCount > 0
+                enabled: Player.canPlayPrevious
                 text: "⏮ " + qsTr("P&revious")
-                onTriggered: player.playlist.previous()
+                onTriggered: Player.playlist.previous()
             }
             Platform.MenuItem {
-                visible: playlist.itemCount > 0
-                text: player.playing ? "⏸ " + qsTr("&Pause") : "⯈ " + qsTr("&Play")
-                onTriggered: player.playing ? player.pause() : player.play()
+                visible: Player.playlist.itemCount > 0
+                text: Player.playing ? "⏸ " + qsTr("&Pause") : "⯈ " + qsTr("&Play")
+                onTriggered: Player.playing ? Player.pause() : Player.play()
             }
             Platform.MenuItem {
-                visible: playlist.itemCount > 0
-                enabled: playbar.canPlayNext
+                visible: Player.playlist.itemCount > 0
+                enabled: Player.canPlayNext
                 text: "⏭ " + qsTr("&Next")
-                onTriggered: player.playlist.next()
+                onTriggered: Player.playlist.next()
             }
             Platform.MenuSeparator {}
             Platform.MenuItem {
