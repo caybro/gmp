@@ -27,5 +27,6 @@
         <file>icons/ic_queue_music_48px.svg</file>
         <file>icons/clear_all-black-48dp.svg</file>
         <file>qml/Player.qml</file>
+        <file>icons/sort_by_alpha-black-48dp.svg</file>
     </qresource>
 </RCC>

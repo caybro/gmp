@@ -15,10 +15,20 @@ Page {
     signal shufflePlayArtist(string artist)
     signal playAlbum(string album, int index)
 
-    // TODO provide quick actions to sort by alphabet/oldest first/newest first
+    QtObject {
+        id: priv
+        property bool alphaSort
+    }
 
     property var toolbarAction: Component {
         Row {
+            ToolButton {
+                id: alphaSort
+                checkable: true
+                checked: false
+                icon.source: "qrc:/icons/sort_by_alpha-black-48dp.svg"
+                onToggled: priv.alphaSort = checked;
+            }
             ToolButton {
                 icon.source: "qrc:/icons/ic_shuffle_48px.svg"
                 onClicked: root.shufflePlayArtist(root.artist)
@@ -29,7 +39,8 @@ Page {
     SqlQueryModel {
         id: albumsModel
         db: DbIndexer.dbName
-        query: "SELECT album, year, genre FROM Tracks WHERE artist='%1' GROUP BY album".arg(escapeSingleQuote(root.artist))
+        query: "SELECT album, year, genre FROM Tracks WHERE artist='%1' GROUP BY album ORDER BY %2"
+            .arg(escapeSingleQuote(root.artist)).arg(priv.alphaSort ? "album" : "year")
     }
 
     GridView {
@@ -40,9 +51,9 @@ Page {
         model: albumsModel
         delegate: AlbumDelegate {
             artist: root.artist
-            year: albumsModel.get(index, "year") ?? ""
+            year: albumsModel.get(index, "year") ?? "";
             numTracks: Number(albumsModel.execRowQuery("SELECT COUNT(url) FROM Tracks WHERE (album=? AND artist=?)", [modelData, root.artist]))
-            genre: albumsModel.get(index, "genre") ?? ""
+            genre: albumsModel.get(index, "genre") ?? "";
             onClicked: {
                 console.debug("Clicked:", modelData);
                 root.albumSelected(modelData, root.artist);
