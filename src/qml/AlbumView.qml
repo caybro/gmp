@@ -74,6 +74,8 @@ Page {
                             listview.positionViewAtBeginning();
                         }
                         highlighted: true
+                        ToolTip.text: qsTr("Play Album")
+                        ToolTip.visible: hovered
                     }
                     RoundButton {
                         width: 64
@@ -83,6 +85,8 @@ Page {
                             root.shufflePlayAlbum(root.album);
                             listview.positionViewAtBeginning();
                         }
+                        ToolTip.text: qsTr("Play Album in Random Order")
+                        ToolTip.visible: hovered
                     }
                 }
             }

@@ -45,11 +45,15 @@ Page {
                     else
                         searchField.clear();
                 }
+                ToolTip.text: qsTr("Search")
+                ToolTip.visible: hovered
             }
             ToolButton {
                 id: shufflePlayButton
                 icon.source: "qrc:/icons/ic_shuffle_48px.svg"
                 onClicked: root.shufflePlay();
+                ToolTip.text: qsTr("Shuffle Play")
+                ToolTip.visible: hovered
             }
             Component.onDestruction: searchField.clear(); // clear when we get unloaded
         }

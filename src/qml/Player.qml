@@ -8,8 +8,8 @@ Audio {
     objectName: "AudioPlayer"
 
     readonly property alias currentPlayUrl: playlist.currentItemSource
-    readonly property bool playing: playbackState === MediaPlayer.PlayingState
 
+    readonly property bool playing: playbackState === MediaPlayer.PlayingState
     readonly property bool canPlayPrevious: playlist.itemCount > 1 && playlist.currentIndex > 0
     readonly property bool canPlayNext: playlist.itemCount > 1 && playlist.currentIndex < playlist.itemCount - 1
 

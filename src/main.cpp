@@ -5,6 +5,7 @@
 #include <QIcon>
 #include <QQmlContext>
 #include <QLoggingCategory>
+#include <QTouchDevice>
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,10 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
+
+    if (QTouchDevice::devices().isEmpty()) {
+        qputenv("QT_QUICK_CONTROLS_HOVER_ENABLED", QByteArrayLiteral("1"));
+    }
 
     QLoggingCategory::setFilterRules("*.debug=true\nqt.*.debug=false");
 

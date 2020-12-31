@@ -19,6 +19,8 @@ ApplicationWindow {
     //    Material.primary: Material.DeepOrange
     //    Material.accent: Material.Orange
 
+    readonly property bool isMobileOS: ["ios", "android", "winrt"].includes(Qt.platform.os)
+
     function formatSeconds(secs) {
         var sec_num = parseInt(secs, 10);
         var hours   = Math.floor(sec_num / 3600);
@@ -37,12 +39,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         parseTimer.start();
-    }
-
-    Binding {
-        target: Qt.styleHints
-        property: "useHoverEffects"
-        value: !["ios", "android", "winrt"].includes(Qt.platform.os)
     }
 
     Timer {
@@ -73,6 +69,8 @@ ApplicationWindow {
                         drawer.open()
                     }
                 }
+                ToolTip.text: stackView.depth > 1 ? qsTr("Back") : qsTr("Menu")
+                ToolTip.visible: hovered
             }
 
             Label {
@@ -342,7 +340,7 @@ ApplicationWindow {
         x: 0
         y: window.height
         width: window.width
-        enabled: ["ios", "android", "winrt"].includes(Qt.platform.os)
+        enabled: window.isMobileOS
         visible: enabled
 
         states: State {

@@ -16,10 +16,14 @@ Page {
             ToolButton {
                 icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
                 onClicked: root.playGenre(root.genre)
+                ToolTip.text: qsTr("Play Genre")
+                ToolTip.visible: hovered
             }
             ToolButton {
                 icon.source: "qrc:/icons/ic_shuffle_48px.svg"
                 onClicked: root.shufflePlayGenre(root.genre)
+                ToolTip.text: qsTr("Play Genre in Random Order")
+                ToolTip.visible: hovered
             }
         }
     }
