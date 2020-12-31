@@ -55,7 +55,8 @@ ToolBar {
         from: 0
         to: Player.duration
         value: Player.position
-        visible: Player.hasAudio && Player.source !== "" && Player.seekable
+        visible: Player.hasAudio && Player.source !== ""
+        enabled: Player.seekable
         onMoved: Player.seek(valueAt(position))
 
         ToolTip {
