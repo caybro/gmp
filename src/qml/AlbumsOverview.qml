@@ -23,7 +23,6 @@ Page {
     property var toolbarAction: Component {
         Row {
             ToolButton {
-                id: alphaSort
                 checkable: true
                 checked: false
                 icon.source: "qrc:/icons/sort_by_alpha-black-48dp.svg"

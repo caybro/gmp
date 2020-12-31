@@ -45,6 +45,7 @@ ToolBar {
     }
 
     Slider {
+        id: slider
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -56,6 +57,12 @@ ToolBar {
         value: Player.position
         visible: Player.hasAudio && Player.source !== "" && Player.seekable
         onMoved: Player.seek(valueAt(position))
+
+        ToolTip {
+            parent: slider.handle
+            visible: slider.pressed
+            text: formatSeconds(slider.value/1000)
+        }
     }
 
     RowLayout {
