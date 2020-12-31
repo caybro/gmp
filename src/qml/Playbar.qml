@@ -106,15 +106,16 @@ ToolBar {
                     }
                 }
             }
+            Label {
+                width: parent.width
+                maximumLineCount: 1
+                elide: Text.ElideRight
+                text: "%1 / %2".arg(formatSeconds(Player.position/1000)).arg(formatSeconds(Player.duration/1000))
+            }
         }
         
         Item {
             Layout.fillWidth: true
-        }
-        
-        Label {
-            id: timeString
-            text: "%1 / %2".arg(formatSeconds(Player.position/1000)).arg(formatSeconds(Player.duration/1000))
         }
         
         ToolButton {
