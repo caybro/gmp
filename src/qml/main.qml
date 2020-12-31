@@ -138,7 +138,7 @@ ApplicationWindow {
             Player.playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
-            stackView.push("GenreOverview.qml");
+            stackView.push("GenreOverview.qml", {"genre": genre});
         }
         function onPlayGenre(genre) {
             Player.playlist.clear();
