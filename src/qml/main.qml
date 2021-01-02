@@ -193,7 +193,7 @@ ApplicationWindow {
         title: qsTr("Edit Track Metadata")
         standardButtons: Dialog.Save | Dialog.Cancel
         modal: true
-        focus: true
+        focus: visible
 
         GridLayout {
             anchors.fill: parent
@@ -257,11 +257,12 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: drawerLayout.childrenRect.width * 1.1
+        width: 400
         height: window.height
 
         ColumnLayout {
             id: drawerLayout
+            anchors.fill: parent
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Playlist")
