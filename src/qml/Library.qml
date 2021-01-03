@@ -42,8 +42,10 @@ Page {
                     searchField.visible = !searchField.visible;
                     if (searchField.visible)
                         searchField.forceActiveFocus();
-                    else
+                    else {
                         searchField.clear();
+                        root.parent.forceActiveFocus();
+                    }
                 }
                 ToolTip.text: qsTr("Search")
                 ToolTip.visible: hovered
@@ -55,6 +57,12 @@ Page {
                 ToolTip.text: qsTr("Shuffle Play")
                 ToolTip.visible: hovered
             }
+            Shortcut {
+                sequence: StandardKey.Find
+                context: Qt.ApplicationShortcut
+                onActivated: searchButton.clicked()
+            }
+
             Component.onDestruction: searchField.clear(); // clear when we get unloaded
         }
     }
