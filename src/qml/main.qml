@@ -302,7 +302,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
-                text: "%1 · %2 · (c) %3 2020".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
+                text: "%1 · %2 · (c) %3 2020-2021".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
             }
         }
     }
@@ -324,6 +324,11 @@ ApplicationWindow {
         focus: true
         Keys.onEscapePressed: stackView.pop()
         Keys.onBackPressed: stackView.pop()
+        Keys.onPressed: {
+            if (event.matches(StandardKey.Back)) {
+                stackView.pop();
+            }
+        }
         initialItem: BusyIndicator {
             anchors.centerIn: parent
             running: true
