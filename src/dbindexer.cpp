@@ -130,7 +130,7 @@ QUrl DbIndexer::coverArtForFile(const QUrl &fileUrl) const
         if (l.isEmpty())
             return {};
 
-        TagLib::ID3v2::AttachedPictureFrame *f = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
+        auto *f = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
         if (!f)
             return {};
 

@@ -1,4 +1,9 @@
+#ifdef QT_NO_SYSTEMTRAYICON
+#include <QGuiApplication>
+#else
 #include <QApplication>
+#endif
+
 #include <QQmlApplicationEngine>
 #include <QTranslator>
 #include <QLibraryInfo>
@@ -11,10 +16,15 @@ int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArrayLiteral("qtvirtualkeyboard"));
 
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+#ifdef QT_NO_SYSTEMTRAYICON
+    QGuiApplication app(argc, argv);
+#else
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
+#endif
 
     if (QTouchDevice::devices().isEmpty()) {
         qputenv("QT_QUICK_CONTROLS_HOVER_ENABLED", QByteArrayLiteral("1"));

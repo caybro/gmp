@@ -3,6 +3,8 @@ TARGET = gmp
 
 QT += gui quick sql widgets
 
+android: QT -= widgets
+
 CONFIG += c++14
 
 CONFIG += link_pkgconfig

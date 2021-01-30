@@ -363,8 +363,9 @@ ApplicationWindow {
 
     Platform.SystemTrayIcon {
         id: trayIcon
-        visible: true
+        visible: available
         icon {
+            mask: true
             name: Player.playing ? "media-playback-start" : "media-playback-stop"
         }
         tooltip: Qt.application.displayName
