@@ -13,11 +13,8 @@ import org.gmp.sqlext 1.0
 ApplicationWindow {
     id: window
     visible: true
-    width: 800
-    height: 600
-
-    //    Material.primary: Material.DeepOrange
-    //    Material.accent: Material.Orange
+    width: isMobileOS ? Screen.width : 800
+    height: isMobileOS ? Screen.height : 600
 
     readonly property bool isMobileOS: ["ios", "android", "winrt"].includes(Qt.platform.os)
 
