@@ -77,27 +77,20 @@ Page {
         db: DbIndexer.dbName
     }
 
-    Component.onCompleted: {
-        artistsButton.text = qsTr("Artists") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT artist) FROM Tracks") + ")" ?? "");
-        albumsButton.text = qsTr("Albums") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT album) FROM Tracks") + ")" ?? "");
-        songsButton.text = qsTr("Songs") + (" (" + queryModel.execHelperQuery("SELECT COUNT(url) FROM Tracks") + ")" ?? "");
-        genresButton.text = qsTr("Genres") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT genre) FROM Tracks") + ")" ?? "");
-    }
-
     TabBar {
         id: tabbar
         width: parent.width
         TabButton {
-            id: artistsButton
+            text: qsTr("Artists") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT artist) FROM Tracks") + ")" ?? "")
         }
         TabButton {
-            id: albumsButton
+            text: qsTr("Albums") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT album) FROM Tracks") + ")" ?? "")
         }
         TabButton {
-            id: songsButton
+            text: qsTr("Songs") + (" (" + queryModel.execHelperQuery("SELECT COUNT(url) FROM Tracks") + ")" ?? "")
         }
         TabButton {
-            id: genresButton
+            text: qsTr("Genres") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT genre) FROM Tracks") + ")" ?? "")
         }
     }
 
