@@ -33,7 +33,7 @@ void SqlQueryModel::componentComplete()
         return;
     }
 
-    setQuery(m_query);
+    setQueryString(m_query);
 }
 
 QString SqlQueryModel::dbFileName() const
@@ -63,7 +63,7 @@ QString SqlQueryModel::errorMessage() const
 
 QVariant SqlQueryModel::get(int row, const QString &name) const
 {
-    return data(createIndex(row, record().indexOf(name)));
+    return data(index(row, record().indexOf(name)));
 }
 
 QVariant SqlQueryModel::execHelperQuery(const QString &query) const

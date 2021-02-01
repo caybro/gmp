@@ -177,20 +177,25 @@ ApplicationWindow {
             editMetaDialog.trackUrl = trackUrl;
             editMetaDialog.open();
         }
+        function onEditAlbumMetadata(album, artist) {
+            console.debug("Edit album metadata:", album, artist)
+            editAlbumMetaDialog.album = album;
+            editAlbumMetaDialog.artist = artist;
+            editAlbumMetaDialog.open();
+        }
     }
 
     Dialog {
         id: editMetaDialog
         width: window.width * 2 / 3
-
-        property url trackUrl
-        property var metadata
-
         anchors.centerIn: parent
         title: qsTr("Edit Track Metadata")
         standardButtons: Dialog.Save | Dialog.Cancel
         modal: true
         focus: visible
+
+        property url trackUrl
+        property var metadata
 
         GridLayout {
             anchors.fill: parent
@@ -249,6 +254,53 @@ ApplicationWindow {
         onAccepted: {
             console.log("Save clicked");
             DbIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, parseInt(yearEdit.text, 10), genreEdit.text);
+        }
+    }
+
+    Dialog {
+        id: editAlbumMetaDialog
+        width: window.width * 2 / 3
+        anchors.centerIn: parent
+        title: qsTr("Edit Album Metadata")
+        standardButtons: Dialog.Save | Dialog.Cancel
+        modal: true
+        focus: visible
+
+        property string album
+        property string artist
+        property var metadata
+
+        GridLayout {
+            anchors.fill: parent
+            columns: 2
+            Label {
+                text: qsTr("Genre:")
+            }
+            TextField {
+                id: albumGenreEdit
+                Layout.fillWidth: true
+                text: editAlbumMetaDialog.metadata ? editAlbumMetaDialog.metadata[0] : ""
+                placeholderText: qsTr("Album Genre")
+            }
+            Label {
+                text: qsTr("Year:")
+            }
+            SpinBox {
+                id: albumYearEdit
+                from: 0
+                to: 9999
+                value: editAlbumMetaDialog.metadata ? editAlbumMetaDialog.metadata[1] : ""
+                textFromValue: function(value) { return value; }
+            }
+        }
+
+        onAboutToShow: {
+            console.log("Dialog about to show")
+            metadata = helperModel.execRowQuery("SELECT genre, year FROM Tracks WHERE album=? AND artist=?", [album, artist]);
+        }
+        onAccepted: {
+            console.log("Save clicked");
+            DbIndexer.saveAlbumMetadata(editAlbumMetaDialog.album, editAlbumMetaDialog.artist, albumGenreEdit.text, albumYearEdit.value);
         }
     }
 

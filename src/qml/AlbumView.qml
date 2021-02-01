@@ -23,6 +23,18 @@ Page {
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
     signal editTrackMetadata(url track)
+    signal editAlbumMetadata(string album, string artist)
+
+    property var toolbarAction: Component {
+        ToolButton {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            icon.source: "qrc:/icons/more_vert-black-48dp.svg"
+            onClicked: root.editAlbumMetadata(root.album, root.artist)
+            ToolTip.text: qsTr("Edit Album Metadata")
+            ToolTip.visible: hovered
+        }
+    }
 
     SqlQueryModel {
         id: albumModel

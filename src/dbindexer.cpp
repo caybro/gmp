@@ -194,6 +194,44 @@ bool DbIndexer::saveMetadata(const QUrl &url, const QString &title, const QStrin
     return result;
 }
 
+bool DbIndexer::saveAlbumMetadata(const QString &album, const QString &artist, const QString &genre, int year)
+{
+    QSqlQuery q;
+    q.prepare(QStringLiteral("SELECT id, path FROM Tracks WHERE album=? AND artist=?"));
+    q.addBindValue(album);
+    q.addBindValue(artist);
+    if (!q.exec()) {
+        qWarning() << "Failed to get list of tracks for album:" << album << "and artist:" << artist << "; error:" << q.lastError();
+        return false;
+    }
+
+    QStringList paths;
+    while (q.next()) {
+        paths.push_back(q.value(1).toString());
+    }
+    q.finish();
+
+    bool result = true;
+    TagLib::FileRef f;
+    for (const auto &path: paths) {
+        f = TagLib::FileRef(QFile::encodeName(path));
+        f.tag()->setGenre(toTString(genre));
+        f.tag()->setYear(year);
+        if (!f.save())
+            result = false;
+    }
+
+    QSqlQuery query;
+    query.prepare(QStringLiteral("UPDATE Tracks SET genre=?, year=? WHERE path IN (?)"));
+    query.addBindValue(genre);
+    query.addBindValue(year);
+    query.addBindValue(paths.join(QStringLiteral(", ")));
+    result = result && query.exec();
+
+    qDebug() << "Saved metadata for album:" << album << "and artist:" << artist << "; status:" << result;
+    return result;
+}
+
 QString DbIndexer::dbName() const
 {
     return m_dbName;
