@@ -65,7 +65,11 @@ Page {
             Shortcut {
                 sequence: "Esc"
                 context: Qt.ApplicationShortcut
-                onActivated: searchButton.clicked()
+                onActivated: {
+                    searchField.visible = false;
+                    searchField.clear();
+                    root.parent.forceActiveFocus();
+                }
             }
 
             Component.onDestruction: searchField.clear(); // clear when we get unloaded
