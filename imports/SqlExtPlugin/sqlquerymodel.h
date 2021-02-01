@@ -24,10 +24,9 @@ public:
 
     Q_INVOKABLE QVariant get(int row, const QString &name) const;
 
+    // helper methods
     Q_INVOKABLE QVariant execHelperQuery(const QString &query) const;
-
     Q_INVOKABLE QVariantList execListQuery(const QString &query) const;
-
     Q_INVOKABLE QVariantList execRowQuery(const QString &query, const QVariantList &args);
 
 signals:

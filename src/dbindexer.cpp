@@ -1,22 +1,21 @@
 #include "dbindexer.h"
 
+#include <QDebug>
 #include <QDir>
+#include <QDirIterator>
+#include <QElapsedTimer>
+#include <QFile>
+#include <QHashIterator>
+#include <QImage>
 #include <QSqlDatabase>
 #include <QSqlDriver>
 #include <QSqlError>
-#include <QDebug>
 #include <QSqlQuery>
-#include <QDirIterator>
-#include <QFile>
-#include <QDebug>
-#include <QHashIterator>
 #include <QUrl>
-#include <QElapsedTimer>
-#include <QImage>
 
+#include <taglib/attachedpictureframe.h>
 #include <taglib/fileref.h>
 #include <taglib/id3v2tag.h>
-#include <taglib/attachedpictureframe.h>
 #include <taglib/mpegfile.h>
 
 TagLib::String toTString(const QString &str) {
@@ -239,19 +238,20 @@ void DbIndexer::setIndexing(bool indexing)
 
 void DbIndexer::setupDatabase()
 {
+#if 0
     const auto storageLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     //qDebug() << "Storage location:" << storageLocation;
     QDir storageDir(storageLocation);
     if (!storageDir.exists()) {
         storageDir.mkpath(storageLocation);
     }
+#endif
 
     QSqlDatabase db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
+#if 0
     db.setDatabaseName(storageLocation + QStringLiteral("/gmp.db"));
-    if (!db.open()) {
-        qWarning() << "DB open failed:" << db.lastError();
-        return;
-    }
+#endif
+    db.setDatabaseName(QStringLiteral(":memory:"));
 
     if (!db.driver()->hasFeature(QSqlDriver::QuerySize)) {
         qInfo() << "DB driver" << db.driverName() << "doesn't support query size!";

@@ -29,7 +29,7 @@ void SqlQueryModel::classBegin()
 void SqlQueryModel::componentComplete()
 {
     if (!m_db.open()) {
-        qWarning() << Q_FUNC_INFO << "DB open failed:" << m_db.lastError().text();
+        qWarning() << "DB open failed:" << m_db.lastError().text();
         return;
     }
 
@@ -68,7 +68,7 @@ QVariant SqlQueryModel::get(int row, const QString &name) const
 
 QVariant SqlQueryModel::execHelperQuery(const QString &query) const
 {
-    QSqlQuery q(query, m_db);
+    QSqlQuery q(query);
     QVariant result;
     if (!q.isSelect()) {
         qWarning() << "Helper query is not SELECT!" << query << q.lastError();
@@ -85,7 +85,7 @@ QVariant SqlQueryModel::execHelperQuery(const QString &query) const
 
 QVariantList SqlQueryModel::execListQuery(const QString &query) const
 {
-    QSqlQuery q(query, m_db);
+    QSqlQuery q(query);
     QVariantList result;
     if (!q.isSelect()) {
         qWarning() << "List query is not SELECT:" << query << q.lastError();
