@@ -130,6 +130,14 @@ QVariantList SqlQueryModel::execRowQuery(const QString &query, const QVariantLis
     return result;
 }
 
+void SqlQueryModel::reload()
+{
+    const auto query = m_query;
+    m_query.clear();
+    clear();
+    setQueryString(query);
+}
+
 QString SqlQueryModel::queryString() const
 {
     return m_query;

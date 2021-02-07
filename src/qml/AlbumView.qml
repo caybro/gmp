@@ -12,13 +12,8 @@ Page {
 
     property string album
     property string artist
-
-    Connections {
-        target: Player
-        function onCurrentPlayUrlChanged(url) {
-            listview.positionViewAtIndex(Player.currentPlaylistIndex, ListView.Contain);
-        }
-    }
+    property string genre: albumModel.get(0, "genre");
+    property int year: albumModel.get(0, "year");
 
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
@@ -29,11 +24,24 @@ Page {
         ToolButton {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            icon.source: "qrc:/icons/more_vert-black-48dp.svg"
+            icon.source: "qrc:/icons/create-black-48dp.svg"
             onClicked: root.editAlbumMetadata(root.album, root.artist)
             ToolTip.text: qsTr("Edit Album Metadata")
             ToolTip.visible: hovered
         }
+    }
+
+    Connections {
+        target: Player
+        function onCurrentPlayUrlChanged(url) {
+            listview.positionViewAtIndex(Player.currentPlaylistIndex, ListView.Contain);
+        }
+    }
+
+    function reload() {
+        albumModel.reload();
+        root.genre = albumModel.get(0, "genre");
+        root.year = albumModel.get(0, "year");
     }
 
     SqlQueryModel {
@@ -66,14 +74,14 @@ Page {
                     text: root.artist
                 }
                 Label {
-                    text: albumModel.get(0, "genre")
+                    text: root.genre
                 }
                 Label {
                     text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count))
                     .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album)))))
                 }
                 Label {
-                    text: albumModel.get(0, "year")
+                    text: root.year
                 }
                 Row {
                     spacing: 10

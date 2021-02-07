@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QHashIterator>
 #include <QImage>
+#include <QMimeDatabase>
 #include <QSqlDatabase>
 #include <QSqlDriver>
 #include <QSqlError>
@@ -129,12 +130,12 @@ QUrl DbIndexer::coverArtForFile(const QUrl &fileUrl) const
         if (l.isEmpty())
             return {};
 
-        auto *f = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
-        if (!f)
+        auto *frame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
+        if (!frame)
             return {};
 
         QImage image;
-        image.loadFromData((const uchar *) f->picture().data(), f->picture().size());
+        image.loadFromData((const uchar *) frame->picture().data(), frame->picture().size());
         image.save(result);
         return QUrl::fromLocalFile(result);
     }
@@ -157,7 +158,7 @@ QUrl DbIndexer::coverArtForAlbum(const QString &album) const
     }
     q.finish();
     QUrl result;
-    for (const QUrl &track: tracks) {
+    for (const QUrl &track: qAsConst(tracks)) {
         result = coverArtForFile(track);
         if (!result.isEmpty())
             break;
@@ -194,7 +195,7 @@ bool DbIndexer::saveMetadata(const QUrl &url, const QString &title, const QStrin
     return result;
 }
 
-bool DbIndexer::saveAlbumMetadata(const QString &album, const QString &artist, const QString &genre, int year)
+bool DbIndexer::saveAlbumMetadata(const QString &album, const QString &artist, const QString &genre, int year, const QUrl &albumCover)
 {
     QSqlQuery q;
     q.prepare(QStringLiteral("SELECT id, path FROM Tracks WHERE album=? AND artist=?"));
@@ -213,12 +214,28 @@ bool DbIndexer::saveAlbumMetadata(const QString &album, const QString &artist, c
 
     bool result = true;
     TagLib::FileRef f;
-    for (const auto &path: paths) {
+    QMimeDatabase mime;
+    for (const auto &path: qAsConst(paths)) {
         f = TagLib::FileRef(QFile::encodeName(path));
         f.tag()->setGenre(toTString(genre));
         f.tag()->setYear(year);
-        if (!f.save())
+        if (!f.save()) {
             result = false;
+            if (albumCover.isEmpty())
+                continue;
+        }
+
+//        TagLib::MPEG::File ff(QFile::encodeName(path)); // TODO extend also beyond MP3
+//        if (ff.hasID3v2Tag()) {
+//            TagLib::ID3v2::Tag *tag = ff.ID3v2Tag();
+//            QImage image(albumCover.toLocalFile());
+//            auto *frame = new TagLib::ID3v2::AttachedPictureFrame();
+//            frame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+//            frame->setMimeType(toTString(mime.mimeTypeForFile(path).name()));
+//            frame->setPicture(TagLib::ByteVector(*image.constBits(), image.sizeInBytes()));
+//            tag->addFrame(frame);
+//            ff.save();
+//        }
     }
 
     QSqlQuery query;

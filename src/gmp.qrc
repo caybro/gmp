@@ -29,5 +29,8 @@
         <file>qml/Player.qml</file>
         <file>icons/sort_by_alpha-black-48dp.svg</file>
         <file>icons/more_vert-black-48dp.svg</file>
+        <file>qml/EditMetaDialog.qml</file>
+        <file>qml/EditAlbumMetaDialog.qml</file>
+        <file>icons/create-black-48dp.svg</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Window 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtMultimedia 5.12
@@ -185,122 +186,31 @@ ApplicationWindow {
         }
     }
 
-    Dialog {
+    EditMetaDialog {
         id: editMetaDialog
-        width: window.width * 2 / 3
         anchors.centerIn: parent
-        title: qsTr("Edit Track Metadata")
-        standardButtons: Dialog.Save | Dialog.Cancel
-        modal: true
         focus: visible
-
-        property url trackUrl
-        property var metadata
-
-        GridLayout {
-            anchors.fill: parent
-            columns: 2
-            Label {
-                text: qsTr("Title:")
+        modal: true
+        onSaved: {
+            console.debug("!!! META DIALOG SAVED")
+            console.debug("Current stack page:", stackView.currentItem.objectName)
+            if (stackView.currentItem && stackView.currentItem.reload) {
+                stackView.currentItem.reload();
             }
-            TextField {
-                id: titleEdit
-                Layout.fillWidth: true
-                text: editMetaDialog.metadata ? editMetaDialog.metadata[0] : ""
-                placeholderText: qsTr("Track Title")
-            }
-            Label {
-                text: qsTr("Artist:")
-            }
-            TextField {
-                id: artistEdit
-                Layout.fillWidth: true
-                text: editMetaDialog.metadata ? editMetaDialog.metadata[1] : ""
-                placeholderText: qsTr("Track Artist")
-            }
-            Label {
-                text: qsTr("Album:")
-            }
-            TextField {
-                id: albumEdit
-                Layout.fillWidth: true
-                text: editMetaDialog.metadata ? editMetaDialog.metadata[2] : ""
-                placeholderText: qsTr("Track Album")
-            }
-            Label {
-                text: qsTr("Year:")
-            }
-            TextField {
-                id: yearEdit
-                Layout.fillWidth: true
-                text: editMetaDialog.metadata ? editMetaDialog.metadata[3] : ""
-                placeholderText: qsTr("Track Year")
-            }
-            Label {
-                text: qsTr("Genre:")
-            }
-            TextField {
-                id: genreEdit
-                Layout.fillWidth: true
-                text: editMetaDialog.metadata ? editMetaDialog.metadata[4] : ""
-                placeholderText: qsTr("Track Genre")
-            }
-        }
-
-        onAboutToShow: {
-            console.log("Dialog about to show")
-            metadata = helperModel.execRowQuery("SELECT title, artist, album, year, genre FROM Tracks WHERE url=?", [trackUrl]);
-        }
-        onAccepted: {
-            console.log("Save clicked");
-            DbIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, parseInt(yearEdit.text, 10), genreEdit.text);
         }
     }
 
-    Dialog {
+    EditAlbumMetaDialog {
         id: editAlbumMetaDialog
-        width: window.width * 2 / 3
         anchors.centerIn: parent
-        title: qsTr("Edit Album Metadata")
-        standardButtons: Dialog.Save | Dialog.Cancel
-        modal: true
         focus: visible
-
-        property string album
-        property string artist
-        property var metadata
-
-        GridLayout {
-            anchors.fill: parent
-            columns: 2
-            Label {
-                text: qsTr("Genre:")
+        modal: true
+        onSaved: {
+            console.debug("!!! ALBUM META DIALOG SAVED")
+            console.debug("Current stack page:", stackView.currentItem.objectName)
+            if (stackView.currentItem && stackView.currentItem.reload) {
+                stackView.currentItem.reload();
             }
-            TextField {
-                id: albumGenreEdit
-                Layout.fillWidth: true
-                text: editAlbumMetaDialog.metadata ? editAlbumMetaDialog.metadata[0] : ""
-                placeholderText: qsTr("Album Genre")
-            }
-            Label {
-                text: qsTr("Year:")
-            }
-            SpinBox {
-                id: albumYearEdit
-                from: 0
-                to: 9999
-                value: editAlbumMetaDialog.metadata ? editAlbumMetaDialog.metadata[1] : ""
-                textFromValue: function(value) { return value; }
-            }
-        }
-
-        onAboutToShow: {
-            console.log("Dialog about to show")
-            metadata = helperModel.execRowQuery("SELECT genre, year FROM Tracks WHERE album=? AND artist=?", [album, artist]);
-        }
-        onAccepted: {
-            console.log("Save clicked");
-            DbIndexer.saveAlbumMetadata(editAlbumMetaDialog.album, editAlbumMetaDialog.artist, albumGenreEdit.text, albumYearEdit.value);
         }
     }
 
@@ -420,7 +330,7 @@ ApplicationWindow {
 
     Platform.SystemTrayIcon {
         id: trayIcon
-        visible: available
+        visible: available && !window.isMobileOS
         icon {
             mask: true
             name: Player.playing ? "media-playback-start" : "media-playback-stop"

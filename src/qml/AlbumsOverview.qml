@@ -58,7 +58,7 @@ Page {
             numTracks: Number(albumsModel.execRowQuery("SELECT COUNT(url) FROM Tracks WHERE (album=? AND artist=?)", [modelData, root.artist]))
             genre: albumsModel.get(index, "genre") ?? "";
             onClicked: {
-                console.debug("Clicked:", modelData);
+                console.debug("Clicked album:", modelData);
                 root.albumSelected(modelData, root.artist);
             }
             onPlayAlbum: root.playAlbum(album, index)
