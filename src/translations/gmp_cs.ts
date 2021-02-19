@@ -14,8 +14,13 @@
 </context>
 <context>
     <name>AlbumView</name>
+    <message>
+        <location filename="../qml/AlbumView.qml" line="30"/>
+        <source>Edit Album Metadata</source>
+        <translation>Upravit metadata alba</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../qml/AlbumView.qml" line="60"/>
+        <location filename="../qml/AlbumView.qml" line="86"/>
         <source>%n track(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -24,14 +29,19 @@
         </translation>
     </message>
     <message>
-        <location filename="../qml/AlbumView.qml" line="77"/>
+        <location filename="../qml/AlbumView.qml" line="103"/>
         <source>Play Album</source>
         <translation>Přehrát album</translation>
     </message>
     <message>
-        <location filename="../qml/AlbumView.qml" line="88"/>
+        <location filename="../qml/AlbumView.qml" line="114"/>
         <source>Play Album in Random Order</source>
         <translation>Přehrát album v náhodném pořadí</translation>
+    </message>
+    <message>
+        <location filename="../qml/AlbumView.qml" line="137"/>
+        <source>Edit Track Metadata</source>
+        <translation>Upravit metadata skladby</translation>
     </message>
 </context>
 <context>
@@ -54,12 +64,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../qml/AlbumsOverview.qml" line="31"/>
+        <location filename="../qml/AlbumsOverview.qml" line="30"/>
         <source>Sort alphabetically</source>
         <translation>Třídit abecedně</translation>
     </message>
     <message>
-        <location filename="../qml/AlbumsOverview.qml" line="37"/>
+        <location filename="../qml/AlbumsOverview.qml" line="36"/>
         <source>Shuffle play all the artist&apos;s songs</source>
         <translation>Náhodně přehrát všechny skladby umělce</translation>
     </message>
@@ -86,6 +96,92 @@
     </message>
 </context>
 <context>
+    <name>EditAlbumMetaDialog</name>
+    <message>
+        <location filename="../qml/EditAlbumMetaDialog.qml" line="12"/>
+        <source>Edit Album Metadata</source>
+        <translation>Upravit metadata alba</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditAlbumMetaDialog.qml" line="28"/>
+        <source>Image Files (*.png *.jpg *.jpeg)</source>
+        <translation>Obrázky (*.png *.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditAlbumMetaDialog.qml" line="32"/>
+        <source>Select new album cover</source>
+        <translation>Zvolit nový obal alba</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditAlbumMetaDialog.qml" line="54"/>
+        <source>Genre:</source>
+        <translation>Žánr:</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditAlbumMetaDialog.qml" line="60"/>
+        <source>Album Genre</source>
+        <translation>Žánr alba</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditAlbumMetaDialog.qml" line="63"/>
+        <source>Year:</source>
+        <translation>Rok:</translation>
+    </message>
+</context>
+<context>
+    <name>EditMetaDialog</name>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="11"/>
+        <source>Edit Track Metadata</source>
+        <translation>Upravit metadata skladby</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="28"/>
+        <source>Title:</source>
+        <translation>Název:</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="34"/>
+        <source>Track Title</source>
+        <translation>Název skladby</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="37"/>
+        <source>Artist:</source>
+        <translation>Umělec:</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="43"/>
+        <source>Track Artist</source>
+        <translation>Umělec skladby</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="46"/>
+        <source>Album:</source>
+        <translation>Album:</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="52"/>
+        <source>Track Album</source>
+        <translation>Album skladby</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="55"/>
+        <source>Year:</source>
+        <translation>Rok:</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="66"/>
+        <source>Genre:</source>
+        <translation>Žánr:</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditMetaDialog.qml" line="72"/>
+        <source>Track Genre</source>
+        <translation>Žánr skladby</translation>
+    </message>
+</context>
+<context>
     <name>GenreOverview</name>
     <message numerus="yes">
         <location filename="../qml/GenreOverview.qml" line="10"/>
@@ -105,6 +201,11 @@
         <location filename="../qml/GenreOverview.qml" line="25"/>
         <source>Play Genre in Random Order</source>
         <translation>Přehrát žánr v náhodném pořadí</translation>
+    </message>
+    <message>
+        <location filename="../qml/GenreOverview.qml" line="61"/>
+        <source>Edit Track Metadata</source>
+        <translation>Upravit metadata skladby</translation>
     </message>
 </context>
 <context>
@@ -155,43 +256,48 @@
         <translation type="vanished">Zamíchat seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="48"/>
+        <location filename="../qml/Library.qml" line="50"/>
         <source>Search</source>
         <translation>Hledat</translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="55"/>
+        <location filename="../qml/Library.qml" line="57"/>
         <source>Shuffle Play</source>
         <translation>Náhodně přehrát</translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="68"/>
+        <location filename="../qml/Library.qml" line="88"/>
         <source>Artists</source>
         <translation>Umělci</translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="69"/>
+        <location filename="../qml/Library.qml" line="91"/>
         <source>Albums</source>
         <translation>Alba</translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="70"/>
+        <location filename="../qml/Library.qml" line="94"/>
         <source>Songs</source>
         <translation>Skladby</translation>
     </message>
     <message>
-        <location filename="../qml/Library.qml" line="71"/>
+        <location filename="../qml/Library.qml" line="97"/>
         <source>Genres</source>
         <translation>Žánry</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/Library.qml" line="125"/>
+        <location filename="../qml/Library.qml" line="135"/>
         <source>%n album(s)</source>
         <translation>
             <numerusform>%n album</numerusform>
             <numerusform>%n alba</numerusform>
             <numerusform>%n alb</numerusform>
         </translation>
+    </message>
+    <message>
+        <location filename="../qml/Library.qml" line="202"/>
+        <source>Edit Track Metadata</source>
+        <translation>Upravit metadata skladby</translation>
     </message>
     <message numerus="yes">
         <source>%n album(s))</source>
@@ -202,7 +308,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/Library.qml" line="210"/>
+        <location filename="../qml/Library.qml" line="225"/>
         <source>%n track(s)</source>
         <translation>
             <numerusform>%n skladba</numerusform>
@@ -214,22 +320,22 @@
 <context>
     <name>Playbar</name>
     <message>
-        <location filename="../qml/Playbar.qml" line="116"/>
+        <location filename="../qml/Playbar.qml" line="126"/>
         <source>Previous Track</source>
         <translation>Předchozí skladba</translation>
     </message>
     <message>
-        <location filename="../qml/Playbar.qml" line="124"/>
+        <location filename="../qml/Playbar.qml" line="135"/>
         <source>Pause</source>
         <translation>Pauza</translation>
     </message>
     <message>
-        <location filename="../qml/Playbar.qml" line="124"/>
+        <location filename="../qml/Playbar.qml" line="135"/>
         <source>Play</source>
         <translation>Přehrát</translation>
     </message>
     <message>
-        <location filename="../qml/Playbar.qml" line="132"/>
+        <location filename="../qml/Playbar.qml" line="144"/>
         <source>Next Track</source>
         <translation>Další skladba</translation>
     </message>
@@ -250,6 +356,11 @@
         <location filename="../qml/Playlist.qml" line="31"/>
         <source>Clear Playlist</source>
         <translation>Vymazat seznam skladeb</translation>
+    </message>
+    <message>
+        <location filename="../qml/Playlist.qml" line="60"/>
+        <source>Edit Track Metadata</source>
+        <translation>Upravit metadata skladby</translation>
     </message>
 </context>
 <context>
@@ -278,122 +389,111 @@
         <translation type="vanished">Právě se přehrává / Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="72"/>
+        <location filename="../qml/main.qml" line="70"/>
         <source>Back</source>
         <translation>Zpět</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="72"/>
+        <location filename="../qml/main.qml" line="70"/>
         <source>Menu</source>
         <translation>Nabídka</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="193"/>
         <source>Edit Track Metadata</source>
-        <translation>Upravit metadata skladby</translation>
+        <translation type="vanished">Upravit metadata skladby</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="202"/>
         <source>Title:</source>
-        <translation>Název:</translation>
+        <translation type="vanished">Název:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="208"/>
         <source>Track Title</source>
-        <translation>Název skladby</translation>
+        <translation type="vanished">Název skladby</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="211"/>
         <source>Artist:</source>
-        <translation>Umělec:</translation>
+        <translation type="vanished">Umělec:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="217"/>
         <source>Track Artist</source>
-        <translation>Umělec skladby</translation>
+        <translation type="vanished">Umělec skladby</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="220"/>
         <source>Album:</source>
-        <translation>Album:</translation>
+        <translation type="vanished">Album:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="226"/>
         <source>Track Album</source>
-        <translation>Album skladby</translation>
+        <translation type="vanished">Album skladby</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="229"/>
         <source>Year:</source>
-        <translation>Rok:</translation>
+        <translation type="vanished">Rok:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="235"/>
         <source>Track Year</source>
-        <translation>Rok skladby</translation>
+        <translation type="vanished">Rok skladby</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="238"/>
         <source>Genre:</source>
-        <translation>Žánr:</translation>
+        <translation type="vanished">Žánr:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="244"/>
         <source>Track Genre</source>
-        <translation>Žánr skladby</translation>
+        <translation type="vanished">Žánr skladby</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="267"/>
+        <location filename="../qml/main.qml" line="233"/>
         <source>Playlist</source>
         <translation>Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="242"/>
         <source>Last Played</source>
         <translation>Naposledy přehráno</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="285"/>
+        <location filename="../qml/main.qml" line="251"/>
         <source>Library</source>
         <translation>Knihovna</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="260"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="382"/>
+        <location filename="../qml/main.qml" line="354"/>
         <source>P&amp;revious</source>
         <translation>Před&amp;chozí</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="387"/>
+        <location filename="../qml/main.qml" line="359"/>
         <source>&amp;Pause</source>
         <translation>&amp;Pauza</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="387"/>
+        <location filename="../qml/main.qml" line="359"/>
         <source>&amp;Play</source>
         <translation>&amp;Přehrát</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="393"/>
+        <location filename="../qml/main.qml" line="365"/>
         <source>&amp;Next</source>
         <translation>&amp;Další</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="398"/>
+        <location filename="../qml/main.qml" line="370"/>
         <source>&amp;Show</source>
         <translation>&amp;Zobrazit</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="407"/>
+        <location filename="../qml/main.qml" line="379"/>
         <source>&amp;Hide</source>
         <translation>&amp;Skrýt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="414"/>
+        <location filename="../qml/main.qml" line="386"/>
         <source>&amp;Quit</source>
         <translation>U&amp;končit</translation>
     </message>
