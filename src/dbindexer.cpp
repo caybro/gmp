@@ -215,27 +215,32 @@ bool DbIndexer::saveAlbumMetadata(const QString &album, const QString &artist, c
     bool result = true;
     TagLib::FileRef f;
     QMimeDatabase mime;
+    const auto coverFile = albumCover.toLocalFile();
     for (const auto &path: qAsConst(paths)) {
         f = TagLib::FileRef(QFile::encodeName(path));
         f.tag()->setGenre(toTString(genre));
         f.tag()->setYear(year);
         if (!f.save()) {
             result = false;
-            if (albumCover.isEmpty())
-                continue;
         }
 
-//        TagLib::MPEG::File ff(QFile::encodeName(path)); // TODO extend also beyond MP3
-//        if (ff.hasID3v2Tag()) {
-//            TagLib::ID3v2::Tag *tag = ff.ID3v2Tag();
-//            QImage image(albumCover.toLocalFile());
-//            auto *frame = new TagLib::ID3v2::AttachedPictureFrame();
-//            frame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
-//            frame->setMimeType(toTString(mime.mimeTypeForFile(path).name()));
-//            frame->setPicture(TagLib::ByteVector(*image.constBits(), image.sizeInBytes()));
-//            tag->addFrame(frame);
-//            ff.save();
-//        }
+        if (albumCover.isEmpty())
+            continue;
+
+        TagLib::MPEG::File ff(QFile::encodeName(path)); // TODO extend also beyond MP3
+        TagLib::ID3v2::Tag *tag = ff.ID3v2Tag(true);
+        QFile reader(coverFile);
+        if (reader.open(QFile::ReadOnly)) {
+            tag->removeFrames("APIC"); // drop old frames of this type -> replace cover
+            const auto data = reader.readAll();
+            auto frame = new TagLib::ID3v2::AttachedPictureFrame;
+            frame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+            frame->setMimeType(toTString(mime.mimeTypeForFile(coverFile).name()));
+            frame->setPicture(TagLib::ByteVector(data.constData(), data.size()));
+            tag->addFrame(frame);
+            ff.save();
+            reader.close();
+        }
     }
 
     QSqlQuery query;

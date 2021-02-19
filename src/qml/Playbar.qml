@@ -46,6 +46,7 @@ ToolBar {
 
     Slider {
         id: slider
+        focusPolicy: Qt.NoFocus
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top

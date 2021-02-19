@@ -30,12 +30,14 @@ Dialog {
         selectMultiple: false
         folder: shortcuts.home
         title: qsTr("Select new album cover")
+        onFileUrlChanged: if (!!fileUrl) cover.source = fileUrl;
     }
 
     GridLayout {
         anchors.fill: parent
         columns: 2
         Image {
+            id: cover
             Layout.preferredWidth: 100
             Layout.preferredHeight: 100
             Layout.columnSpan: 2
