@@ -124,6 +124,7 @@ ToolBar {
             onClicked: Player.playlist.previous()
             ToolTip.text: qsTr("Previous Track")
             ToolTip.visible: hovered
+            focusPolicy: Qt.NoFocus
         }
         
         RoundButton {
@@ -132,6 +133,7 @@ ToolBar {
             highlighted: true
             ToolTip.text: Player.playing ? qsTr("Pause") : qsTr("Play")
             ToolTip.visible: hovered
+            focusPolicy: Qt.NoFocus
         }
         
         ToolButton {
@@ -140,6 +142,7 @@ ToolBar {
             onClicked: Player.playlist.next()
             ToolTip.text: qsTr("Next Track")
             ToolTip.visible: hovered
+            focusPolicy: Qt.NoFocus
         }
     }
 }

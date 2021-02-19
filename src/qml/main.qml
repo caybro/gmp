@@ -198,6 +198,9 @@ ApplicationWindow {
                 stackView.currentItem.reload();
             }
         }
+        onClosed: {
+            stackView.focus = true;
+        }
     }
 
     EditAlbumMetaDialog {
@@ -211,6 +214,9 @@ ApplicationWindow {
             if (stackView.currentItem && stackView.currentItem.reload) {
                 stackView.currentItem.reload();
             }
+        }
+        onClosed: {
+            stackView.focus = true;
         }
     }
 
