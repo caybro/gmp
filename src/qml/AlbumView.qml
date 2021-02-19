@@ -19,6 +19,7 @@ Page {
     signal shufflePlayAlbum(string album)
     signal editTrackMetadata(url track)
     signal editAlbumMetadata(string album, string artist)
+    signal artistSelected(string artist)
 
     property var toolbarAction: Component {
         ToolButton {
@@ -71,7 +72,12 @@ Page {
                     font.pixelSize: root.font.pixelSize * 1.2
                 }
                 Label {
-                    text: root.artist
+                    text: "<a href=\"artist:/%2\">%1</a>".arg(root.artist).arg(escape(root.artist))
+                    onLinkActivated: {
+                        if (link.startsWith("artist:/")) {
+                            root.artistSelected(root.artist);
+                        }
+                    }
                 }
                 Label {
                     text: root.genre
