@@ -75,7 +75,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
-                text: stackView.currentItem.title
+                text: stackView.currentItem.title ?? "";
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
             }
 

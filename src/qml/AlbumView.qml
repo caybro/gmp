@@ -20,6 +20,7 @@ Page {
     signal editTrackMetadata(url track)
     signal editAlbumMetadata(string album, string artist)
     signal artistSelected(string artist)
+    signal genreSelected(string genre)
 
     property var toolbarAction: Component {
         ToolButton {
@@ -85,7 +86,17 @@ Page {
                     }
                 }
                 Label {
-                    text: root.genre
+                    text: "<a href=\"genre:/%2\">%1</a>".arg(root.genre).arg(escape(root.genre))
+                    onLinkActivated: {
+                        if (link.startsWith("genre:/")) {
+                            root.genreSelected(root.genre);
+                        }
+                    }
+                    HoverHandler {
+                        acceptedButtons: Qt.NoButton
+                        acceptedDevices: PointerDevice.GenericPointer
+                        cursorShape: Qt.PointingHandCursor
+                    }
                 }
                 Label {
                     text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count))
