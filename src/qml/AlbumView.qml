@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
@@ -77,6 +77,11 @@ Page {
                         if (link.startsWith("artist:/")) {
                             root.artistSelected(root.artist);
                         }
+                    }
+                    HoverHandler {
+                        acceptedButtons: Qt.NoButton
+                        acceptedDevices: PointerDevice.GenericPointer
+                        cursorShape: Qt.PointingHandCursor
                     }
                 }
                 Label {

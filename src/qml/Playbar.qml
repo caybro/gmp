@@ -29,7 +29,7 @@ ToolBar {
             const cover = DbIndexer.coverArtForFile(trackUrl);
             // @disable-check M126
             if (cover != "")
-                coverArt.source = cover; // FIXME add a generic extractor and/or QQuickImageProvider
+                coverArt.source = cover;
             else
                 coverArt.source = DbIndexer.coverArtForAlbum(root.album);
 
@@ -86,7 +86,7 @@ ToolBar {
             Layout.margins: 5
             Layout.fillWidth: true
             Label {
-                text: root.title ?? "";
+                text: root.title
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 maximumLineCount: 1
                 elide: Text.ElideRight
@@ -105,6 +105,11 @@ ToolBar {
                     } else if (link.startsWith("album:/")) {
                         root.albumSelected(root.album, root.artist);
                     }
+                }
+                HoverHandler {
+                    acceptedButtons: Qt.NoButton
+                    acceptedDevices: PointerDevice.GenericPointer
+                    cursorShape: Qt.PointingHandCursor
                 }
             }
             Label {
