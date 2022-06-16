@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = SqlExtPlugin
 QT += qml sql
-CONFIG += qt plugin c++14
+CONFIG += qt plugin c++17
 
 CONFIG += qmltypes
 QML_IMPORT_NAME = org.gmp.sqlext

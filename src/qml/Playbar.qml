@@ -33,7 +33,6 @@ ToolBar {
             else
                 coverArt.source = DbIndexer.coverArtForAlbum(root.album);
 
-            // @disable-check M126
             if (trackUrl != "")
                 root.currentTrackChanged(root.title, root.artist, root.album);
         }
