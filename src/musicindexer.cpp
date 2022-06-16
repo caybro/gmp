@@ -134,6 +134,11 @@ void MusicIndexer::parse(bool incremental)
   endResetModel();
 }
 
+const std::vector<MusicRecord> &MusicIndexer::database() const
+{
+  return m_db;
+}
+
 QHash<int, QByteArray> MusicIndexer::roleNames() const
 {
   static QHash<int, QByteArray> roleNames = {{MusicRecordRole::RolePath, QByteArrayLiteral("path")},
