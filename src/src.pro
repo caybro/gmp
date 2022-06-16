@@ -1,11 +1,11 @@
 TEMPLATE = app
 TARGET = gmp
 
-QT += gui quick sql widgets
+QT += qml gui quick sql widgets
 
 android: QT -= widgets
 
-CONFIG += c++14
+CONFIG += c++17
 
 CONFIG += link_pkgconfig
 PKGCONFIG += taglib
@@ -17,10 +17,12 @@ QML_IMPORT_PATH += $$PWD/qml
 QML_IMPORT_PATH += $$OUT_PWD
 
 SOURCES += main.cpp \
-    dbindexer.cpp
+    dbindexer.cpp \
+    musicindexer.cpp
 
 HEADERS += \
-    dbindexer.h
+    dbindexer.h \
+    musicindexer.h
 
 OTHER_FILES = \
     qml/*.qml \
