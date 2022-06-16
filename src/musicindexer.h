@@ -47,6 +47,8 @@ class MusicIndexer : public QAbstractListModel
 
   Q_INVOKABLE void parse(bool incremental = false);
 
+  const std::vector<MusicRecord> &database() const;
+
  protected:
   QHash<int, QByteArray> roleNames() const override;
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;

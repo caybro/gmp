@@ -17,10 +17,12 @@ QML_IMPORT_PATH += $$PWD/qml
 QML_IMPORT_PATH += $$OUT_PWD
 
 SOURCES += main.cpp \
+    artistsmodel.cpp \
     dbindexer.cpp \
     musicindexer.cpp
 
 HEADERS += \
+    artistsmodel.h \
     dbindexer.h \
     musicindexer.h
 
