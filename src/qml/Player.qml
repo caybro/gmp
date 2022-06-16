@@ -1,6 +1,6 @@
 pragma Singleton
 
-import QtQuick 2.12
+import QtQuick 2.15
 import QtMultimedia 5.15
 
 Audio {
@@ -21,5 +21,9 @@ Audio {
         id: playlist
         property int duration
         playbackMode: Playlist.Sequential
+    }
+
+    onError: {
+        console.warn("!!! ERROR in audio playback:", errorString, "; code:", error);
     }
 }
