@@ -96,6 +96,9 @@ Page {
         TabButton {
             text: qsTr("Genres") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT genre) FROM Tracks") + ")" ?? "")
         }
+        TabButton {
+            text: "Music"
+        }
     }
 
     Loader {
@@ -114,14 +117,36 @@ Page {
                 return tracksListViewComponent;
             case 3:
                 return genresListViewComponent;
+            case 4:
+                return newMusicComponent;
             }
+        }
+    }
+
+    Component {
+        id: newMusicComponent
+        ListView {
+            clip: true
+            model: MusicIndexer
+            delegate: CustomItemDelegate {
+                readonly property bool isPlaying: Player.currentPlayUrl === model.url
+                width: ListView.view.width
+                text: (isPlaying ? "⯈ " : "") + model.title
+                secondaryText: model.artist + " · " + model.album
+                tertiaryText: model.year
+                onClicked: {
+                    console.debug("Clicked track:", model.url);
+                    root.playRequested(model.url);
+                }
+            }
+
+            ScrollIndicator.vertical: ScrollIndicator {}
         }
     }
 
     Component {
         id: artistsListViewComponent
         ListView {
-            id: artistsListView
             clip: true
             model: SqlQueryModel {
                 id: artistsModel
@@ -222,7 +247,7 @@ Page {
             delegate: CustomItemDelegate {
                 width: ListView.view.width
                 text: modelData
-                secondaryText: qsTr("%n track(s)", "", genresModel.get(index, "count"))
+                secondaryText: qsTr("%n track(s)", "", genresModel.get(index, "count") ?? 0)
                 onClicked: {
                     console.debug("Clicked genre:", modelData);
                     root.genreSelected(modelData);
