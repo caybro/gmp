@@ -6,6 +6,7 @@ import org.gmp.model 1.0
 ItemDelegate {
     id: root
 
+    property string album
     property string artist: ""
     property string year: "????"
     property string numTracks: "?"
@@ -16,7 +17,7 @@ ItemDelegate {
     contentItem: Column {
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            source: DbIndexer.coverArtForAlbum(modelData)
+            source: DbIndexer.coverArtForAlbum(root.album)
             asynchronous: true
             width: 150
             height: width
@@ -30,7 +31,7 @@ ItemDelegate {
                 height: 48
                 icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
                 onClicked: {
-                    root.playAlbum(modelData, 0);
+                    root.playAlbum(root.album, 0);
                 }
                 highlighted: true
             }
@@ -42,7 +43,7 @@ ItemDelegate {
             maximumLineCount: 1
             elide: Label.ElideRight
             horizontalAlignment: Label.AlignHCenter
-            text: modelData
+            text: root.album
         }
         Label {
             width: parent.width

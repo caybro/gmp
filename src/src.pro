@@ -19,12 +19,16 @@ QML_IMPORT_PATH += $$OUT_PWD
 SOURCES += main.cpp \
     artistsmodel.cpp \
     dbindexer.cpp \
-    musicindexer.cpp
+    musicindexer.cpp \
+    tracksmodel.cpp \
+    albumsmodel.cpp
 
 HEADERS += \
     artistsmodel.h \
     dbindexer.h \
-    musicindexer.h
+    musicindexer.h \
+    tracksmodel.h \
+    albumsmodel.h
 
 OTHER_FILES = \
     qml/*.qml \

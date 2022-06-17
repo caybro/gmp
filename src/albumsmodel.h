@@ -4,26 +4,32 @@
 
 #include <vector>
 
-struct Artist
+struct Album
 {
+  QString album;
   QString artist;
-  int numAlbums{0};
+  uint year;
+  int numTracks{0};
+  QString genre;
 };
 
 class MusicIndexer;
 
-class ArtistsModel : public QAbstractListModel
+class AlbumsModel : public QAbstractListModel
 {
   Q_OBJECT
 
  public:
-  enum ArtistRole {
+  enum AlbumRole {
+    RoleAlbum,
     RoleArtist,
-    RoleNumAlbums,
+    RoleYear,
+    RoleNumTracks,
+    RoleGenre,
   };
-  Q_ENUM(ArtistRole)
+  Q_ENUM(AlbumRole)
 
-  explicit ArtistsModel(MusicIndexer *indexer = nullptr);
+  explicit AlbumsModel(MusicIndexer *indexer = nullptr);
 
  protected:
   QHash<int, QByteArray> roleNames() const override;
@@ -32,6 +38,6 @@ class ArtistsModel : public QAbstractListModel
 
  private:
   void parse();
-  std::vector<Artist> m_db;
+  std::vector<Album> m_db;
   MusicIndexer *m_indexer;
 };

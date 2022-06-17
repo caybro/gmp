@@ -12,9 +12,8 @@
 #include <algorithm>
 
 MusicIndexer::MusicIndexer(QObject *parent)
-    : QAbstractListModel{parent}
+    : QObject{parent}
 {
-  parse();
 }
 
 QStringList MusicIndexer::rootPaths() const
@@ -56,7 +55,6 @@ void MusicIndexer::setIndexing(bool indexing)
 
 void MusicIndexer::parse(bool incremental)
 {
-  beginResetModel();
   setIndexing(true);
 #ifdef QT_DEBUG
   qDebug() << "!!! INDEXER start parsing...";
@@ -127,68 +125,14 @@ void MusicIndexer::parse(bool incremental)
   }
 
   setIndexing(false);
+  emit dataChanged();
 #ifdef QT_DEBUG
   qDebug() << "!!! INDEXER took" << timer.elapsed() << "ms";
   qDebug() << "!!! INDEXER found" << m_db.size() << "files";
 #endif
-  endResetModel();
 }
 
-const std::vector<MusicRecord> &MusicIndexer::database() const
+const MusicDatabase &MusicIndexer::database() const
 {
   return m_db;
-}
-
-QHash<int, QByteArray> MusicIndexer::roleNames() const
-{
-  static QHash<int, QByteArray> roleNames = {{MusicRecordRole::RolePath, QByteArrayLiteral("path")},
-                                             {MusicRecordRole::RoleUrl, QByteArrayLiteral("url")},
-                                             {MusicRecordRole::RoleTitle, QByteArrayLiteral("title")},
-                                             {MusicRecordRole::RoleArtist, QByteArrayLiteral("artist")},
-                                             {MusicRecordRole::RoleAlbum, QByteArrayLiteral("album")},
-                                             {MusicRecordRole::RoleYear, QByteArrayLiteral("year")},
-                                             {MusicRecordRole::RoleGenre, QByteArrayLiteral("genre")},
-                                             {MusicRecordRole::RoleTrackNo, QByteArrayLiteral("trackNo")},
-                                             {MusicRecordRole::RoleLength, QByteArrayLiteral("length")}};
-
-  return roleNames;
-}
-
-int MusicIndexer::rowCount(const QModelIndex &) const
-{
-  return static_cast<int>(m_db.size());
-}
-
-QVariant MusicIndexer::data(const QModelIndex &index, int role) const
-{
-  if (!index.isValid())
-    return QVariant();
-
-  if (index.row() >= static_cast<int>(m_db.size()))
-    return QVariant();
-
-  const auto item = m_db[index.row()];
-
-  switch (static_cast<MusicRecordRole>(role)) {
-  case MusicIndexer::RolePath:
-    return item.path;
-  case MusicIndexer::RoleUrl:
-    return item.url;
-  case MusicIndexer::RoleTitle:
-    return item.title;
-  case MusicIndexer::RoleArtist:
-    return item.artist;
-  case MusicIndexer::RoleAlbum:
-    return item.album;
-  case MusicIndexer::RoleYear:
-    return item.year;
-  case MusicIndexer::RoleGenre:
-    return item.genre;
-  case MusicIndexer::RoleTrackNo:
-    return item.trackNo;
-  case MusicIndexer::RoleLength:
-    return item.length;
-  }
-
-  return {};
 }

@@ -2,28 +2,27 @@
 
 #include <QAbstractListModel>
 
-#include <vector>
-
-struct Artist
-{
-  QString artist;
-  int numAlbums{0};
-};
-
 class MusicIndexer;
 
-class ArtistsModel : public QAbstractListModel
+class TracksModel : public QAbstractListModel
 {
   Q_OBJECT
 
  public:
-  enum ArtistRole {
+  enum TrackRole {
+    RolePath = Qt::UserRole + 1,
+    RoleUrl,
+    RoleTitle,
     RoleArtist,
-    RoleNumAlbums,
+    RoleAlbum,
+    RoleYear,
+    RoleGenre,
+    RoleTrackNo,
+    RoleLength,
   };
-  Q_ENUM(ArtistRole)
+  Q_ENUM(TrackRole)
 
-  explicit ArtistsModel(MusicIndexer *indexer = nullptr);
+  explicit TracksModel(MusicIndexer *indexer = nullptr);
 
  protected:
   QHash<int, QByteArray> roleNames() const override;
@@ -31,7 +30,5 @@ class ArtistsModel : public QAbstractListModel
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
  private:
-  void parse();
-  std::vector<Artist> m_db;
   MusicIndexer *m_indexer;
 };

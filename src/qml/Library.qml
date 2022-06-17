@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 
 import org.gmp.model 1.0
 import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -127,17 +128,11 @@ Page {
         id: newMusicComponent
         ListView {
             clip: true
-            model: MusicIndexer
+            model: ArtistsModel
             delegate: CustomItemDelegate {
-                readonly property bool isPlaying: Player.currentPlayUrl === model.url
                 width: ListView.view.width
-                text: (isPlaying ? "⯈ " : "") + model.title
-                secondaryText: model.artist + " · " + model.album
-                tertiaryText: model.year
-                onClicked: {
-                    console.debug("Clicked track:", model.url);
-                    root.playRequested(model.url);
-                }
+                text: model.artist
+                secondaryText: model.numAlbums
             }
 
             ScrollIndicator.vertical: ScrollIndicator {}
@@ -148,19 +143,14 @@ Page {
         id: artistsListViewComponent
         ListView {
             clip: true
-            model: SqlQueryModel {
-                id: artistsModel
-                db: DbIndexer.dbName
-                query: "SELECT artist, (SELECT COUNT(DISTINCT s.album) FROM Tracks AS s WHERE s.artist=t.artist) AS count FROM Tracks AS t %1 GROUP BY artist"
-                .arg(priv.searchText ? "WHERE artist LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
-            }
+            model: ArtistsModel
             delegate: CustomItemDelegate {
                 width: ListView.view.width
-                text: modelData
-                secondaryText: qsTr("%n album(s)", "", Number(artistsModel.get(index, "count")))
+                text: model.artist
+                secondaryText: qsTr("%n album(s)", "", model.numAlbums)
                 onClicked: {
-                    console.debug("Clicked artist:", modelData);
-                    root.artistSelected(modelData);
+                    console.debug("Clicked artist:", model.artist);
+                    root.artistSelected(model.artist);
                 }
             }
 
@@ -172,24 +162,20 @@ Page {
         id: albumsListViewComponent
         GridView {
             id: albumsListView
-            model: SqlQueryModel {
-                id: albumsModel
-                db: DbIndexer.dbName
-                query: "SELECT album, artist, year, genre, (SELECT COUNT(DISTINCT s.url) FROM Tracks AS s WHERE s.album=t.album) AS count FROM Tracks AS t %1 GROUP BY album"
-                .arg(priv.searchText ? "WHERE album LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
-            }
+            model: AlbumsModel
             clip: true
             cellWidth: 200
             cellHeight: 240
             delegate: AlbumDelegate {
-                artist: albumsModel.get(index, "artist")
-                year: albumsModel.get(index, "year")
-                numTracks: albumsModel.get(index, "count")
-                genre: albumsModel.get(index, "genre")
+                album: model.album
+                artist: model.artist
+                year: model.year
+                numTracks: model.numTracks
+                genre: model.genre
 
                 onClicked: {
-                    console.debug("Clicked album:", modelData);
-                    root.albumSelected(modelData, artist);
+                    console.debug("Clicked album:", album);
+                    root.albumSelected(album, artist);
                 }
                 onPlayAlbum: root.playAlbum(album, index)
             }
@@ -202,28 +188,23 @@ Page {
         id: tracksListViewComponent
         ListView {
             id: tracksListView
-            model: SqlQueryModel {
-                id: tracksModel
-                db: DbIndexer.dbName
-                query: "SELECT url, title, album, artist FROM Tracks %1 ORDER BY title"
-                .arg(priv.searchText ? "WHERE title LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
-            }
+            model: TracksModel
             clip: true
             delegate: CustomItemDelegate {
-                readonly property bool isPlaying: Player.currentPlayUrl == modelData
+                readonly property bool isPlaying: Player.currentPlayUrl === model.url
                 width: ListView.view.width
-                text: (isPlaying ? "⯈ " : "") + tracksModel.get(index, "title")
-                secondaryText: tracksModel.get(index, "artist") + " · " + tracksModel.get(index, "album")
+                text: (isPlaying ? "⯈ " : "") + model.title
+                secondaryText: model.artist + " · " + model.album
                 highlighted: isPlaying
                 onClicked: {
-                    console.debug("Clicked track:", modelData);
-                    root.playRequested(modelData);
+                    console.debug("Clicked track:", model.url);
+                    root.playRequested(model.url);
                 }
                 ToolButton {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                    onClicked: root.editTrackMetadata(modelData)
+                    onClicked: root.editTrackMetadata(model.url)
                     ToolTip.text: qsTr("Edit Track Metadata")
                     ToolTip.visible: hovered
                 }
