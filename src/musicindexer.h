@@ -1,9 +1,8 @@
 #pragma once
 
-#include <QAbstractListModel>
+#include <QObject>
 #include <QStandardPaths>
 #include <QUrl>
-#include <QmlTypeAndRevisionsRegistration>
 
 #include <vector>
 
@@ -20,43 +19,26 @@ struct MusicRecord
   int length;
 };
 
-class MusicIndexer : public QAbstractListModel
+using MusicDatabase = std::vector<MusicRecord>;
+
+class MusicIndexer : public QObject
 {
   Q_OBJECT
-  QML_ELEMENT
-  QML_SINGLETON
 
   Q_PROPERTY(QStringList rootPaths READ rootPaths WRITE setRootPaths NOTIFY rootPathsChanged)
   Q_PROPERTY(bool indexing READ isIndexing NOTIFY isIndexingChanged)
 
  public:
-  enum MusicRecordRole {
-    RolePath = Qt::UserRole + 1,
-    RoleUrl,
-    RoleTitle,
-    RoleArtist,
-    RoleAlbum,
-    RoleYear,
-    RoleGenre,
-    RoleTrackNo,
-    RoleLength,
-  };
-  Q_ENUM(MusicRecordRole)
-
   explicit MusicIndexer(QObject *parent = nullptr);
 
   Q_INVOKABLE void parse(bool incremental = false);
 
-  const std::vector<MusicRecord> &database() const;
-
- protected:
-  QHash<int, QByteArray> roleNames() const override;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  const MusicDatabase &database() const;
 
  signals:
   void rootPathsChanged(const QStringList &rootPaths);
   void isIndexingChanged(bool indexing);
+  void dataChanged();
 
  private:
   QStringList rootPaths() const;
@@ -69,5 +51,15 @@ class MusicIndexer : public QAbstractListModel
   QStringList m_rootPaths{QStandardPaths::standardLocations(QStandardPaths::MusicLocation)};
   bool m_indexing{false};
 
-  std::vector<MusicRecord> m_db;
+  MusicDatabase m_db;
 };
+
+inline uint qHash(const MusicRecord &rec)
+{
+  return qHash(rec.path);
+}
+
+inline bool operator==(const MusicRecord &rec1, const MusicRecord &rec2)
+{
+  return rec1.path == rec2.path;
+}

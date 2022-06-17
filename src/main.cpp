@@ -12,6 +12,11 @@
 #include <QTouchDevice>
 #include <QTranslator>
 
+#include "albumsmodel.h"
+#include "artistsmodel.h"
+#include "musicindexer.h"
+#include "tracksmodel.h"
+
 int main(int argc, char *argv[])
 {
   qputenv("QT_IM_MODULE", QByteArrayLiteral("qtvirtualkeyboard"));
@@ -34,7 +39,7 @@ int main(int argc, char *argv[])
 
   app.setOrganizationName(QStringLiteral("caybro"));
   app.setApplicationDisplayName(QStringLiteral("G Music Player"));
-  app.setApplicationVersion(QStringLiteral("0.0.1"));
+  app.setApplicationVersion(QStringLiteral("0.0.2"));
 
   app.setWindowIcon(QIcon(QStringLiteral(":/icons/ic_library_music_48px.svg")));
 
@@ -49,7 +54,18 @@ int main(int argc, char *argv[])
 
   qmlRegisterSingletonType(QUrl(QStringLiteral("qrc:/qml/Player.qml")), "org.gmp.player", 1, 0, "Player");
 
+  auto indexer = QScopedPointer<MusicIndexer>(new MusicIndexer);
+  auto artistsModel = QScopedPointer<ArtistsModel>(new ArtistsModel(indexer.get()));
+  auto albumsModel = QScopedPointer<AlbumsModel>(new AlbumsModel(indexer.get()));
+  auto tracksModel = QScopedPointer<TracksModel>(new TracksModel(indexer.get()));
+  indexer->parse();
+
   QQmlApplicationEngine engine;
+
+  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "ArtistsModel", artistsModel.get());
+  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "AlbumsModel", albumsModel.get());
+  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "TracksModel", tracksModel.get());
+
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
