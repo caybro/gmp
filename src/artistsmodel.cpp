@@ -14,6 +14,7 @@ ArtistsModel::ArtistsModel(MusicIndexer *indexer)
 void ArtistsModel::parse()
 {
   beginResetModel();
+  m_db.clear();
 
   // get list of uniq artists
   QMap<QString, int> artists;
@@ -36,6 +37,7 @@ void ArtistsModel::parse()
     m_db.push_back({it.key(), it.value()});
   }
 
+  emit countChanged();
   endResetModel();
 }
 
@@ -70,4 +72,9 @@ QVariant ArtistsModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
+}
+
+int ArtistsModel::count() const
+{
+  return rowCount();
 }

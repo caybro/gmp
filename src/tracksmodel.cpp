@@ -70,6 +70,11 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
   return {};
 }
 
+int TracksModel::count() const
+{
+  return rowCount();
+}
+
 QJsonObject TracksModel::getMetadata(const QUrl &url) const
 {
   const auto &db = m_indexer->database();
@@ -88,91 +93,5 @@ QJsonObject TracksModel::getMetadata(const QUrl &url) const
     i.next();
     result.insert(i.value(), QJsonValue::fromVariant(data(idx, i.key())));
   }
-  return result;
-}
-
-QList<QUrl> TracksModel::allTracks() const
-{
-  const auto &db = m_indexer->database();
-  QList<QUrl> result;
-  result.reserve(db.size());
-
-  for (const auto &rec : db) {
-    result.append(rec.url);
-  }
-
-  return result;
-}
-
-QList<QUrl> TracksModel::tracksByAlbum(const QString &album, bool ordered) const
-{
-  const auto &db = m_indexer->database();
-  std::vector<MusicRecord> tracks;
-
-  for (const auto &rec : db) {
-    if (rec.album == album)
-      tracks.push_back(rec);
-  }
-
-  if (ordered) {
-    std::sort(tracks.begin(), tracks.end(), [](const auto &t1, const auto &t2) { return t1.trackNo < t2.trackNo; });
-  }
-
-  QList<QUrl> result;
-  result.reserve(tracks.size());
-  std::transform(tracks.cbegin(), tracks.cend(), std::back_inserter(result),
-                 [](const auto &track) { return track.url; });
-
-  return result;
-}
-
-QList<QUrl> TracksModel::tracksByGenre(const QString &genre, bool ordered) const
-{
-  const auto &db = m_indexer->database();
-  std::vector<MusicRecord> tracks;
-
-  for (const auto &rec : db) {
-    if (rec.genre == genre)
-      tracks.push_back(rec);
-  }
-
-  if (ordered) {
-    std::sort(tracks.begin(), tracks.end(),
-              [](const auto &t1, const auto &t2) { return t1.title.localeAwareCompare(t2.title) < 0; });
-  }
-
-  QList<QUrl> result;
-  result.reserve(tracks.size());
-  std::transform(tracks.cbegin(), tracks.cend(), std::back_inserter(result),
-                 [](const auto &track) { return track.url; });
-
-  return result;
-}
-
-QList<QUrl> TracksModel::tracksByArtist(const QString &artist) const
-{
-  const auto &db = m_indexer->database();
-  QList<QUrl> result;
-  result.reserve(db.size());
-
-  for (const auto &rec : db) {
-    if (rec.artist == artist)
-      result.append(rec.url);
-  }
-
-  return result;
-}
-
-int TracksModel::tracksDuration(const QList<QUrl> &urls) const
-{
-  int result = 0;
-  const auto &db = m_indexer->database();
-
-  for (const auto &url : urls) {
-    const auto track = std::find_if(db.cbegin(), db.cend(), [url](MusicRecord rec) { return rec.url == url; });
-    if (track != std::cend(db))
-      result += track->length;
-  }
-
   return result;
 }

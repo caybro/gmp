@@ -14,6 +14,7 @@ AlbumsModel::AlbumsModel(MusicIndexer *indexer)
 void AlbumsModel::parse()
 {
   beginResetModel();
+  m_db.clear();
 
   // get list of unique albums
   QMap<QString, QString> albums; // album,artist
@@ -44,6 +45,7 @@ void AlbumsModel::parse()
     m_db.push_back(std::move(a));
   }
 
+  emit countChanged();
   endResetModel();
 }
 
@@ -87,4 +89,9 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
+}
+
+int AlbumsModel::count() const
+{
+  return rowCount();
 }

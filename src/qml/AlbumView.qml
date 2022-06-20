@@ -3,7 +3,6 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -60,7 +59,7 @@ Page {
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 150
                 Layout.margins: 15
-                source: DbIndexer.coverArtForAlbum(root.album)
+                source: MusicIndexer.coverArtForAlbum(root.album)
                 sourceSize: Qt.size(width, height)
             }
             Column {

@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -80,16 +79,16 @@ Page {
         id: tabbar
         width: parent.width
         TabButton {
-            text: qsTr("Artists") + (" (" + ArtistsModel.rowCount() + ")" ?? "")
+            text: qsTr("Artists") + (" (" + ArtistsModel.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Albums") + (" (" + AlbumsModel.rowCount() + ")" ?? "")
+            text: qsTr("Albums") + (" (" + AlbumsModel.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Songs") + (" (" + TracksModel.rowCount() + ")" ?? "")
+            text: qsTr("Songs") + (" (" + TracksModel.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Genres") + (" (" + GenresModel.rowCount() + ")" ?? "")
+            text: qsTr("Genres") + (" (" + GenresModel.count + ")" ?? "")
         }
     }
 

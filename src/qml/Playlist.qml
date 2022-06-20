@@ -3,7 +3,6 @@ import QtQuick.Controls 2.15
 import QtMultimedia 5.15
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 Page {
     id: root

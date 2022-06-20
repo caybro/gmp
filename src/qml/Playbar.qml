@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 ToolBar {
     id: root
@@ -25,12 +24,12 @@ ToolBar {
         target: Player.playlist
         function onCurrentItemSourceChanged() {
             const trackUrl = Player.currentPlayUrl;
-            const cover = DbIndexer.coverArtForFile(trackUrl);
+            const cover = MusicIndexer.coverArtForFile(trackUrl);
             // @disable-check M126
             if (cover != "")
                 coverArt.source = cover;
             else
-                coverArt.source = DbIndexer.coverArtForAlbum(root.album);
+                coverArt.source = MusicIndexer.coverArtForAlbum(root.album);
 
             if (trackUrl != "")
                 root.currentTrackChanged(root.title, root.artist, root.album);

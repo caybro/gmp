@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = gmp
 
-QT += qml gui quick sql widgets
+QT += qml gui quick widgets
 
 android: QT -= widgets
 
@@ -10,15 +10,11 @@ CONFIG += c++17
 CONFIG += link_pkgconfig
 PKGCONFIG += taglib
 
-CONFIG += qmltypes
-QML_IMPORT_NAME = org.gmp.model
-QML_IMPORT_MAJOR_VERSION = 1
 QML_IMPORT_PATH += $$PWD/qml
 QML_IMPORT_PATH += $$OUT_PWD
 
 SOURCES += main.cpp \
     artistsmodel.cpp \
-    dbindexer.cpp \
     genericproxymodel.cpp \
     genresmodel.cpp \
     musicindexer.cpp \
@@ -27,7 +23,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     artistsmodel.h \
-    dbindexer.h \
     genericproxymodel.h \
     genresmodel.h \
     musicindexer.h \
@@ -40,10 +35,6 @@ OTHER_FILES = \
     icons/*.svg
 
 RESOURCES += gmp.qrc
-
-lupdate_only {
-    SOURCES += ../imports/*/*.cpp
-}
 
 TRANSLATIONS = translations/gmp_base.ts \
                translations/gmp_cs.ts
