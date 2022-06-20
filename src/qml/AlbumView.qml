@@ -143,7 +143,7 @@ Page {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                onClicked: root.editTrackMetadata(modelData)
+                onClicked: root.editTrackMetadata(model.url)
                 ToolTip.text: qsTr("Edit Track Metadata")
                 ToolTip.visible: hovered
             }
