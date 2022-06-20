@@ -19,6 +19,7 @@ QML_IMPORT_PATH += $$OUT_PWD
 SOURCES += main.cpp \
     artistsmodel.cpp \
     dbindexer.cpp \
+    genericproxymodel.cpp \
     genresmodel.cpp \
     musicindexer.cpp \
     tracksmodel.cpp \
@@ -27,6 +28,7 @@ SOURCES += main.cpp \
 HEADERS += \
     artistsmodel.h \
     dbindexer.h \
+    genericproxymodel.h \
     genresmodel.h \
     musicindexer.h \
     tracksmodel.h \
