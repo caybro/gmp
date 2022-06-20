@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -12,8 +12,8 @@ Page {
 
     property string album
     property string artist
-    property string genre: albumModel.get(0, "genre");
-    property int year: albumModel.get(0, "year");
+    property string genre: albumModel.data(albumModel.index(0, 0), TracksModel.RoleGenre)
+    property int year: albumModel.data(albumModel.index(0, 0), TracksModel.RoleYear)
 
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
@@ -40,17 +40,13 @@ Page {
         }
     }
 
-    function reload() {
-        albumModel.reload();
-        root.genre = albumModel.get(0, "genre");
-        root.year = albumModel.get(0, "year");
-    }
-
-    SqlQueryModel {
+    // TODO make an AlbumProxyModel with album/artist props and additional ones to display overall genre, year and computed length
+    GenericProxyModel {
         id: albumModel
-        db: DbIndexer.dbName
-        query: "SELECT url, title, genre, year, length FROM Tracks WHERE (album='%1' AND artist='%2') ORDER BY trackNo"
-            .arg(escapeSingleQuote(root.album)).arg(escapeSingleQuote(root.artist))
+        sourceModel: TracksModel
+        filterRole: TracksModel.RoleAlbum
+        filterString: root.album
+        sortRole: TracksModel.RoleTrackNo
     }
 
     ListView {
@@ -100,7 +96,7 @@ Page {
                 }
                 Label {
                     text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count))
-                    .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album)))))
+                    .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album))))) // FIXME AlbumProxyModel
                 }
                 Label {
                     text: root.year
@@ -135,14 +131,13 @@ Page {
         }
 
         delegate: CustomItemDelegate {
-            readonly property bool isPlaying: Player.currentPlayUrl == modelData
+            readonly property bool isPlaying: Player.currentPlayUrl === model.url
             width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") +
-                  (index + 1) + " · " + albumModel.get(index, "title")
-            secondaryText: formatSeconds(albumModel.get(index, "length"))
+            text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + model.title
+            secondaryText: formatSeconds(model.length)
             highlighted: isPlaying
             onClicked: {
-                console.debug("Clicked track:", modelData);
+                console.debug("Clicked track:", model.url);
                 root.playAlbum(root.album, index);
             }
             ToolButton {
