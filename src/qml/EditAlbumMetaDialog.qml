@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.3 as OldDialogs
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Dialog {
     id: root
@@ -14,13 +14,17 @@ Dialog {
 
     property string album
     property string artist
-    property var metadata
+    property string genre
+    property int year
 
     signal saved()
 
-    SqlQueryModel {
-        id: helperModel
-        db: DbIndexer.dbName
+    // TODO make an AlbumProxyModel with album/artist props and additional ones to display overall genre, year and computed length
+    GenericProxyModel {
+        id: albumModel
+        sourceModel: TracksModel
+        filterRole: TracksModel.RoleAlbum
+        filterString: root.album
     }
 
     OldDialogs.FileDialog {
@@ -56,7 +60,7 @@ Dialog {
         TextField {
             Layout.fillWidth: true
             id: albumGenreEdit
-            text: root.metadata ? root.metadata[0] : ""
+            text: root.genre
             placeholderText: qsTr("Album Genre")
         }
         Label {
@@ -67,14 +71,16 @@ Dialog {
             from: 0
             to: 9999
             editable: true
-            value: root.metadata ? root.metadata[1] : ""
+            value: root.year
             textFromValue: function(value) { return value; }
         }
     }
 
     onAboutToShow: {
-        metadata = helperModel.execRowQuery("SELECT genre, year FROM Tracks WHERE album=? AND artist=?", [root.album, root.artist]);
+        root.genre = albumModel.data(albumModel.index(0, 0), TracksModel.RoleGenre) ?? "";
+        root.year = albumModel.data(albumModel.index(0, 0), TracksModel.RoleYear) ?? 0;
     }
+
     onAccepted: {
         DbIndexer.saveAlbumMetadata(root.album, root.artist, albumGenreEdit.text, albumYearEdit.value, fileDialog.fileUrl);
         root.saved();
