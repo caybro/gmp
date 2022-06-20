@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 ToolBar {
     id: root
@@ -12,11 +12,10 @@ ToolBar {
     contentHeight: playbarLayout.implicitHeight
     focusPolicy: Qt.NoFocus
 
-    readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?",
-                                                            [Player.currentPlayUrl])
-    readonly property string title: metadata[0] ?? "";
-    readonly property string artist: metadata[1] ?? "";
-    readonly property string album: metadata[2] ?? "";
+    readonly property var metadata: TracksModel.getMetadata(Player.currentPlayUrl)
+    readonly property string title: metadata.title ?? "";
+    readonly property string artist: metadata.artist ?? "";
+    readonly property string album: metadata.album ?? "";
 
     signal currentTrackChanged(string title, string artist, string album)
     signal artistSelected(string artist)
@@ -36,11 +35,6 @@ ToolBar {
             if (trackUrl != "")
                 root.currentTrackChanged(root.title, root.artist, root.album);
         }
-    }
-
-    SqlQueryModel {
-        id: queryModel
-        db: DbIndexer.dbName
     }
 
     Slider {
