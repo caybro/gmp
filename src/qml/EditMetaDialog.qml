@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Dialog {
     id: root
@@ -16,11 +16,6 @@ Dialog {
 
     signal saved()
 
-    SqlQueryModel {
-        id: helperModel
-        db: DbIndexer.dbName
-    }
-
     GridLayout {
         anchors.fill: parent
         columns: 2
@@ -30,7 +25,7 @@ Dialog {
         TextField {
             id: titleEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata[0] : ""
+            text: root.metadata ? root.metadata.title : ""
             placeholderText: qsTr("Track Title")
         }
         Label {
@@ -39,7 +34,7 @@ Dialog {
         TextField {
             id: artistEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata[1] : ""
+            text: root.metadata ? root.metadata.artist : ""
             placeholderText: qsTr("Track Artist")
         }
         Label {
@@ -48,7 +43,7 @@ Dialog {
         TextField {
             id: albumEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata[2] : ""
+            text: root.metadata ? root.metadata.album : ""
             placeholderText: qsTr("Track Album")
         }
         Label {
@@ -59,7 +54,7 @@ Dialog {
             from: 0
             to: 9999
             editable: true
-            value: root.metadata ? root.metadata[3] : ""
+            value: root.metadata ? root.metadata.year : 0
             textFromValue: function(value) { return value; }
         }
         Label {
@@ -68,13 +63,13 @@ Dialog {
         TextField {
             id: genreEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata[4] : ""
+            text: root.metadata ? root.metadata.genre : ""
             placeholderText: qsTr("Track Genre")
         }
     }
 
     onAboutToShow: {
-        metadata = helperModel.execRowQuery("SELECT title, artist, album, year, genre FROM Tracks WHERE url=?", [root.trackUrl]);
+        metadata = TracksModel.getMetadata(root.trackUrl);
     }
     onAccepted: {
         DbIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.value, genreEdit.text);
