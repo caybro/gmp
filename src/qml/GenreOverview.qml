@@ -38,6 +38,7 @@ Page {
         sourceModel: TracksModel
         filterRole: TracksModel.RoleGenre
         filterString: root.genre
+        sortRole: TracksModel.RoleTitle
     }
 
     ListView {

@@ -9,7 +9,7 @@ import Qt.labs.settings 1.1
 import Qt.labs.platform 1.1 as Platform
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 ApplicationWindow {
     id: window
@@ -20,7 +20,7 @@ ApplicationWindow {
     readonly property bool isMobileOS: ["ios", "android", "winrt"].includes(Qt.platform.os)
 
     function formatSeconds(secs) {
-        var sec_num = parseInt(secs, 10);
+        const sec_num = parseInt(secs, 10);
         var hours   = Math.floor(sec_num / 3600);
         var minutes = Math.floor((sec_num % 3600) / 60);
         var seconds = Math.floor(sec_num % 60);
@@ -96,11 +96,6 @@ ApplicationWindow {
                                                     qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
     }
 
-    SqlQueryModel {
-        id: helperModel
-        db: "" // inited later when parsing finishes
-    }
-
     Connections {
         id: stackViewConnections
         target: stackView.currentItem
@@ -119,20 +114,20 @@ ApplicationWindow {
         }
         function onPlayAlbum(album, index) {
             Player.playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1' ORDER BY trackNo".arg(escapeSingleQuote(album)));
+            const urls = TracksModel.tracksByAlbum(album, true);
             Player.playlist.addItems(urls);
             Player.currentPlaylistIndex = index;
             Player.play();
-            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE album=?", [album]);
+            const duration = TracksModel.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlayAlbum(album) {
             Player.playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(album)));
+            const urls = TracksModel.tracksByAlbum(album);
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE album=?", [album]);
+            const duration = TracksModel.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
@@ -140,37 +135,37 @@ ApplicationWindow {
         }
         function onPlayGenre(genre) {
             Player.playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(genre)));
+            const urls = TracksModel.tracksByGenre(genre, true);
             Player.playlist.addItems(urls);
             Player.play();
-            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE genre=?", [genre]);
+            const duration = TracksModel.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlayGenre(genre) {
             Player.playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE genre='%1'".arg(escapeSingleQuote(genre)));
+            const urls = TracksModel.tracksByGenre(genre);
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE genre=?", [genre]);
+            const duration = TracksModel.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlay() {
             Player.playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks");
+            const urls = TracksModel.allTracks();
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = helperModel.execHelperQuery("SELECT SUM(length) AS duration FROM Tracks");
+            const duration = TracksModel.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlayArtist(artist) {
             Player.playlist.clear();
-            const urls = helperModel.execListQuery("SELECT url FROM Tracks WHERE artist='%1'".arg(escapeSingleQuote(artist)));
+            const urls = TracksModel.tracksByArtist(artist);
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = helperModel.execRowQuery("SELECT SUM(length) AS duration FROM Tracks WHERE artist=?", [artist]);
+            const duration = TracksModel.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onEditTrackMetadata(trackUrl) {
@@ -274,7 +269,6 @@ ApplicationWindow {
         function onIndexingChanged() {
             console.info("!!! INDEXING CHANGED:", DbIndexer.indexing);
             if (!DbIndexer.indexing) {
-                helperModel.db = DbIndexer.dbName;
                 stackView.replace(null, "Library.qml");
             }
         }
