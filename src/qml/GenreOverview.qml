@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -33,10 +33,11 @@ Page {
     signal shufflePlayGenre(string genre)
     signal editTrackMetadata(url track)
 
-    SqlQueryModel {
+    GenericProxyModel {
         id: genreModel
-        db: DbIndexer.dbName
-        query: "SELECT url, title, artist, album FROM Tracks WHERE genre='%1' ORDER BY title".arg(escapeSingleQuote(root.genre))
+        sourceModel: TracksModel
+        filterRole: TracksModel.RoleGenre
+        filterString: root.genre
     }
 
     ListView {
@@ -44,20 +45,20 @@ Page {
         anchors.fill: parent
         model: genreModel
         delegate: CustomItemDelegate {
-            readonly property bool isPlaying: Player.currentPlayUrl == modelData
+            readonly property bool isPlaying: Player.currentPlayUrl === model.url
             width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") + genreModel.get(index, "title")
-            secondaryText: genreModel.get(index, "artist") + " · " + genreModel.get(index, "album")
+            text: (isPlaying ? "⯈ " : "") + model.title
+            secondaryText: model.artist + " · " + model.album
             highlighted: isPlaying
             onClicked: {
-                console.debug("Clicked:", modelData);
-                root.playRequested(modelData);
+                console.debug("Clicked track:", model.url);
+                root.playRequested(model.url);
             }
             ToolButton {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                onClicked: root.editTrackMetadata(modelData)
+                onClicked: root.editTrackMetadata(model.url)
                 ToolTip.text: qsTr("Edit Track Metadata")
                 ToolTip.visible: hovered
             }
