@@ -194,9 +194,6 @@ ApplicationWindow {
         onSaved: {
             console.debug("!!! META DIALOG SAVED")
             console.debug("Current stack page:", stackView.currentItem.objectName)
-            if (stackView.currentItem && stackView.currentItem.reload) {
-                stackView.currentItem.reload();
-            }
         }
         onClosed: {
             stackView.focus = true;
@@ -211,9 +208,6 @@ ApplicationWindow {
         onSaved: {
             console.debug("!!! ALBUM META DIALOG SAVED")
             console.debug("Current stack page:", stackView.currentItem.objectName)
-            if (stackView.currentItem && stackView.currentItem.reload) {
-                stackView.currentItem.reload();
-            }
         }
         onClosed: {
             stackView.focus = true;
