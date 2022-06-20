@@ -2,6 +2,8 @@
 
 #include "musicindexer.h"
 
+#include <algorithm>
+
 TracksModel::TracksModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}
     , m_indexer(indexer)
@@ -66,4 +68,25 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
+}
+
+QJsonObject TracksModel::getMetadata(const QUrl &url) const
+{
+  const auto &db = m_indexer->database();
+  const auto row = std::find_if(db.cbegin(), db.cend(), [url](MusicRecord rec) { return rec.url == url; });
+  if (row == db.cend())
+    return {};
+  const auto rowIndex = std::distance(db.cbegin(), row);
+
+  const auto idx = index(rowIndex);
+  if (!idx.isValid() || !checkIndex(idx))
+    return {};
+
+  QJsonObject result;
+  QHashIterator<int, QByteArray> i(roleNames());
+  while (i.hasNext()) {
+    i.next();
+    result.insert(i.value(), QJsonValue::fromVariant(data(idx, i.key())));
+  }
+  return result;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QJsonObject>
 
 class MusicIndexer;
 
@@ -23,6 +24,8 @@ class TracksModel : public QAbstractListModel
   Q_ENUM(TrackRole)
 
   explicit TracksModel(MusicIndexer *indexer = nullptr);
+
+  Q_INVOKABLE QJsonObject getMetadata(const QUrl &url) const;
 
  protected:
   QHash<int, QByteArray> roleNames() const override;

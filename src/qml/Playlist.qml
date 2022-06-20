@@ -1,9 +1,9 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtMultimedia 5.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtMultimedia 5.15
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -34,11 +34,6 @@ Page {
         }
     }
 
-    SqlQueryModel {
-        id: queryModel
-        db: DbIndexer.dbName
-    }
-
     ListView {
         id: tracksListView
         anchors.fill: parent
@@ -46,17 +41,17 @@ Page {
         clip: true
         delegate: CustomItemDelegate {
             readonly property bool isPlaying: Player.currentPlayUrl === model.source
-            readonly property var metadata: queryModel.execRowQuery("SELECT title, artist, album FROM Tracks WHERE url=?", [model.source])
+            readonly property var metadata: TracksModel.getMetadata(model.source)
             width: ListView.view.width
-            text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata[0]
-            secondaryText: metadata[1] + " · " + metadata[2]
+            text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata.title
+            secondaryText: metadata.artist + " · " + metadata.album
             highlighted: isPlaying
             onClicked: Player.playlist.currentIndex = index
             ToolButton {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                onClicked: root.editTrackMetadata(modelData)
+                onClicked: root.editTrackMetadata(model.source)
                 ToolTip.text: qsTr("Edit Track Metadata")
                 ToolTip.visible: hovered
             }
