@@ -86,19 +86,16 @@ Page {
         id: tabbar
         width: parent.width
         TabButton {
-            text: qsTr("Artists") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT artist) FROM Tracks") + ")" ?? "")
+            text: qsTr("Artists") + (" (" + loader.item.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Albums") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT album) FROM Tracks") + ")" ?? "")
+            text: qsTr("Albums") + (" (" + loader.item.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Songs") + (" (" + queryModel.execHelperQuery("SELECT COUNT(url) FROM Tracks") + ")" ?? "")
+            text: qsTr("Songs") + (" (" + loader.item.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Genres") + (" (" + queryModel.execHelperQuery("SELECT COUNT(DISTINCT genre) FROM Tracks") + ")" ?? "")
-        }
-        TabButton {
-            text: "Music"
+            text: qsTr("Genres") + (" (" + loader.item.count + ")" ?? "")
         }
     }
 
@@ -118,24 +115,7 @@ Page {
                 return tracksListViewComponent;
             case 3:
                 return genresListViewComponent;
-            case 4:
-                return newMusicComponent;
             }
-        }
-    }
-
-    Component {
-        id: newMusicComponent
-        ListView {
-            clip: true
-            model: ArtistsModel
-            delegate: CustomItemDelegate {
-                width: ListView.view.width
-                text: model.artist
-                secondaryText: model.numAlbums
-            }
-
-            ScrollIndicator.vertical: ScrollIndicator {}
         }
     }
 
@@ -218,20 +198,15 @@ Page {
         id: genresListViewComponent
         ListView {
             id: genresListView
-            model: SqlQueryModel {
-                id: genresModel
-                db: DbIndexer.dbName
-                query: "SELECT genre, (SELECT COUNT(s.url) FROM Tracks AS s WHERE s.genre=t.genre) AS count FROM Tracks AS t %1 GROUP BY genre"
-                .arg(priv.searchText ? "WHERE genre LIKE '%%1%'".arg(escapeSingleQuote(priv.searchText)) : "")
-            }
+            model: GenresModel
             clip: true
             delegate: CustomItemDelegate {
                 width: ListView.view.width
-                text: modelData
-                secondaryText: qsTr("%n track(s)", "", genresModel.get(index, "count") ?? 0)
+                text: model.genre
+                secondaryText: qsTr("%n track(s)", "", model.numTracks)
                 onClicked: {
-                    console.debug("Clicked genre:", modelData);
-                    root.genreSelected(modelData);
+                    console.debug("Clicked genre:", model.genre);
+                    root.genreSelected(model.genre);
                 }
             }
 
