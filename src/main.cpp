@@ -14,6 +14,7 @@
 
 #include "albumsmodel.h"
 #include "artistsmodel.h"
+#include "genresmodel.h"
 #include "musicindexer.h"
 #include "tracksmodel.h"
 
@@ -58,6 +59,7 @@ int main(int argc, char *argv[])
   auto artistsModel = QScopedPointer<ArtistsModel>(new ArtistsModel(indexer.get()));
   auto albumsModel = QScopedPointer<AlbumsModel>(new AlbumsModel(indexer.get()));
   auto tracksModel = QScopedPointer<TracksModel>(new TracksModel(indexer.get()));
+  auto genresModel = QScopedPointer<GenresModel>(new GenresModel(indexer.get()));
   indexer->parse();
 
   QQmlApplicationEngine engine;
@@ -65,6 +67,7 @@ int main(int argc, char *argv[])
   qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "ArtistsModel", artistsModel.get());
   qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "AlbumsModel", albumsModel.get());
   qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "TracksModel", tracksModel.get());
+  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "GenresModel", genresModel.get());
 
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   QObject::connect(
