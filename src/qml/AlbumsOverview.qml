@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
+import org.gmp.indexer 1.0
 
 Page {
     id: root
@@ -39,11 +39,12 @@ Page {
         }
     }
 
-    SqlQueryModel {
+    GenericProxyModel {
         id: albumsModel
-        db: DbIndexer.dbName
-        query: "SELECT album, year, genre FROM Tracks WHERE artist='%1' GROUP BY album ORDER BY %2"
-            .arg(escapeSingleQuote(root.artist)).arg(priv.alphaSort ? "album" : "year")
+        sourceModel: AlbumsModel
+        filterRole: AlbumsModel.RoleArtist
+        filterString: root.artist
+        sortRole: priv.alphaSort ? AlbumsModel.RoleAlbum : AlbumsModel.RoleYear
     }
 
     GridView {
@@ -53,13 +54,14 @@ Page {
         cellHeight: 240
         model: albumsModel
         delegate: AlbumDelegate {
+            album: model.album
             artist: root.artist
-            year: albumsModel.get(index, "year") ?? "";
-            numTracks: Number(albumsModel.execRowQuery("SELECT COUNT(url) FROM Tracks WHERE (album=? AND artist=?)", [modelData, root.artist]))
-            genre: albumsModel.get(index, "genre") ?? "";
+            year: model.year
+            numTracks: model.numTracks
+            genre: model.genre
             onClicked: {
-                console.debug("Clicked album:", modelData);
-                root.albumSelected(modelData, root.artist);
+                console.debug("Clicked album:", model.album);
+                root.albumSelected(model.album, root.artist);
             }
             onPlayAlbum: root.playAlbum(album, index)
         }
