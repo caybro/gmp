@@ -27,6 +27,12 @@ class TracksModel : public QAbstractListModel
 
   Q_INVOKABLE QJsonObject getMetadata(const QUrl &url) const;
 
+  Q_INVOKABLE QList<QUrl> allTracks() const;
+  Q_INVOKABLE QList<QUrl> tracksByAlbum(const QString &album, bool ordered = false) const;
+  Q_INVOKABLE QList<QUrl> tracksByGenre(const QString &genre, bool ordered = false) const;
+  Q_INVOKABLE QList<QUrl> tracksByArtist(const QString &artist) const;
+  Q_INVOKABLE int tracksDuration(const QList<QUrl> &urls) const;
+
  protected:
   QHash<int, QByteArray> roleNames() const override;
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
