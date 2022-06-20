@@ -14,6 +14,7 @@ GenresModel::GenresModel(MusicIndexer *indexer)
 void GenresModel::parse()
 {
   beginResetModel();
+  m_db.clear();
 
   // get list of uniq genres
   QMap<QString, int> genres;
@@ -36,6 +37,7 @@ void GenresModel::parse()
     m_db.push_back({it.key(), it.value()});
   }
 
+  emit countChanged();
   endResetModel();
 }
 
@@ -70,4 +72,9 @@ QVariant GenresModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
+}
+
+int GenresModel::count() const
+{
+  return rowCount();
 }

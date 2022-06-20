@@ -35,6 +35,15 @@ class MusicIndexer : public QObject
 
   const MusicDatabase &database() const;
 
+  Q_INVOKABLE QList<QUrl> allTracks() const;
+  Q_INVOKABLE QList<QUrl> tracksByAlbum(const QString &album, bool ordered = false) const;
+  Q_INVOKABLE QList<QUrl> tracksByGenre(const QString &genre, bool ordered = false) const;
+  Q_INVOKABLE QList<QUrl> tracksByArtist(const QString &artist) const;
+  Q_INVOKABLE int tracksDuration(const QList<QUrl> &urls) const;
+
+  Q_INVOKABLE QUrl coverArtForFile(const QUrl &fileUrl) const;
+  Q_INVOKABLE QUrl coverArtForAlbum(const QString &album) const;
+
  signals:
   void rootPathsChanged(const QStringList &rootPaths);
   void isIndexingChanged(bool indexing);

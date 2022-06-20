@@ -3,7 +3,6 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 Dialog {
     id: root

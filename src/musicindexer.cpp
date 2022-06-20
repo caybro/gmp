@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QElapsedTimer>
+#include <QImage>
 
 #include <algorithm>
 
@@ -135,4 +136,129 @@ void MusicIndexer::parse(bool incremental)
 const MusicDatabase &MusicIndexer::database() const
 {
   return m_db;
+}
+
+QList<QUrl> MusicIndexer::allTracks() const
+{
+  QList<QUrl> result;
+  result.reserve(m_db.size());
+
+  for (const auto &rec : m_db) {
+    result.append(rec.url);
+  }
+
+  return result;
+}
+
+QList<QUrl> MusicIndexer::tracksByAlbum(const QString &album, bool ordered) const
+{
+  std::vector<MusicRecord> tracks;
+
+  for (const auto &rec : m_db) {
+    if (rec.album == album)
+      tracks.push_back(rec);
+  }
+
+  if (ordered) {
+    std::sort(tracks.begin(), tracks.end(), [](const auto &t1, const auto &t2) { return t1.trackNo < t2.trackNo; });
+  }
+
+  QList<QUrl> result;
+  result.reserve(tracks.size());
+  std::transform(tracks.cbegin(), tracks.cend(), std::back_inserter(result),
+                 [](const auto &track) { return track.url; });
+
+  return result;
+}
+
+QList<QUrl> MusicIndexer::tracksByGenre(const QString &genre, bool ordered) const
+{
+  std::vector<MusicRecord> tracks;
+
+  for (const auto &rec : m_db) {
+    if (rec.genre == genre)
+      tracks.push_back(rec);
+  }
+
+  if (ordered) {
+    std::sort(tracks.begin(), tracks.end(),
+              [](const auto &t1, const auto &t2) { return t1.title.localeAwareCompare(t2.title) < 0; });
+  }
+
+  QList<QUrl> result;
+  result.reserve(tracks.size());
+  std::transform(tracks.cbegin(), tracks.cend(), std::back_inserter(result),
+                 [](const auto &track) { return track.url; });
+
+  return result;
+}
+
+QList<QUrl> MusicIndexer::tracksByArtist(const QString &artist) const
+{
+  QList<QUrl> result;
+  result.reserve(m_db.size());
+
+  for (const auto &rec : m_db) {
+    if (rec.artist == artist)
+      result.append(rec.url);
+  }
+
+  return result;
+}
+
+int MusicIndexer::tracksDuration(const QList<QUrl> &urls) const
+{
+  int result = 0;
+
+  for (const auto &url : urls) {
+    const auto track = std::find_if(m_db.cbegin(), m_db.cend(), [url](MusicRecord rec) { return rec.url == url; });
+    if (track != std::cend(m_db))
+      result += track->length;
+  }
+
+  return result;
+}
+
+QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
+{
+  const QString localFile = fileUrl.toLocalFile();
+  const QString result = localFile + QStringLiteral(".png");
+  if (QFile::exists(result))
+    return QUrl::fromLocalFile(result);
+
+  TagLib::MPEG::File f(QFile::encodeName(localFile)); // TODO extend also beyond MP3
+  if (f.hasID3v2Tag()) {
+    const auto tag = f.ID3v2Tag();
+    const auto l = tag->frameList("APIC");
+    if (l.isEmpty())
+      return {};
+
+    auto frame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
+    if (!frame)
+      return {};
+
+    QImage image;
+    image.loadFromData((const uchar *) frame->picture().data(), frame->picture().size());
+    image.save(result);
+    return QUrl::fromLocalFile(result);
+  }
+
+  return {};
+}
+
+QUrl MusicIndexer::coverArtForAlbum(const QString &album) const
+{
+  QList<QUrl> tracks = tracksByAlbum(album);
+
+  QUrl result;
+  for (const QUrl &track : qAsConst(tracks)) {
+    result = coverArtForFile(track);
+    if (!result.isEmpty())
+      break;
+  }
+
+  if (result.isEmpty())
+    result = QStringLiteral("qrc:/icons/ic_album_48px.svg");
+
+  return result;
 }

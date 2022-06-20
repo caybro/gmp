@@ -9,7 +9,6 @@ import Qt.labs.settings 1.1
 import Qt.labs.platform 1.1 as Platform
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 ApplicationWindow {
     id: window
@@ -41,9 +40,9 @@ ApplicationWindow {
 
     Timer {
         id: parseTimer
-        interval: 100
+        interval: 1
         onTriggered: {
-            DbIndexer.parse();
+            MusicIndexer.parse();
         }
     }
 
@@ -114,20 +113,20 @@ ApplicationWindow {
         }
         function onPlayAlbum(album, index) {
             Player.playlist.clear();
-            const urls = TracksModel.tracksByAlbum(album, true);
+            const urls = MusicIndexer.tracksByAlbum(album, true);
             Player.playlist.addItems(urls);
             Player.currentPlaylistIndex = index;
             Player.play();
-            const duration = TracksModel.tracksDuration(urls);
+            const duration = MusicIndexer.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlayAlbum(album) {
             Player.playlist.clear();
-            const urls = TracksModel.tracksByAlbum(album);
+            const urls = MusicIndexer.tracksByAlbum(album);
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = TracksModel.tracksDuration(urls);
+            const duration = MusicIndexer.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
@@ -135,37 +134,37 @@ ApplicationWindow {
         }
         function onPlayGenre(genre) {
             Player.playlist.clear();
-            const urls = TracksModel.tracksByGenre(genre, true);
+            const urls = MusicIndexer.tracksByGenre(genre, true);
             Player.playlist.addItems(urls);
             Player.play();
-            const duration = TracksModel.tracksDuration(urls);
+            const duration = MusicIndexer.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlayGenre(genre) {
             Player.playlist.clear();
-            const urls = TracksModel.tracksByGenre(genre);
+            const urls = MusicIndexer.tracksByGenre(genre);
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = TracksModel.tracksDuration(urls);
+            const duration = MusicIndexer.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlay() {
             Player.playlist.clear();
-            const urls = TracksModel.allTracks();
+            const urls = MusicIndexer.allTracks();
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = TracksModel.tracksDuration(urls);
+            const duration = MusicIndexer.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onShufflePlayArtist(artist) {
             Player.playlist.clear();
-            const urls = TracksModel.tracksByArtist(artist);
+            const urls = MusicIndexer.tracksByArtist(artist);
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = TracksModel.tracksDuration(urls);
+            const duration = MusicIndexer.tracksDuration(urls);
             Player.playlist.duration = Number(duration);
         }
         function onEditTrackMetadata(trackUrl) {
@@ -259,16 +258,16 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
-                text: "%1 · %2 · (c) %3 2020-2021".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
+                text: "%1 · %2 · (c) %3 2020-2022".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
             }
         }
     }
 
     Connections {
-        target: DbIndexer
+        target: MusicIndexer
         function onIndexingChanged() {
-            console.info("!!! INDEXING CHANGED:", DbIndexer.indexing);
-            if (!DbIndexer.indexing) {
+            console.info("!!! INDEXING CHANGED:", MusicIndexer.indexing);
+            if (!MusicIndexer.indexing) {
                 stackView.replace(null, "Library.qml");
             }
         }

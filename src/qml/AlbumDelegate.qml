@@ -17,7 +17,7 @@ ItemDelegate {
     contentItem: Column {
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
-            source: DbIndexer.coverArtForAlbum(root.album)
+            source: MusicIndexer.coverArtForAlbum(root.album)
             asynchronous: true
             width: 150
             height: width

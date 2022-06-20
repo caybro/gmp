@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.3 as OldDialogs
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 Dialog {
     id: root
@@ -45,7 +44,7 @@ Dialog {
             Layout.preferredWidth: 100
             Layout.preferredHeight: 100
             Layout.columnSpan: 2
-            source: DbIndexer.coverArtForAlbum(root.album)
+            source: MusicIndexer.coverArtForAlbum(root.album)
             sourceSize: Qt.size(width, height)
 
             MouseArea {

@@ -14,6 +14,7 @@
 
 #include "albumsmodel.h"
 #include "artistsmodel.h"
+#include "genericproxymodel.h"
 #include "genresmodel.h"
 #include "musicindexer.h"
 #include "tracksmodel.h"
@@ -60,14 +61,16 @@ int main(int argc, char *argv[])
   auto albumsModel = QScopedPointer<AlbumsModel>(new AlbumsModel(indexer.get()));
   auto tracksModel = QScopedPointer<TracksModel>(new TracksModel(indexer.get()));
   auto genresModel = QScopedPointer<GenresModel>(new GenresModel(indexer.get()));
-  indexer->parse();
 
   QQmlApplicationEngine engine;
 
-  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "ArtistsModel", artistsModel.get());
-  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "AlbumsModel", albumsModel.get());
-  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "TracksModel", tracksModel.get());
-  qmlRegisterSingletonInstance("org.gmp.indexer", 1, 0, "GenresModel", genresModel.get());
+  qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "MusicIndexer", indexer.get());
+  qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "ArtistsModel", artistsModel.get());
+  qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "AlbumsModel", albumsModel.get());
+  qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "TracksModel", tracksModel.get());
+  qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "GenresModel", genresModel.get());
+
+  qmlRegisterType<GenericProxyModel>("org.gmp.model", 1, 0, "GenericProxyModel");
 
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   QObject::connect(

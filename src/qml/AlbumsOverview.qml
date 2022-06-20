@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 import org.gmp.model 1.0
-import org.gmp.indexer 1.0
 
 Page {
     id: root
