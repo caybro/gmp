@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 import org.gmp.model 1.0
-import org.gmp.sqlext 1.0
 import org.gmp.indexer 1.0
 
 Page {
@@ -77,25 +76,20 @@ Page {
         }
     }
 
-    SqlQueryModel {
-        id: queryModel
-        db: DbIndexer.dbName
-    }
-
     TabBar {
         id: tabbar
         width: parent.width
         TabButton {
-            text: qsTr("Artists") + (" (" + loader.item.count + ")" ?? "")
+            text: qsTr("Artists") + (" (" + ArtistsModel.rowCount() + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Albums") + (" (" + loader.item.count + ")" ?? "")
+            text: qsTr("Albums") + (" (" + AlbumsModel.rowCount() + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Songs") + (" (" + loader.item.count + ")" ?? "")
+            text: qsTr("Songs") + (" (" + TracksModel.rowCount() + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Genres") + (" (" + loader.item.count + ")" ?? "")
+            text: qsTr("Genres") + (" (" + GenresModel.rowCount() + ")" ?? "")
         }
     }
 
