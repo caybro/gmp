@@ -14,8 +14,7 @@
 
 MusicIndexer::MusicIndexer(QObject *parent)
     : QObject{parent}
-{
-}
+{}
 
 QStringList MusicIndexer::rootPaths() const
 {
