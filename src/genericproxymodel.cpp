@@ -7,6 +7,13 @@ GenericProxyModel::GenericProxyModel(QObject *parent)
   setFilterCaseSensitivity(Qt::CaseInsensitive);
   setSortLocaleAware(true);
 
+  connect(this, &GenericProxyModel::sourceModelChanged, this, [this]() {
+    connect(sourceModel(), &QAbstractItemModel::dataChanged, this, &GenericProxyModel::invalidate);
+    connect(sourceModel(), &QAbstractItemModel::modelReset, this, &GenericProxyModel::invalidate);
+  });
+
+  connect(this, &GenericProxyModel::layoutChanged, this, &GenericProxyModel::countChanged);
+
   sort(0);
 }
 
@@ -21,6 +28,12 @@ void GenericProxyModel::setFilterString(const QString &filterString)
     return;
 
   m_filterString = filterString;
-  setFilterWildcard(m_filterString);
+  setFilterFixedString(m_filterString);
   emit filterStringChanged(m_filterString);
+  emit countChanged();
+}
+
+int GenericProxyModel::count() const
+{
+  return rowCount();
 }

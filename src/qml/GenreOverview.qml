@@ -32,7 +32,6 @@ Page {
     signal shufflePlayGenre(string genre)
     signal editTrackMetadata(url track)
 
-
     ListView {
         id: listview
         anchors.fill: parent
