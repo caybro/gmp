@@ -32,18 +32,16 @@ Page {
     signal shufflePlayGenre(string genre)
     signal editTrackMetadata(url track)
 
-    GenericProxyModel {
-        id: genreModel
-        sourceModel: TracksModel
-        filterRole: TracksModel.RoleGenre
-        filterString: root.genre
-        sortRole: TracksModel.RoleTitle
-    }
 
     ListView {
         id: listview
         anchors.fill: parent
-        model: genreModel
+        model: GenericProxyModel {
+            sourceModel: TracksModel
+            filterRole: TracksModel.RoleGenre
+            filterRegExp: new RegExp("^" + root.genre + "$", 'g')
+            sortRole: TracksModel.RoleTitle
+        }
         delegate: CustomItemDelegate {
             readonly property bool isPlaying: Player.currentPlayUrl === model.url
             width: ListView.view.width
