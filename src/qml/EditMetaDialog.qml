@@ -11,7 +11,8 @@ Dialog {
     standardButtons: Dialog.Save | Dialog.Cancel
 
     property url trackUrl
-    property var metadata
+
+    readonly property var metadata: TracksModel.getMetadata(root.trackUrl)
 
     signal saved()
 
@@ -24,7 +25,7 @@ Dialog {
         TextField {
             id: titleEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata.title : ""
+            text: root.metadata.title ?? ""
             placeholderText: qsTr("Track Title")
         }
         Label {
@@ -33,7 +34,7 @@ Dialog {
         TextField {
             id: artistEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata.artist : ""
+            text: root.metadata.artist ?? ""
             placeholderText: qsTr("Track Artist")
         }
         Label {
@@ -42,7 +43,7 @@ Dialog {
         TextField {
             id: albumEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata.album : ""
+            text: root.metadata.album ?? ""
             placeholderText: qsTr("Track Album")
         }
         Label {
@@ -53,7 +54,7 @@ Dialog {
             from: 0
             to: 9999
             editable: true
-            value: root.metadata ? root.metadata.year : 0
+            value: root.metadata.year ?? 0
             textFromValue: function(value) { return value; }
         }
         Label {
@@ -62,15 +63,13 @@ Dialog {
         TextField {
             id: genreEdit
             Layout.fillWidth: true
-            text: root.metadata ? root.metadata.genre : ""
+            text: root.metadata.genre ?? ""
             placeholderText: qsTr("Track Genre")
         }
     }
 
-    onAboutToShow: {
-        metadata = TracksModel.getMetadata(root.trackUrl);
-    }
     onAccepted: {
+        // TODO implement
         DbIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.value, genreEdit.text);
         root.saved();
     }
