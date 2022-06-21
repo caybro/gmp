@@ -56,10 +56,8 @@ int ArtistsModel::rowCount(const QModelIndex &) const
 
 QVariant ArtistsModel::data(const QModelIndex &index, int role) const
 {
-  if (!index.isValid())
-    return {};
-
-  if (index.row() >= static_cast<int>(m_db.size()))
+  if (!checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid
+                             | QAbstractItemModel::CheckIndexOption::ParentIsInvalid))
     return {};
 
   const auto item = m_db[index.row()];

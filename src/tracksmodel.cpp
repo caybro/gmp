@@ -36,13 +36,11 @@ int TracksModel::rowCount(const QModelIndex &) const
 
 QVariant TracksModel::data(const QModelIndex &index, int role) const
 {
-  if (!index.isValid())
+  if (!checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid
+                             | QAbstractItemModel::CheckIndexOption::ParentIsInvalid))
     return {};
 
   auto const &db = m_indexer->database();
-
-  if (index.row() >= static_cast<int>(db.size()))
-    return {};
 
   const auto item = db[index.row()];
 
@@ -84,7 +82,7 @@ QJsonObject TracksModel::getMetadata(const QUrl &url) const
   const auto rowIndex = std::distance(db.cbegin(), row);
 
   const auto idx = index(rowIndex);
-  if (!idx.isValid() || !checkIndex(idx))
+  if (!checkIndex(idx, QAbstractItemModel::CheckIndexOption::IndexIsValid))
     return {};
 
   QJsonObject result;
