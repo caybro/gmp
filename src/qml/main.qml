@@ -89,7 +89,7 @@ ApplicationWindow {
     footer: Playbar {
         id: playbar
         visible: Player.playlist.itemCount
-        onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
+        onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist, genre, year)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
         onCurrentTrackChanged: trayIcon.showMessage(Qt.application.name,
                                                     qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
@@ -105,8 +105,8 @@ ApplicationWindow {
             Player.playlist.addItem(playFileUrl);
             Player.play();
         }
-        function onAlbumSelected(album, artist) {
-            stackView.push("AlbumView.qml", {"album": album, "artist": artist});
+        function onAlbumSelected(album, artist, genre, year) {
+            stackView.push("AlbumView.qml", {"album": album, "artist": artist, "genre": genre, "year": year});
         }
         function onArtistSelected(artist) {
             stackView.push("AlbumsOverview.qml", {"artist": artist});
@@ -172,10 +172,12 @@ ApplicationWindow {
             editMetaDialog.trackUrl = trackUrl;
             editMetaDialog.open();
         }
-        function onEditAlbumMetadata(album, artist) {
-            console.debug("Edit album metadata:", album, artist)
+        function onEditAlbumMetadata(album, artist, genre, year) {
+            console.debug("Edit album metadata:", album, artist, genre, year)
             editAlbumMetaDialog.album = album;
             editAlbumMetaDialog.artist = artist;
+            editAlbumMetaDialog.genre = genre;
+            editAlbumMetaDialog.year = year;
             editAlbumMetaDialog.open();
         }
     }

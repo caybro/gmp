@@ -219,6 +219,18 @@ int MusicIndexer::tracksDuration(const QList<QUrl> &urls) const
   return result;
 }
 
+int MusicIndexer::albumTracksDuration(const QString &album) const
+{
+  int result = 0;
+
+  for (const auto &rec : m_db) {
+    if (rec.album == album)
+      result += rec.length;
+  }
+
+  return result;
+}
+
 QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
 {
   const QString localFile = fileUrl.toLocalFile();

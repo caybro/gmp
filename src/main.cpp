@@ -12,6 +12,7 @@
 #include <QTouchDevice>
 #include <QTranslator>
 
+#include "albumproxymodel.h"
 #include "albumsmodel.h"
 #include "artistsmodel.h"
 #include "genericproxymodel.h"
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
   qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "GenresModel", genresModel.get());
 
   qmlRegisterType<GenericProxyModel>("org.gmp.model", 1, 0, "GenericProxyModel");
+  qmlRegisterType<AlbumProxyModel>("org.gmp.model", 1, 0, "AlbumProxyModel");
 
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   QObject::connect(

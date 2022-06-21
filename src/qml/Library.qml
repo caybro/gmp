@@ -10,7 +10,7 @@ Page {
 
     signal playRequested(url playFileUrl)
     signal artistSelected(string artist)
-    signal albumSelected(string album, string artist)
+    signal albumSelected(string album, string artist, string genre, int year)
     signal genreSelected(string genre)
     signal shufflePlay()
     signal playAlbum(string album, int index)
@@ -148,7 +148,7 @@ Page {
 
                 onClicked: {
                     console.debug("Clicked album:", album);
-                    root.albumSelected(album, artist);
+                    root.albumSelected(album, artist, genre, year);
                 }
                 onPlayAlbum: root.playAlbum(album, index)
             }

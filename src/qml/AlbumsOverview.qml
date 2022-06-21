@@ -10,7 +10,7 @@ Page {
 
     property string artist
 
-    signal albumSelected(string album, string artist)
+    signal albumSelected(string album, string artist, string genre, int year)
     signal shufflePlayArtist(string artist)
     signal playAlbum(string album, int index)
 
@@ -59,8 +59,8 @@ Page {
             numTracks: model.numTracks
             genre: model.genre
             onClicked: {
-                console.debug("Clicked album:", model.album);
-                root.albumSelected(model.album, root.artist);
+                console.debug("Clicked album:", album);
+                root.albumSelected(album, artist, genre, year);
             }
             onPlayAlbum: root.playAlbum(album, index)
         }
