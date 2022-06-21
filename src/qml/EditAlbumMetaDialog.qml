@@ -18,14 +18,6 @@ Dialog {
 
     signal saved()
 
-    // TODO make an AlbumProxyModel with album/artist props and additional ones to display overall genre, year and computed length
-    GenericProxyModel {
-        id: albumModel
-        sourceModel: TracksModel
-        filterRole: TracksModel.RoleAlbum
-        filterString: root.album
-    }
-
     OldDialogs.FileDialog {
         id: fileDialog
         nameFilters: [qsTr("Image Files (*.png *.jpg *.jpeg)")]
@@ -73,11 +65,6 @@ Dialog {
             value: root.year
             textFromValue: function(value) { return value; }
         }
-    }
-
-    onAboutToShow: {
-        root.genre = albumModel.data(albumModel.index(0, 0), TracksModel.RoleGenre) ?? "";
-        root.year = albumModel.data(albumModel.index(0, 0), TracksModel.RoleYear) ?? 0;
     }
 
     onAccepted: {

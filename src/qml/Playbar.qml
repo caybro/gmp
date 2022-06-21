@@ -18,7 +18,7 @@ ToolBar {
 
     signal currentTrackChanged(string title, string artist, string album)
     signal artistSelected(string artist)
-    signal albumSelected(string album, string artist)
+    signal albumSelected(string album, string artist, string genre, int year)
 
     Connections {
         target: Player.playlist
@@ -95,7 +95,7 @@ ToolBar {
                     if (link.startsWith("artist:/")) {
                         root.artistSelected(root.artist);
                     } else if (link.startsWith("album:/")) {
-                        root.albumSelected(root.album, root.artist);
+                        root.albumSelected(root.album, root.artist, metadata.genre, metadata.year);
                     }
                 }
                 HoverHandler {

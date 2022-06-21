@@ -11,13 +11,13 @@ Page {
 
     property string album
     property string artist
-    property string genre: albumModel.data(albumModel.index(0, 0), TracksModel.RoleGenre)
-    property int year: albumModel.data(albumModel.index(0, 0), TracksModel.RoleYear)
+    property string genre
+    property int year
 
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
     signal editTrackMetadata(url track)
-    signal editAlbumMetadata(string album, string artist)
+    signal editAlbumMetadata(string album, string artist, string genre, int year)
     signal artistSelected(string artist)
     signal genreSelected(string genre)
 
@@ -26,7 +26,7 @@ Page {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             icon.source: "qrc:/icons/create-black-48dp.svg"
-            onClicked: root.editAlbumMetadata(root.album, root.artist)
+            onClicked: root.editAlbumMetadata(root.album, root.artist, root.genre, root.year)
             ToolTip.text: qsTr("Edit Album Metadata")
             ToolTip.visible: hovered
         }
@@ -39,12 +39,11 @@ Page {
         }
     }
 
-    // TODO make an AlbumProxyModel with album/artist props and additional ones to display overall genre, year and computed length
-    GenericProxyModel {
+    AlbumProxyModel {
         id: albumModel
         sourceModel: TracksModel
-        filterRole: TracksModel.RoleAlbum
-        filterString: root.album
+        album: root.album
+        artist: root.artist
         sortRole: TracksModel.RoleTrackNo
     }
 
@@ -94,8 +93,7 @@ Page {
                     }
                 }
                 Label {
-                    text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count))
-                    .arg(formatSeconds(albumModel.execHelperQuery("SELECT SUM(length) FROM Tracks WHERE album='%1'".arg(escapeSingleQuote(root.album))))) // FIXME AlbumProxyModel
+                    text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count)).arg(formatSeconds(MusicIndexer.albumTracksDuration(root.album)))
                 }
                 Label {
                     text: root.year

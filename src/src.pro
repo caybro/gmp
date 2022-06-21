@@ -14,6 +14,7 @@ QML_IMPORT_PATH += $$PWD/qml
 QML_IMPORT_PATH += $$OUT_PWD
 
 SOURCES += main.cpp \
+    albumproxymodel.cpp \
     artistsmodel.cpp \
     genericproxymodel.cpp \
     genresmodel.cpp \
@@ -22,6 +23,7 @@ SOURCES += main.cpp \
     albumsmodel.cpp
 
 HEADERS += \
+    albumproxymodel.h \
     artistsmodel.h \
     genericproxymodel.h \
     genresmodel.h \
