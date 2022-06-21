@@ -79,16 +79,16 @@ Page {
         id: tabbar
         width: parent.width
         TabButton {
-            text: qsTr("Artists") + (" (" + ArtistsModel.count + ")" ?? "")
+            text: qsTr("Artists") + (" (" + artistsModel.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Albums") + (" (" + AlbumsModel.count + ")" ?? "")
+            text: qsTr("Albums") + (" (" + albumsModel.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Songs") + (" (" + TracksModel.count + ")" ?? "")
+            text: qsTr("Songs") + (" (" + tracksModel.count + ")" ?? "")
         }
         TabButton {
-            text: qsTr("Genres") + (" (" + GenresModel.count + ")" ?? "")
+            text: qsTr("Genres") + (" (" + genresModel.count + ")" ?? "")
         }
     }
 
@@ -112,11 +112,43 @@ Page {
         }
     }
 
+    GenericProxyModel {
+        id: artistsModel
+        sourceModel: ArtistsModel
+        filterRole: ArtistsModel.RoleArtist
+        filterString: tabbar.currentIndex == 0 ? priv.searchText : ""
+        sortRole: ArtistsModel.RoleArtist
+    }
+
+    GenericProxyModel {
+        id: albumsModel
+        sourceModel: AlbumsModel
+        filterRole: AlbumsModel.RoleAlbum
+        filterString: tabbar.currentIndex == 1 ? priv.searchText : ""
+        sortRole: AlbumsModel.RoleAlbum
+    }
+
+    GenericProxyModel {
+        id: tracksModel
+        sourceModel: TracksModel
+        filterRole: TracksModel.RoleTitle
+        filterString: tabbar.currentIndex == 2 ? priv.searchText : ""
+        sortRole: TracksModel.RoleTitle
+    }
+
+    GenericProxyModel {
+        id: genresModel
+        sourceModel: GenresModel
+        filterRole: GenresModel.RoleGenre
+        filterString: tabbar.currentIndex == 3 ? priv.searchText : ""
+        sortRole: GenresModel.RoleGenre
+    }
+
     Component {
         id: artistsListViewComponent
         ListView {
             clip: true
-            model: ArtistsModel
+            model: artistsModel
             delegate: CustomItemDelegate {
                 width: ListView.view.width
                 text: model.artist
@@ -135,7 +167,7 @@ Page {
         id: albumsListViewComponent
         GridView {
             id: albumsListView
-            model: AlbumsModel
+            model: albumsModel
             clip: true
             cellWidth: 200
             cellHeight: 240
@@ -161,7 +193,7 @@ Page {
         id: tracksListViewComponent
         ListView {
             id: tracksListView
-            model: TracksModel
+            model: tracksModel
             clip: true
             delegate: CustomItemDelegate {
                 readonly property bool isPlaying: Player.currentPlayUrl === model.url
@@ -191,7 +223,7 @@ Page {
         id: genresListViewComponent
         ListView {
             id: genresListView
-            model: GenresModel
+            model: genresModel
             clip: true
             delegate: CustomItemDelegate {
                 width: ListView.view.width
