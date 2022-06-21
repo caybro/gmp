@@ -68,6 +68,7 @@ Dialog {
     }
 
     onAccepted: {
+        // TODO implement
         DbIndexer.saveAlbumMetadata(root.album, root.artist, albumGenreEdit.text, albumYearEdit.value, fileDialog.fileUrl);
         root.saved();
     }
