@@ -16,25 +16,14 @@ void GenresModel::parse()
   beginResetModel();
   m_db.clear();
 
-  // get list of uniq genres
-  QMap<QString, int> genres;
+  QSet<QString> genres;
   for (const auto &rec : m_indexer->database()) {
-    genres.insert(rec.genre, 0);
+    genres.insert(rec.genre);
   }
-
-  // count each genres's tracks
-  QMap<QString, int>::iterator it;
-  for (it = genres.begin(); it != genres.end(); ++it) {
-    QSet<QString> tracks;
-    for (const auto &rec : m_indexer->database()) {
-      if (rec.genre == it.key()) {
-        tracks.insert(rec.path);
-      }
-    }
-    it.value() = tracks.size();
-
-    // finally insert into our datastructure
-    m_db.push_back({it.key(), it.value()});
+  for (const auto &genre : genres) {
+    const int count = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
+                                    [genre](const auto &rec) { return rec.genre == genre; });
+    m_db.push_back({genre, count});
   }
 
   emit countChanged();
