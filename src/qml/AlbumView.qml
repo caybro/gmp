@@ -55,10 +55,19 @@ Page {
         header: RowLayout {
             spacing: 10
             AlbumCover {
-                album: root.album
+                id: cover
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 150
                 Layout.margins: 15
+                image: albumModel.data(albumModel.index(0, 0), TracksModel.RoleCoverImage)
+
+                Connections {
+                    target: MusicIndexer
+                    function onAlbumCoverArtChanged(album) {
+                        if (album === root.album)
+                            cover.image = albumModel.data(albumModel.index(0, 0), TracksModel.RoleCoverImage);
+                    }
+                }
             }
             Column {
                 Label {

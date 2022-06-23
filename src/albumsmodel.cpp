@@ -1,6 +1,6 @@
 #include "albumsmodel.h"
 
-#include <QSet>
+#include <unordered_map>
 
 #include "musicindexer.h"
 
@@ -17,29 +17,31 @@ void AlbumsModel::parse()
   m_db.clear();
 
   // get list of unique albums
-  QMap<QString, QString> albums; // album,artist
+  std::unordered_map<QString, QString> albums; // album,artist
   for (const auto &rec : m_indexer->database()) {
-    albums.insert(rec.album, rec.artist);
+    albums.emplace(rec.album, rec.artist);
   }
 
   // get the album's tracks
-  QMap<QString, QString>::iterator it;
-  for (it = albums.begin(); it != albums.end(); ++it) {
-    QSet<MusicRecord> tracks;
+  for (const auto &[album, artist] : albums) {
+    std::vector<MusicRecord> tracks;
     for (const auto &rec : m_indexer->database()) {
-      if (rec.album == it.key() && rec.artist == it.value()) {
-        tracks.insert(rec);
+      if (rec.album == album && rec.artist == artist) {
+        tracks.push_back(rec);
       }
     }
 
     // assemble the new album
     Album a;
-    a.album = it.key();
-    a.artist = it.value();
-    const auto firstTrack = *tracks.constBegin();
-    a.year = firstTrack.year;
-    a.numTracks = tracks.size();
-    a.genre = firstTrack.genre;
+    a.album = album;
+    a.artist = artist;
+    if (!tracks.empty()) {
+      const auto firstTrack = tracks.cbegin();
+      a.year = firstTrack->year;
+      a.numTracks = tracks.size();
+      a.genre = firstTrack->genre;
+      a.coverImage = m_indexer->coverArtImageForFile(firstTrack->path);
+    }
 
     // finally insert into our datastructure
     m_db.push_back(std::move(a));
@@ -55,7 +57,8 @@ QHash<int, QByteArray> AlbumsModel::roleNames() const
                                              {AlbumRole::RoleArtist, QByteArrayLiteral("artist")},
                                              {AlbumRole::RoleYear, QByteArrayLiteral("year")},
                                              {AlbumRole::RoleNumTracks, QByteArrayLiteral("numTracks")},
-                                             {AlbumRole::RoleGenre, QByteArrayLiteral("genre")}};
+                                             {AlbumRole::RoleGenre, QByteArrayLiteral("genre")},
+                                             {AlbumRole::RoleCoverImage, QByteArrayLiteral("coverImage")}};
 
   return roleNames;
 }
@@ -84,6 +87,8 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const
     return item.numTracks;
   case AlbumsModel::RoleGenre:
     return item.genre;
+  case AlbumsModel::RoleCoverImage:
+    return item.coverImage;
   }
 
   return {};

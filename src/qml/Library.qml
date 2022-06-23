@@ -172,17 +172,11 @@ Page {
             cellWidth: 200
             cellHeight: 240
             delegate: AlbumDelegate {
-                album: model.album
-                artist: model.artist
-                year: model.year
-                numTracks: model.numTracks
-                genre: model.genre
-
                 onClicked: {
-                    console.debug("Clicked album:", album);
-                    root.albumSelected(album, artist);
+                    console.debug("Clicked album:", model.album);
+                    root.albumSelected(model.album, model.artist);
                 }
-                onPlayAlbum: root.playAlbum(album, index)
+                onPlayAlbum: root.playAlbum(model.album, index)
             }
 
             ScrollIndicator.vertical: ScrollIndicator {}

@@ -16,6 +16,7 @@ QML_IMPORT_PATH += $$OUT_PWD
 SOURCES += main.cpp \
     albumproxymodel.cpp \
     artistsmodel.cpp \
+    directimage.cpp \
     genericproxymodel.cpp \
     genresmodel.cpp \
     musicindexer.cpp \
@@ -25,6 +26,7 @@ SOURCES += main.cpp \
 HEADERS += \
     albumproxymodel.h \
     artistsmodel.h \
+    directimage.h \
     genericproxymodel.h \
     genresmodel.h \
     musicindexer.h \

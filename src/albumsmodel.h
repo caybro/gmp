@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QImage>
 
 #include <vector>
 
@@ -11,6 +12,7 @@ struct Album
   uint year;
   int numTracks{0};
   QString genre;
+  QImage coverImage;
 };
 
 class MusicIndexer;
@@ -27,6 +29,7 @@ class AlbumsModel : public QAbstractListModel
     RoleYear,
     RoleNumTracks,
     RoleGenre,
+    RoleCoverImage,
   };
   Q_ENUM(AlbumRole)
 

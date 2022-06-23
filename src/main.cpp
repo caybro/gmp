@@ -15,6 +15,7 @@
 #include "albumproxymodel.h"
 #include "albumsmodel.h"
 #include "artistsmodel.h"
+#include "directimage.h"
 #include "genericproxymodel.h"
 #include "genresmodel.h"
 #include "musicindexer.h"
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
 
   qmlRegisterType<GenericProxyModel>("org.gmp.model", 1, 0, "GenericProxyModel");
   qmlRegisterType<AlbumProxyModel>("org.gmp.model", 1, 0, "AlbumProxyModel");
+  qmlRegisterType<DirectImage>("org.gmp.misc", 1, 0, "DirectImage");
 
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   QObject::connect(

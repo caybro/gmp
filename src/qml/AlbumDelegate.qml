@@ -6,17 +6,11 @@ import org.gmp.model 1.0
 ItemDelegate {
     id: root
 
-    property string album
-    property string artist: ""
-    property string year: "????"
-    property string numTracks: "?"
-    property string genre: ""
-
     signal playAlbum(string album, int index)
 
     contentItem: Column {
         AlbumCover {
-            album: root.album
+            image: model.coverImage
             anchors.horizontalCenter: parent.horizontalCenter
 
             RoundButton {
@@ -26,7 +20,7 @@ ItemDelegate {
                 width: 48
                 height: 48
                 icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
-                onClicked: root.playAlbum(root.album, 0)
+                onClicked: root.playAlbum(model.album, 0)
                 highlighted: true
             }
         }
@@ -37,14 +31,14 @@ ItemDelegate {
             maximumLineCount: 1
             elide: Label.ElideRight
             horizontalAlignment: Label.AlignHCenter
-            text: root.album
+            text: model.album
         }
         Label {
             width: parent.width
             horizontalAlignment: Label.AlignHCenter
             maximumLineCount: 1
             elide: Label.ElideRight
-            text: root.artist
+            text: model.artist
             visible: !!text
         }
         Label {
@@ -52,7 +46,7 @@ ItemDelegate {
             horizontalAlignment: Label.AlignHCenter
             maximumLineCount: 1
             elide: Label.ElideRight
-            text: "%1 · %2 𝅘𝅥 · %3".arg(root.year).arg(root.numTracks).arg(root.genre)
+            text: "%1 · %2 𝅘𝅥 · %3".arg(model.year ?? "????").arg(model.numTracks ?? "?").arg(model.genre ?? "")
         }
     }
 }
