@@ -34,7 +34,6 @@ Page {
     }
 
     ListView {
-        id: tracksListView
         anchors.fill: parent
         model: Player.playlist
         clip: true

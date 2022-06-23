@@ -2,6 +2,8 @@
 
 #include "musicindexer.h"
 
+#include <QImage>
+
 #include <algorithm>
 
 TracksModel::TracksModel(MusicIndexer *indexer)
@@ -24,7 +26,8 @@ QHash<int, QByteArray> TracksModel::roleNames() const
                                              {TrackRole::RoleYear, QByteArrayLiteral("year")},
                                              {TrackRole::RoleGenre, QByteArrayLiteral("genre")},
                                              {TrackRole::RoleTrackNo, QByteArrayLiteral("trackNo")},
-                                             {TrackRole::RoleLength, QByteArrayLiteral("length")}};
+                                             {TrackRole::RoleLength, QByteArrayLiteral("length")},
+                                             {TrackRole::RoleCoverImage, QByteArrayLiteral("coverImage")}};
 
   return roleNames;
 }
@@ -63,6 +66,8 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
     return item.trackNo;
   case TracksModel::RoleLength:
     return item.length;
+  case TracksModel::RoleCoverImage:
+    return m_indexer->coverArtImageForFile(item.path);
   }
 
   return {};

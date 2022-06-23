@@ -21,6 +21,7 @@ class TracksModel : public QAbstractListModel
     RoleGenre,
     RoleTrackNo,
     RoleLength,
+    RoleCoverImage,
   };
   Q_ENUM(TrackRole)
 

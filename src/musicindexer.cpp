@@ -237,14 +237,9 @@ int MusicIndexer::albumTracksDuration(const QString &album) const
   return result;
 }
 
-QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
+QImage MusicIndexer::coverArtImageForFile(const QString &file) const
 {
-  const QString localFile = fileUrl.toLocalFile();
-  const QString result = localFile + QStringLiteral(".png");
-  if (QFile::exists(result))
-    return QUrl::fromLocalFile(result);
-
-  TagLib::MPEG::File f(QFile::encodeName(localFile)); // TODO extend also beyond MP3
+  TagLib::MPEG::File f(QFile::encodeName(file)); // TODO extend also beyond MP3
   if (f.hasID3v2Tag()) {
     const auto tag = f.ID3v2Tag();
     const auto l = tag->frameList("APIC");
@@ -257,11 +252,24 @@ QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
 
     QImage image;
     image.loadFromData((const uchar *) frame->picture().data(), frame->picture().size());
-    image.save(result);
-    return QUrl::fromLocalFile(result);
+    return image;
   }
-
   return {};
+}
+
+QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
+{
+  const QString localFile = fileUrl.toLocalFile();
+  const QString result = localFile + QStringLiteral(".png");
+  if (QFile::exists(result))
+    return QUrl::fromLocalFile(result);
+
+  const auto image = coverArtImageForFile(localFile);
+  if (image.isNull())
+    return {};
+
+  image.save(result);
+  return QUrl::fromLocalFile(result);
 }
 
 QUrl MusicIndexer::coverArtForAlbum(const QString &album) const
