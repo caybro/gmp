@@ -9,8 +9,16 @@
 #include <QDirIterator>
 #include <QElapsedTimer>
 #include <QImage>
+#include <QMimeDatabase>
 
 #include <algorithm>
+
+namespace {
+TagLib::String toTString(const QString &str)
+{
+  return TagLib::String(str.toUtf8().constData(), TagLib::String::UTF8);
+}
+} // namespace
 
 MusicIndexer::MusicIndexer(QObject *parent)
     : QObject{parent}
@@ -120,7 +128,7 @@ void MusicIndexer::parse(bool incremental)
           m_db.erase(old);
         }
       }
-      m_db.push_back(rec);
+      m_db.push_back(std::move(rec));
     }
   }
 
@@ -195,7 +203,6 @@ QList<QUrl> MusicIndexer::tracksByGenre(const QString &genre, bool ordered) cons
 QList<QUrl> MusicIndexer::tracksByArtist(const QString &artist) const
 {
   QList<QUrl> result;
-  result.reserve(m_db.size());
 
   for (const auto &rec : m_db) {
     if (rec.artist == artist)
@@ -244,7 +251,7 @@ QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
     if (l.isEmpty())
       return {};
 
-    auto frame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
+    const auto frame = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(l.front());
     if (!frame)
       return {};
 
@@ -259,17 +266,120 @@ QUrl MusicIndexer::coverArtForFile(const QUrl &fileUrl) const
 
 QUrl MusicIndexer::coverArtForAlbum(const QString &album) const
 {
-  QList<QUrl> tracks = tracksByAlbum(album);
+  const auto tracks = tracksByAlbum(album);
 
+  // find first existing cover pic from the album
   QUrl result;
-  for (const QUrl &track : qAsConst(tracks)) {
+  for (const auto &track : tracks) {
     result = coverArtForFile(track);
     if (!result.isEmpty())
-      break;
+      return result;
   }
 
+  // fallback
   if (result.isEmpty())
     result = QStringLiteral("qrc:/icons/ic_album_48px.svg");
 
+  return result;
+}
+
+bool MusicIndexer::saveMetadata(const QUrl &url, const QString &title, const QString &artist, const QString &album,
+                                int year, const QString &genre)
+{
+  // save metadata to file
+  auto f = TagLib::FileRef(QFile::encodeName(url.toLocalFile()));
+  f.tag()->setTitle(toTString(title));
+  f.tag()->setArtist(toTString(artist));
+  f.tag()->setAlbum(toTString(album));
+  f.tag()->setYear(year);
+  f.tag()->setGenre(toTString(genre));
+  const bool result = f.save();
+
+  qDebug() << "Saved metadata for url:" << url << "; status:" << result;
+
+  // replace the record
+  if (result) {
+    const auto rec = std::find_if(m_db.cbegin(), m_db.cend(), [url](MusicRecord rec) { return rec.url == url; });
+    if (rec != std::cend(m_db)) {
+      MusicRecord newRecord{*rec};
+      newRecord.title = title;
+      newRecord.artist = artist;
+      newRecord.album = album;
+      newRecord.year = year;
+      newRecord.genre = genre;
+
+      std::replace(m_db.begin(), m_db.end(), *rec, std::move(newRecord));
+
+      emit dataChanged();
+    }
+  }
+
+  return result;
+}
+
+bool MusicIndexer::saveAlbumMetadata(const QString &album, const QString &artist, const QString &genre, int year,
+                                     const QUrl &albumCover)
+{
+  qDebug() << "!! SAVE ALBUM METADATA" << album << artist << "; cover URL:" << albumCover;
+
+  bool result = false;
+  TagLib::FileRef f;
+  QMimeDatabase mime;
+  const auto coverFile = albumCover.toLocalFile();
+  const auto tracks = tracksByAlbum(album);
+
+  for (const auto &track : tracks) {
+    // save metadata
+    f = TagLib::FileRef(QFile::encodeName(track.toLocalFile()));
+    f.tag()->setGenre(toTString(genre));
+    f.tag()->setYear(year);
+    result = f.save();
+
+    if (!result) {
+      qWarning() << "Failed saving ID3 tag to file" << track.toLocalFile();
+      continue;
+    }
+
+    // replace the record
+    const auto record = std::find_if(m_db.cbegin(), m_db.cend(), [track](MusicRecord rec) { return rec.url == track; });
+    if (result && record != std::cend(m_db)) {
+      MusicRecord newRecord{*record};
+      newRecord.year = year;
+      newRecord.genre = genre;
+
+      std::replace(m_db.begin(), m_db.end(), *record, std::move(newRecord));
+    }
+
+    if (albumCover.isEmpty())
+      continue;
+
+    // remove old cover file
+    const auto oldCover = track.toLocalFile() + QStringLiteral(".png");
+    if (QFile::exists(oldCover)) {
+      qDebug() << "Found existing cover file, removing:" << oldCover;
+      QFile::remove(oldCover);
+    }
+
+    // save cover to ID3 tag
+    TagLib::MPEG::File ff(QFile::encodeName(track.toLocalFile())); // TODO extend also beyond MP3
+    TagLib::ID3v2::Tag *tag = ff.ID3v2Tag(true);
+    QFile reader(coverFile);
+    if (reader.open(QFile::ReadOnly)) {
+      tag->removeFrames("APIC"); // drop old frames of this type -> replace cover
+      const auto data = reader.readAll();
+      auto frame = new TagLib::ID3v2::AttachedPictureFrame;
+      frame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+      frame->setMimeType(toTString(mime.mimeTypeForFile(coverFile).name()));
+      frame->setPicture(TagLib::ByteVector(data.constData(), data.size()));
+      tag->addFrame(frame);
+      ff.save();
+      reader.close();
+    }
+  }
+
+  emit dataChanged();
+  emit albumCoverArtChanged(album);
+
+  qDebug() << "Saved metadata for album:" << album << "and artist:" << artist << "; status:" << result;
   return result;
 }

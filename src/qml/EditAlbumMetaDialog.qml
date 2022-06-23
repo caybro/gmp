@@ -13,10 +13,13 @@ Dialog {
 
     property string album
     property string artist
-    property string genre
-    property int year
 
-    signal saved()
+    AlbumProxyModel {
+        id: albumModel
+        sourceModel: TracksModel
+        album: root.album
+        artist: root.artist
+    }
 
     OldDialogs.FileDialog {
         id: fileDialog
@@ -33,10 +36,10 @@ Dialog {
         columns: 2
         Image {
             id: cover
+            cache: false
             Layout.preferredWidth: 100
             Layout.preferredHeight: 100
             Layout.columnSpan: 2
-            source: MusicIndexer.coverArtForAlbum(root.album)
             sourceSize: Qt.size(width, height)
 
             MouseArea {
@@ -51,7 +54,7 @@ Dialog {
         TextField {
             Layout.fillWidth: true
             id: albumGenreEdit
-            text: root.genre
+            text: albumModel.genre
             placeholderText: qsTr("Album Genre")
         }
         Label {
@@ -62,14 +65,14 @@ Dialog {
             from: 0
             to: 9999
             editable: true
-            value: root.year
+            value: albumModel.year
             textFromValue: function(value) { return value; }
         }
     }
-
+    onAboutToShow: {
+        cover.source = MusicIndexer.coverArtForAlbum(root.album);
+    }
     onAccepted: {
-        // TODO implement
-        DbIndexer.saveAlbumMetadata(root.album, root.artist, albumGenreEdit.text, albumYearEdit.value, fileDialog.fileUrl);
-        root.saved();
+        MusicIndexer.saveAlbumMetadata(root.album, root.artist, albumGenreEdit.text, albumYearEdit.value, fileDialog.fileUrl);
     }
 }

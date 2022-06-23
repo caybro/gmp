@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 import QtMultimedia 5.15
 
 import org.gmp.model 1.0
@@ -18,7 +18,7 @@ ToolBar {
 
     signal currentTrackChanged(string title, string artist, string album)
     signal artistSelected(string artist)
-    signal albumSelected(string album, string artist, string genre, int year)
+    signal albumSelected(string album, string artist)
 
     Connections {
         target: Player.playlist
@@ -95,7 +95,7 @@ ToolBar {
                     if (link.startsWith("artist:/")) {
                         root.artistSelected(root.artist);
                     } else if (link.startsWith("album:/")) {
-                        root.albumSelected(root.album, root.artist, metadata.genre, metadata.year);
+                        root.albumSelected(root.album, root.artist);
                     }
                 }
                 HoverHandler {

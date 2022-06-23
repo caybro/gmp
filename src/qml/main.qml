@@ -1,10 +1,10 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls.Material 2.12
-import QtQuick.Layouts 1.12
-import QtMultimedia 5.12
-import QtQuick.VirtualKeyboard 2.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Window 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts 1.15
+import QtMultimedia 5.15
+import QtQuick.VirtualKeyboard 2.15
 import Qt.labs.settings 1.1
 import Qt.labs.platform 1.1 as Platform
 
@@ -30,17 +30,13 @@ ApplicationWindow {
         return (hours !== "00" ? hours + ':' : "") + minutes + ':' + seconds;
     }
 
-    function escapeSingleQuote(input) {
-        return String(input).replace(/'/g, "''");
-    }
-
     Component.onCompleted: {
         parseTimer.start();
     }
 
     Timer {
         id: parseTimer
-        interval: 1
+        interval: 100
         onTriggered: {
             MusicIndexer.parse();
         }
@@ -89,7 +85,7 @@ ApplicationWindow {
     footer: Playbar {
         id: playbar
         visible: Player.playlist.itemCount
-        onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist, genre, year)
+        onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
         onCurrentTrackChanged: trayIcon.showMessage(Qt.application.name,
                                                     qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
@@ -105,8 +101,8 @@ ApplicationWindow {
             Player.playlist.addItem(playFileUrl);
             Player.play();
         }
-        function onAlbumSelected(album, artist, genre, year) {
-            stackView.push("AlbumView.qml", {"album": album, "artist": artist, "genre": genre, "year": year});
+        function onAlbumSelected(album, artist) {
+            stackView.push("AlbumView.qml", {"album": album, "artist": artist});
         }
         function onArtistSelected(artist) {
             stackView.push("AlbumsOverview.qml", {"artist": artist});
@@ -172,12 +168,10 @@ ApplicationWindow {
             editMetaDialog.trackUrl = trackUrl;
             editMetaDialog.open();
         }
-        function onEditAlbumMetadata(album, artist, genre, year) {
-            console.debug("Edit album metadata:", album, artist, genre, year)
+        function onEditAlbumMetadata(album, artist) {
+            console.debug("Edit album metadata:", album, artist)
             editAlbumMetaDialog.album = album;
             editAlbumMetaDialog.artist = artist;
-            editAlbumMetaDialog.genre = genre;
-            editAlbumMetaDialog.year = year;
             editAlbumMetaDialog.open();
         }
     }
@@ -187,13 +181,7 @@ ApplicationWindow {
         anchors.centerIn: parent
         focus: visible
         modal: true
-        onSaved: {
-            console.debug("!!! META DIALOG SAVED")
-            console.debug("Current stack page:", stackView.currentItem.objectName)
-        }
-        onClosed: {
-            stackView.focus = true;
-        }
+        onClosed: stackView.focus = true
     }
 
     EditAlbumMetaDialog {
@@ -201,13 +189,7 @@ ApplicationWindow {
         anchors.centerIn: parent
         focus: visible
         modal: true
-        onSaved: {
-            console.debug("!!! ALBUM META DIALOG SAVED")
-            console.debug("Current stack page:", stackView.currentItem.objectName)
-        }
-        onClosed: {
-            stackView.focus = true;
-        }
+        onClosed: stackView.focus = true
     }
 
     Drawer {
