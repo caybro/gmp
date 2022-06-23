@@ -310,7 +310,7 @@ ApplicationWindow {
         visible: available && !window.isMobileOS
         icon {
             mask: true
-            name: Player.playing ? "media-playback-start" : "media-playback-stop"
+            name: Player.playing ? "media-playback-start-symbolic" : "media-playback-stop-symbolic"
         }
         tooltip: Qt.application.displayName
         onActivated: {
