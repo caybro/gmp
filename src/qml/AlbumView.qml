@@ -11,13 +11,13 @@ Page {
 
     property string album
     property string artist
-    property string genre
-    property int year
+    readonly property string genre: albumModel.genre
+    readonly property int year: albumModel.year
 
     signal playAlbum(string album, int index)
     signal shufflePlayAlbum(string album)
     signal editTrackMetadata(url track)
-    signal editAlbumMetadata(string album, string artist, string genre, int year)
+    signal editAlbumMetadata(string album, string artist)
     signal artistSelected(string artist)
     signal genreSelected(string genre)
 
@@ -26,7 +26,7 @@ Page {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             icon.source: "qrc:/icons/create-black-48dp.svg"
-            onClicked: root.editAlbumMetadata(root.album, root.artist, root.genre, root.year)
+            onClicked: root.editAlbumMetadata(root.album, root.artist)
             ToolTip.text: qsTr("Edit Album Metadata")
             ToolTip.visible: hovered
         }
@@ -54,12 +54,11 @@ Page {
         clip: true
         header: RowLayout {
             spacing: 10
-            Image {
+            AlbumCover {
+                album: root.album
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 150
                 Layout.margins: 15
-                source: MusicIndexer.coverArtForAlbum(root.album)
-                sourceSize: Qt.size(width, height)
             }
             Column {
                 Label {

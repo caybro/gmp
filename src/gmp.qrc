@@ -32,5 +32,6 @@
         <file>qml/EditMetaDialog.qml</file>
         <file>qml/EditAlbumMetaDialog.qml</file>
         <file>icons/create-black-48dp.svg</file>
+        <file>qml/AlbumCover.qml</file>
     </qresource>
 </RCC>

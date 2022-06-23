@@ -15,13 +15,9 @@ ItemDelegate {
     signal playAlbum(string album, int index)
 
     contentItem: Column {
-        Image {
+        AlbumCover {
+            album: root.album
             anchors.horizontalCenter: parent.horizontalCenter
-            source: MusicIndexer.coverArtForAlbum(root.album)
-            asynchronous: true
-            width: 150
-            height: width
-            sourceSize: Qt.size(width, height)
 
             RoundButton {
                 anchors.right: parent.right
@@ -30,9 +26,7 @@ ItemDelegate {
                 width: 48
                 height: 48
                 icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
-                onClicked: {
-                    root.playAlbum(root.album, 0);
-                }
+                onClicked: root.playAlbum(root.album, 0)
                 highlighted: true
             }
         }

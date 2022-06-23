@@ -11,10 +11,7 @@ Dialog {
     standardButtons: Dialog.Save | Dialog.Cancel
 
     property url trackUrl
-
-    readonly property var metadata: TracksModel.getMetadata(root.trackUrl)
-
-    signal saved()
+    property var metadata: ({})
 
     GridLayout {
         anchors.fill: parent
@@ -68,9 +65,11 @@ Dialog {
         }
     }
 
+    onAboutToShow: {
+        root.metadata = TracksModel.getMetadata(root.trackUrl);
+    }
+
     onAccepted: {
-        // TODO implement
-        DbIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.value, genreEdit.text);
-        root.saved();
+        MusicIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.value, genreEdit.text);
     }
 }

@@ -11,6 +11,8 @@ AlbumProxyModel::AlbumProxyModel(QObject *parent)
   connect(this, &AlbumProxyModel::sourceModelChanged, this, [this]() {
     connect(sourceModel(), &QAbstractItemModel::dataChanged, this, &AlbumProxyModel::invalidate);
     connect(sourceModel(), &QAbstractItemModel::modelReset, this, &AlbumProxyModel::invalidate);
+    connect(sourceModel(), &QAbstractItemModel::dataChanged, this, &AlbumProxyModel::metadataChanged);
+    connect(sourceModel(), &QAbstractItemModel::modelReset, this, &AlbumProxyModel::metadataChanged);
   });
 
   sort(0);
@@ -27,6 +29,7 @@ void AlbumProxyModel::setAlbum(const QString &newAlbum)
     return;
   m_album = newAlbum;
   invalidateFilter();
+  emit metadataChanged();
   emit albumChanged();
 }
 
@@ -41,7 +44,18 @@ void AlbumProxyModel::setArtist(const QString &newArtist)
     return;
   m_artist = newArtist;
   invalidateFilter();
+  emit metadataChanged();
   emit artistChanged();
+}
+
+QString AlbumProxyModel::genre() const
+{
+  return data(index(0, 0), TracksModel::RoleGenre).toString();
+}
+
+int AlbumProxyModel::year() const
+{
+  return data(index(0, 0), TracksModel::RoleYear).toInt();
 }
 
 bool AlbumProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

@@ -8,7 +8,7 @@ TracksModel::TracksModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}
     , m_indexer(indexer)
 {
-  connect(m_indexer, &MusicIndexer::dataChanged, this, [&]() {
+  connect(m_indexer, &MusicIndexer::dataChanged, this, [this]() {
     beginResetModel();
     endResetModel();
   });
