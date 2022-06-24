@@ -6,7 +6,7 @@ import org.gmp.model 1.0
 Page {
     id: root
     objectName: "AlbumsOverview"
-    title: "%1 · %2".arg(artist).arg(qsTr("%n album(s)", "", gridview.count))
+    title: "%1 · %2".arg(artist).arg(qsTr("%n album(s)", "", gridview.model.count))
 
     property string artist
 
@@ -38,20 +38,17 @@ Page {
         }
     }
 
-    GenericProxyModel {
-        id: albumsModel
-        sourceModel: AlbumsModel
-        filterRole: AlbumsModel.RoleArtist
-        filterString: root.artist
-        sortRole: priv.alphaSort ? AlbumsModel.RoleAlbum : AlbumsModel.RoleYear
-    }
-
     GridView {
         id: gridview
         anchors.fill: parent
         cellWidth: 200
         cellHeight: 240
-        model: albumsModel
+        model: GenericProxyModel {
+            sourceModel: AlbumsModel
+            filterRole: AlbumsModel.RoleArtist
+            filterString: root.artist
+            sortRole: priv.alphaSort ? AlbumsModel.RoleAlbum : AlbumsModel.RoleYear
+        }
         delegate: AlbumDelegate {
             onClicked: {
                 console.debug("Clicked album:", model.album);

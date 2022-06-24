@@ -166,7 +166,6 @@ Page {
     Component {
         id: albumsListViewComponent
         GridView {
-            id: albumsListView
             model: albumsModel
             clip: true
             cellWidth: 200
@@ -186,7 +185,6 @@ Page {
     Component {
         id: tracksListViewComponent
         ListView {
-            id: tracksListView
             model: tracksModel
             clip: true
             delegate: CustomItemDelegate {
@@ -216,7 +214,6 @@ Page {
     Component {
         id: genresListViewComponent
         ListView {
-            id: genresListView
             model: genresModel
             clip: true
             delegate: CustomItemDelegate {

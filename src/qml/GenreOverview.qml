@@ -6,7 +6,7 @@ import org.gmp.model 1.0
 Page {
     id: root
     objectName: "GenreOverviewPage"
-    title: "%1 · %2".arg(genre).arg(qsTr("%n track(s)", "", listview.count))
+    title: "%1 · %2".arg(genre).arg(qsTr("%n track(s)", "", listview.model.count))
 
     property string genre
 
