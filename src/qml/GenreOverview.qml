@@ -60,5 +60,6 @@ Page {
                 ToolTip.visible: hovered
             }
         }
+        ScrollIndicator.vertical: ScrollIndicator {}
     }
 }
