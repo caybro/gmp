@@ -10,9 +10,13 @@ TracksModel::TracksModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}
     , m_indexer(indexer)
 {
-  connect(m_indexer, &MusicIndexer::dataChanged, this, [this]() {
+  connect(m_indexer, qOverload<>(&MusicIndexer::dataChanged), this, [this]() {
     beginResetModel();
     endResetModel();
+  });
+  connect(m_indexer, qOverload<int>(&MusicIndexer::dataChanged), this, [this](int row) {
+    const auto idx = index(row);
+    emit dataChanged(idx, idx);
   });
 }
 

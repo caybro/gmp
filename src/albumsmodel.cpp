@@ -8,7 +8,7 @@ AlbumsModel::AlbumsModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}
     , m_indexer(indexer)
 {
-  connect(m_indexer, &MusicIndexer::dataChanged, this, &AlbumsModel::parse);
+  connect(m_indexer, qOverload<>(&MusicIndexer::dataChanged), this, &AlbumsModel::parse);
 }
 
 void AlbumsModel::parse()

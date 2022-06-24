@@ -318,7 +318,8 @@ bool MusicIndexer::saveMetadata(const QUrl &url, const QString &title, const QSt
 
       std::replace(m_db.begin(), m_db.end(), *rec, std::move(newRecord));
 
-      emit dataChanged();
+      const auto row = std::distance(m_db.cbegin(), rec);
+      emit dataChanged(row);
     }
   }
 
@@ -349,13 +350,16 @@ bool MusicIndexer::saveAlbumMetadata(const QString &album, const QString &artist
     }
 
     // replace the record
-    const auto record = std::find_if(m_db.cbegin(), m_db.cend(), [track](MusicRecord rec) { return rec.url == track; });
-    if (result && record != std::cend(m_db)) {
-      MusicRecord newRecord{*record};
+    const auto rec = std::find_if(m_db.cbegin(), m_db.cend(), [track](MusicRecord rec) { return rec.url == track; });
+    if (result && rec != std::cend(m_db)) {
+      MusicRecord newRecord{*rec};
       newRecord.year = year;
       newRecord.genre = genre;
 
-      std::replace(m_db.begin(), m_db.end(), *record, std::move(newRecord));
+      std::replace(m_db.begin(), m_db.end(), *rec, std::move(newRecord));
+
+      const auto row = std::distance(m_db.cbegin(), rec);
+      emit dataChanged(row);
     }
 
     if (albumCover.isEmpty())
@@ -385,7 +389,6 @@ bool MusicIndexer::saveAlbumMetadata(const QString &album, const QString &artist
     }
   }
 
-  emit dataChanged();
   emit albumCoverArtChanged(album);
 
   qDebug() << "Saved metadata for album:" << album << "and artist:" << artist << "; status:" << result;
