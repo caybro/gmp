@@ -86,5 +86,7 @@ int main(int argc, char *argv[])
       Qt::QueuedConnection);
   engine.load(url);
 
+  indexer->parse();
+
   return app.exec();
 }

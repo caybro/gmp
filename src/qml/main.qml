@@ -31,14 +31,8 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        parseTimer.start();
-    }
-
-    Timer {
-        id: parseTimer
-        interval: 100
-        onTriggered: {
-            MusicIndexer.parse();
+        if (!MusicIndexer.indexing) {
+            stackView.replace(null, "Library.qml");
         }
     }
 
@@ -250,7 +244,6 @@ ApplicationWindow {
     Connections {
         target: MusicIndexer
         function onIndexingChanged() {
-            console.info("!!! INDEXING CHANGED:", MusicIndexer.indexing);
             if (!MusicIndexer.indexing) {
                 stackView.replace(null, "Library.qml");
             }
