@@ -36,6 +36,17 @@ ToolBar {
         }
     }
 
+    Connections {
+        target: MusicIndexer
+        ignoreUnknownSignals: true
+        function onAlbumCoverArtChanged(album) {
+            if (album === root.album) {
+                coverArt.source = "";
+                coverArt.source = MusicIndexer.coverArtForAlbum(root.album);
+            }
+        }
+    }
+
     Slider {
         id: slider
         focusPolicy: Qt.NoFocus
@@ -70,6 +81,7 @@ ToolBar {
             Layout.preferredWidth: 60
             Layout.preferredHeight: 60
             id: coverArt
+            cache: false
             sourceSize: Qt.size(width, height)
             visible: !!source
         }
