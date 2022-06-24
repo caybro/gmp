@@ -27,7 +27,7 @@ void AlbumsModel::parse()
     std::vector<MusicRecord> tracks;
     for (const auto &rec : m_indexer->database()) {
       if (rec.album == album && rec.artist == artist) {
-        tracks.push_back(rec);
+        tracks.emplace_back(rec);
       }
     }
 

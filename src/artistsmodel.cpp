@@ -1,6 +1,6 @@
 #include "artistsmodel.h"
 
-#include <QSet>
+#include <unordered_set>
 
 #include "musicindexer.h"
 
@@ -17,24 +17,24 @@ void ArtistsModel::parse()
   m_db.clear();
 
   // get list of uniq artists
-  QMap<QString, int> artists;
+  std::unordered_set<QString> artists;
   for (const auto &rec : m_indexer->database()) {
-    artists.insert(rec.artist, 0);
+    artists.emplace(rec.artist);
   }
 
+  m_db.reserve(artists.size());
+
   // count each artist's albums
-  QMap<QString, int>::iterator it;
-  for (it = artists.begin(); it != artists.end(); ++it) {
-    QSet<QString> albums;
+  for (const auto &artist : artists) {
+    std::unordered_set<QString> albums;
     for (const auto &rec : m_indexer->database()) {
-      if (rec.artist == it.key()) {
+      if (rec.artist == artist) {
         albums.insert(rec.album);
       }
     }
-    it.value() = albums.size();
 
     // finally insert into our datastructure
-    m_db.push_back({it.key(), it.value()});
+    m_db.push_back({artist, static_cast<int>(albums.size())});
   }
 
   emit countChanged();

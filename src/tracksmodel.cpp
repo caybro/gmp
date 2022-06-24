@@ -81,7 +81,7 @@ int TracksModel::count() const
 QJsonObject TracksModel::getMetadata(const QUrl &url) const
 {
   const auto &db = m_indexer->database();
-  const auto row = std::find_if(db.cbegin(), db.cend(), [url](MusicRecord rec) { return rec.url == url; });
+  const auto row = std::find_if(db.cbegin(), db.cend(), [url](const auto &rec) { return rec.url == url; });
   if (row == db.cend())
     return {};
   const auto rowIndex = std::distance(db.cbegin(), row);
@@ -94,6 +94,8 @@ QJsonObject TracksModel::getMetadata(const QUrl &url) const
   QHashIterator<int, QByteArray> i(roleNames());
   while (i.hasNext()) {
     i.next();
+    if (i.key() == TracksModel::RoleCoverImage)
+      continue;
     result.insert(i.value(), QJsonValue::fromVariant(data(idx, i.key())));
   }
   return result;

@@ -1,6 +1,6 @@
 #include "genresmodel.h"
 
-#include <QSet>
+#include <unordered_set>
 
 #include "musicindexer.h"
 
@@ -16,14 +16,17 @@ void GenresModel::parse()
   beginResetModel();
   m_db.clear();
 
-  QSet<QString> genres;
+  std::unordered_set<QString> genres;
   for (const auto &rec : m_indexer->database()) {
-    genres.insert(rec.genre);
+    genres.emplace(rec.genre);
   }
+
+  m_db.reserve(genres.size());
+
   for (const auto &genre : genres) {
-    const int count = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
-                                    [genre](const auto &rec) { return rec.genre == genre; });
-    m_db.push_back({genre, count});
+    const int numTracks = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
+                                        [genre](const auto &rec) { return rec.genre == genre; });
+    m_db.push_back({genre, numTracks});
   }
 
   emit countChanged();
