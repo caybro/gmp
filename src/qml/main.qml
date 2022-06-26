@@ -36,6 +36,15 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: MusicIndexer
+        function onIndexingChanged() {
+            if (!MusicIndexer.indexing) {
+                stackView.replace(null, "Library.qml");
+            }
+        }
+    }
+
     Settings {
         property alias x: window.x
         property alias y: window.y
@@ -237,15 +246,6 @@ ApplicationWindow {
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
                 text: "%1 · %2 · (c) %3 2020-2022".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
-            }
-        }
-    }
-
-    Connections {
-        target: MusicIndexer
-        function onIndexingChanged() {
-            if (!MusicIndexer.indexing) {
-                stackView.replace(null, "Library.qml");
             }
         }
     }

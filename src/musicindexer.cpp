@@ -16,7 +16,7 @@
 namespace {
 TagLib::String toTString(const QString &str)
 {
-  return TagLib::String(str.toUtf8().constData(), TagLib::String::UTF8);
+  return {str.toUtf8().constData(), TagLib::String::UTF8};
 }
 } // namespace
 
@@ -217,7 +217,8 @@ int MusicIndexer::tracksDuration(const QList<QUrl> &urls) const
   int result = 0;
 
   for (const auto &url : urls) {
-    const auto track = std::find_if(m_db.cbegin(), m_db.cend(), [url](MusicRecord rec) { return rec.url == url; });
+    const auto track = std::find_if(m_db.cbegin(), m_db.cend(),
+                                    [url](const MusicRecord &rec) { return rec.url == url; });
     if (track != std::cend(m_db))
       result += track->length;
   }
@@ -307,7 +308,7 @@ bool MusicIndexer::saveMetadata(const QUrl &url, const QString &title, const QSt
 
   // replace the record
   if (result) {
-    const auto rec = std::find_if(m_db.cbegin(), m_db.cend(), [url](MusicRecord rec) { return rec.url == url; });
+    const auto rec = std::find_if(m_db.cbegin(), m_db.cend(), [url](const MusicRecord &rec) { return rec.url == url; });
     if (rec != std::cend(m_db)) {
       MusicRecord newRecord{*rec};
       newRecord.title = title;
@@ -350,7 +351,8 @@ bool MusicIndexer::saveAlbumMetadata(const QString &album, const QString &artist
     }
 
     // replace the record
-    const auto rec = std::find_if(m_db.cbegin(), m_db.cend(), [track](MusicRecord rec) { return rec.url == track; });
+    const auto rec = std::find_if(m_db.cbegin(), m_db.cend(),
+                                  [track](const MusicRecord &rec) { return rec.url == track; });
     if (result && rec != std::cend(m_db)) {
       MusicRecord newRecord{*rec};
       newRecord.year = year;
