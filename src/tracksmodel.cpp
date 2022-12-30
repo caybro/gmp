@@ -49,7 +49,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
 
   auto const &db = m_indexer->database();
 
-  const auto item = db[index.row()];
+  const auto &item = db[index.row()];
 
   switch (static_cast<TrackRole>(role)) {
   case TracksModel::RolePath:

@@ -23,9 +23,9 @@ void AlbumsModel::parse()
   }
 
   // get the album's tracks
-  for (const auto &[album, artist] : albums) {
+  for (const auto &[album, artist] : std::as_const(albums)) {
     std::vector<MusicRecord> tracks;
-    for (const auto &rec : m_indexer->database()) {
+    for (const auto &rec : std::as_const(m_indexer->database())) {
       if (rec.album == album && rec.artist == artist) {
         tracks.emplace_back(rec);
       }
@@ -74,7 +74,7 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const
                              | QAbstractItemModel::CheckIndexOption::ParentIsInvalid))
     return {};
 
-  const auto item = m_db[index.row()];
+  const auto &item = m_db[index.row()];
 
   switch (static_cast<AlbumRole>(role)) {
   case AlbumsModel::RoleAlbum:

@@ -93,8 +93,7 @@ void MusicIndexer::parse(bool incremental)
         const auto l = tag->frameList("TPOS");
         if (!l.isEmpty()) {
           const auto frame = l.front();
-          const int tmpPos
-              = QString::fromLatin1(frame->toString().toCString()).section(QLatin1Char('/'), 0, 0).toUInt(); // 1/0
+          const int tmpPos = frame->toString().split('/').front().toInt();
           if (tmpPos > 0)
             pos = 1000 * tmpPos;
         }

@@ -18,16 +18,16 @@ void ArtistsModel::parse()
 
   // get list of uniq artists
   std::unordered_set<QString> artists;
-  for (const auto &rec : m_indexer->database()) {
+  for (const auto &rec : std::as_const(m_indexer->database())) {
     artists.emplace(rec.artist);
   }
 
   m_db.reserve(artists.size());
 
   // count each artist's albums
-  for (const auto &artist : artists) {
+  for (const auto &artist : std::as_const(artists)) {
     std::unordered_set<QString> albums;
-    for (const auto &rec : m_indexer->database()) {
+    for (const auto &rec : std::as_const(m_indexer->database())) {
       if (rec.artist == artist) {
         albums.insert(rec.album);
       }
@@ -60,7 +60,7 @@ QVariant ArtistsModel::data(const QModelIndex &index, int role) const
                              | QAbstractItemModel::CheckIndexOption::ParentIsInvalid))
     return {};
 
-  const auto item = m_db[index.row()];
+  const auto &item = m_db[index.row()];
 
   switch (static_cast<ArtistRole>(role)) {
   case ArtistsModel::RoleArtist:

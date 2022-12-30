@@ -17,13 +17,13 @@ void GenresModel::parse()
   m_db.clear();
 
   std::unordered_set<QString> genres;
-  for (const auto &rec : m_indexer->database()) {
+  for (const auto &rec : std::as_const(m_indexer->database())) {
     genres.emplace(rec.genre);
   }
 
   m_db.reserve(genres.size());
 
-  for (const auto &genre : genres) {
+  for (const auto &genre : std::as_const(genres)) {
     const int numTracks = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
                                         [genre](const auto &rec) { return rec.genre == genre; });
     m_db.push_back({genre, numTracks});
@@ -52,7 +52,7 @@ QVariant GenresModel::data(const QModelIndex &index, int role) const
                              | QAbstractItemModel::CheckIndexOption::ParentIsInvalid))
     return {};
 
-  const auto item = m_db[index.row()];
+  const auto &item = m_db[index.row()];
 
   switch (static_cast<GenreRole>(role)) {
   case GenresModel::RoleGenre:

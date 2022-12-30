@@ -64,8 +64,6 @@ int main(int argc, char *argv[])
   auto tracksModel = QScopedPointer<TracksModel>(new TracksModel(indexer.get()));
   auto genresModel = QScopedPointer<GenresModel>(new GenresModel(indexer.get()));
 
-  QQmlApplicationEngine engine;
-
   qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "MusicIndexer", indexer.get());
   qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "ArtistsModel", artistsModel.get());
   qmlRegisterSingletonInstance("org.gmp.model", 1, 0, "AlbumsModel", albumsModel.get());
@@ -76,12 +74,13 @@ int main(int argc, char *argv[])
   qmlRegisterType<AlbumProxyModel>("org.gmp.model", 1, 0, "AlbumProxyModel");
   qmlRegisterType<DirectImage>("org.gmp.misc", 1, 0, "DirectImage");
 
+  QQmlApplicationEngine engine;
   const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
       [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
-          QCoreApplication::exit(-1);
+          QCoreApplication::exit(EXIT_FAILURE);
       },
       Qt::QueuedConnection);
   engine.load(url);
