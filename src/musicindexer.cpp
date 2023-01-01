@@ -149,7 +149,7 @@ QList<QUrl> MusicIndexer::allTracks() const
   QList<QUrl> result;
   result.reserve(m_db.size());
 
-  for (const auto &rec : m_db) {
+  for (const auto &rec : std::as_const(m_db)) {
     result.append(rec.url);
   }
 
@@ -160,7 +160,7 @@ QList<QUrl> MusicIndexer::tracksByAlbum(const QString &album, bool ordered) cons
 {
   std::vector<MusicRecord> tracks;
 
-  for (const auto &rec : m_db) {
+  for (const auto &rec : std::as_const(m_db)) {
     if (rec.album == album)
       tracks.push_back(rec);
   }
@@ -181,7 +181,7 @@ QList<QUrl> MusicIndexer::tracksByGenre(const QString &genre, bool ordered) cons
 {
   std::vector<MusicRecord> tracks;
 
-  for (const auto &rec : m_db) {
+  for (const auto &rec : std::as_const(m_db)) {
     if (rec.genre == genre)
       tracks.push_back(rec);
   }
@@ -203,7 +203,7 @@ QList<QUrl> MusicIndexer::tracksByArtist(const QString &artist) const
 {
   QList<QUrl> result;
 
-  for (const auto &rec : m_db) {
+  for (const auto &rec : std::as_const(m_db)) {
     if (rec.artist == artist)
       result.append(rec.url);
   }
@@ -229,7 +229,7 @@ int MusicIndexer::albumTracksDuration(const QString &album) const
 {
   int result = 0;
 
-  for (const auto &rec : m_db) {
+  for (const auto &rec : std::as_const(m_db)) {
     if (rec.album == album)
       result += rec.length;
   }

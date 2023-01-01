@@ -19,8 +19,10 @@ void AlbumsModel::parse()
   // get list of unique albums
   std::unordered_map<QString, QString> albums; // album,artist
   for (const auto &rec : m_indexer->database()) {
-    albums.emplace(rec.album, rec.artist);
+    albums.try_emplace(rec.album, rec.artist);
   }
+
+  m_db.reserve(albums.size());
 
   // get the album's tracks
   for (const auto &[album, artist] : std::as_const(albums)) {
