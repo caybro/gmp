@@ -15,7 +15,7 @@ class DirectImage : public QQuickPaintedItem
   void imageChanged();
 
  protected:
-  void paint(QPainter *painer) override;
+  void paint(QPainter *painter) override;
 
  private:
   QImage image() const;
