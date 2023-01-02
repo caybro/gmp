@@ -84,7 +84,7 @@ void MusicIndexer::parse(bool incremental)
       const QString filePath = it.next();
       //qDebug() << "Found audio file:" << filePath;
 
-      f = TagLib::FileRef(QFile::encodeName(filePath));
+      f = TagLib::FileRef(QFile::encodeName(filePath), true, TagLib::AudioProperties::Fast);
 
       uint pos = 0;
       TagLib::MPEG::File f2(QFile::encodeName(filePath)); // TODO extend also beyond MP3
@@ -149,9 +149,8 @@ QList<QUrl> MusicIndexer::allTracks() const
   QList<QUrl> result;
   result.reserve(m_db.size());
 
-  for (const auto &rec : std::as_const(m_db)) {
-    result.append(rec.url);
-  }
+  std::transform(m_db.cbegin(), m_db.cend(), std::back_inserter(result),
+                 [](const auto &rec) { return rec.url; });
 
   return result;
 }
@@ -390,7 +389,7 @@ bool MusicIndexer::saveAlbumMetadata(const QString &album, const QString &artist
     }
   }
 
-  emit albumCoverArtChanged(album);
+  emit albumCoverArtChanged(album, artist);
 
   qDebug() << "Saved metadata for album:" << album << "and artist:" << artist << "; status:" << result;
   return result;

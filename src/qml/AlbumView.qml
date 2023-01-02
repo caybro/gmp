@@ -59,13 +59,13 @@ Page {
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 150
                 Layout.margins: 15
-                image: albumModel.data(albumModel.index(0, 0), TracksModel.RoleCoverImage)
+                image: albumModel.coverImage
 
                 Connections {
                     target: MusicIndexer
-                    function onAlbumCoverArtChanged(album) {
-                        if (album === root.album)
-                            cover.image = albumModel.data(albumModel.index(0, 0), TracksModel.RoleCoverImage);
+                    function onAlbumCoverArtChanged(album, artist) {
+                        if (album === root.album && artist === root.artist)
+                            cover.image = albumModel.coverImage
                     }
                 }
             }

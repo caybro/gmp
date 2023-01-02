@@ -1,8 +1,7 @@
 #include "artistsmodel.h"
 
-#include <unordered_set>
-
 #include "musicindexer.h"
+#include "duplicatetracker.h"
 
 ArtistsModel::ArtistsModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}
@@ -17,24 +16,24 @@ void ArtistsModel::parse()
   m_db.clear();
 
   // get list of uniq artists
-  std::unordered_set<QString> artists;
+  KDToolBox::DuplicateTracker<QString> artists;
   for (const auto &rec : std::as_const(m_indexer->database())) {
-    artists.emplace(rec.artist);
+    artists.hasSeen(rec.artist);
   }
 
-  m_db.reserve(artists.size());
+  m_db.reserve(artists.set().size());
 
   // count each artist's albums
-  for (const auto &artist : std::as_const(artists)) {
-    std::unordered_set<QString> albums;
+  for (const auto &artist : std::as_const(artists.set())) {
+    KDToolBox::DuplicateTracker<QString> albums;
     for (const auto &rec : std::as_const(m_indexer->database())) {
       if (rec.artist == artist) {
-        albums.insert(rec.album);
+        albums.hasSeen(rec.album);
       }
     }
 
     // finally insert into our datastructure
-    m_db.push_back({artist, static_cast<int>(albums.size())});
+    m_db.push_back({artist, static_cast<uint>(albums.set().size())});
   }
 
   emit countChanged();

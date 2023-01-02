@@ -10,7 +10,7 @@ struct Album
   QString album;
   QString artist;
   uint year;
-  int numTracks{0};
+  uint numTracks{0};
   QString genre;
   QImage coverImage;
 };

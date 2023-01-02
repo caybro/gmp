@@ -45,6 +45,8 @@ int main(int argc, char *argv[])
   app.setApplicationDisplayName(QStringLiteral("G Music Player"));
   app.setApplicationVersion(QStringLiteral("0.0.2"));
 
+  if (app.platformName() == QLatin1String("wayland"))
+    app.setDesktopFileName(QStringLiteral("gmp.desktop"));
   app.setWindowIcon(QIcon(QStringLiteral(":/icons/ic_library_music_48px.svg")));
 
   QTranslator qtTranslator;

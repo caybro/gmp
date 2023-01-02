@@ -56,7 +56,7 @@ class MusicIndexer : public QObject
   void isIndexingChanged(bool indexing);
   void dataChanged();
   void dataChanged(int row);
-  void albumCoverArtChanged(const QString &album);
+  void albumCoverArtChanged(const QString &album, const QString &artist);
 
  private:
   QStringList rootPaths() const;

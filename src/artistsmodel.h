@@ -7,7 +7,7 @@
 struct Artist
 {
   QString artist;
-  int numAlbums{0};
+  uint numAlbums{0};
 };
 
 class MusicIndexer;

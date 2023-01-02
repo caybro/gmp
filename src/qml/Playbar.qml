@@ -39,8 +39,8 @@ ToolBar {
     Connections {
         target: MusicIndexer
         ignoreUnknownSignals: true
-        function onAlbumCoverArtChanged(album) {
-            if (album === root.album) {
+        function onAlbumCoverArtChanged(album, artist) {
+            if (album === root.album && artist === root.artist) {
                 coverArt.source = "";
                 coverArt.source = MusicIndexer.coverArtForAlbum(root.album);
             }

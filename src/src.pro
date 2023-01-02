@@ -27,6 +27,7 @@ HEADERS += \
     albumproxymodel.h \
     artistsmodel.h \
     directimage.h \
+    duplicatetracker.h \
     genericproxymodel.h \
     genresmodel.h \
     musicindexer.h \

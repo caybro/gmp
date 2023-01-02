@@ -58,6 +58,11 @@ int AlbumProxyModel::year() const
   return data(index(0, 0), TracksModel::RoleYear).toInt();
 }
 
+QImage AlbumProxyModel::coverImage() const
+{
+  return data(index(0, 0), TracksModel::RoleCoverImage).value<QImage>();
+}
+
 bool AlbumProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
   if (sourceParent.isValid()) {

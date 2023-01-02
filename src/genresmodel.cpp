@@ -3,6 +3,7 @@
 #include <unordered_set>
 
 #include "musicindexer.h"
+#include "duplicatetracker.h"
 
 GenresModel::GenresModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}
@@ -16,17 +17,17 @@ void GenresModel::parse()
   beginResetModel();
   m_db.clear();
 
-  std::unordered_set<QString> genres;
+  KDToolBox::DuplicateTracker<QString> genres;
   for (const auto &rec : std::as_const(m_indexer->database())) {
-    genres.emplace(rec.genre);
+    genres.hasSeen(rec.genre);
   }
 
-  m_db.reserve(genres.size());
+  m_db.reserve(genres.set().size());
 
-  for (const auto &genre : std::as_const(genres)) {
-    const int numTracks = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
-                                        [genre](const auto &rec) { return rec.genre == genre; });
-    m_db.push_back({genre, numTracks});
+  for (const auto &genre : std::as_const(genres.set())) {
+    const auto numTracks = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
+                                         [genre](const auto &rec) { return rec.genre == genre; });
+    m_db.push_back({genre, static_cast<uint>(numTracks)});
   }
 
   emit countChanged();

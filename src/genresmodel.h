@@ -7,7 +7,7 @@
 struct Genre
 {
   QString genre;
-  int numTracks{0};
+  uint numTracks{0};
 };
 
 class MusicIndexer;

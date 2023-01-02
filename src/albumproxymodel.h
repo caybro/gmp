@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSortFilterProxyModel>
+#include <QImage>
 
 class TracksModel;
 
@@ -12,6 +13,7 @@ class AlbumProxyModel : public QSortFilterProxyModel
   Q_PROPERTY(QString artist READ artist WRITE setArtist NOTIFY artistChanged REQUIRED)
   Q_PROPERTY(QString genre READ genre NOTIFY metadataChanged)
   Q_PROPERTY(int year READ year NOTIFY metadataChanged)
+  Q_PROPERTY(QImage coverImage READ coverImage NOTIFY metadataChanged)
 
  public:
   AlbumProxyModel(QObject *parent = nullptr);
@@ -35,4 +37,5 @@ class AlbumProxyModel : public QSortFilterProxyModel
 
   QString genre() const;
   int year() const;
+  QImage coverImage() const;
 };
