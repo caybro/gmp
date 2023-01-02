@@ -18,6 +18,10 @@ TagLib::String toTString(const QString &str)
 {
   return {str.toUtf8().constData(), TagLib::String::UTF8};
 }
+
+QString fromTString(const TagLib::String &string) {
+  return QString::fromStdString(string.to8Bit(true));
+}
 } // namespace
 
 MusicIndexer::MusicIndexer(QObject *parent)
@@ -101,18 +105,18 @@ void MusicIndexer::parse(bool incremental)
 
       const auto tag = f.tag();
 
-      QString album = tag->album().toCString(true);
+      QString album = fromTString(tag->album());
       if (album.isEmpty())
         album = tr("Unknown album");
-      QString genre = tag->genre().toCString(true);
+      QString genre = fromTString(tag->genre());
       if (genre.isEmpty())
         genre = tr("Unknown genre");
 
       MusicRecord rec;
       rec.path = filePath;
       rec.url = QUrl::fromLocalFile(filePath);
-      rec.title = tag->title().toCString(true);
-      rec.artist = tag->artist().toCString(true);
+      rec.title = fromTString(tag->title());
+      rec.artist = fromTString(tag->artist());
       rec.album = album;
       rec.year = tag->year();
       rec.genre = genre;
