@@ -93,11 +93,9 @@ void MusicIndexer::parse(bool incremental)
       uint pos = 0;
       TagLib::MPEG::File f2(QFile::encodeName(filePath)); // TODO extend also beyond MP3
       if (f2.hasID3v2Tag()) {
-        auto tag = f2.ID3v2Tag();
-        const auto l = tag->frameList("TPOS");
+        const auto l = f2.ID3v2Tag()->frameList("TPOS");
         if (!l.isEmpty()) {
-          const auto frame = l.front();
-          const int tmpPos = frame->toString().split('/').front().toInt();
+          const int tmpPos = l.front()->toString().split('/').front().toInt();
           if (tmpPos > 0)
             pos = 1000 * tmpPos;
         }
