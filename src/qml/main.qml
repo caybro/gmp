@@ -254,10 +254,8 @@ ApplicationWindow {
         id: stackView
         anchors.fill: parent
         focus: true
-        Keys.onEscapePressed: stackView.pop()
-        Keys.onBackPressed: stackView.pop()
         Keys.onPressed: {
-            if (event.matches(StandardKey.Back)) {
+            if (event.matches(StandardKey.Back) || event.matches(StandardKey.Cancel)) {
                 stackView.pop();
             }
         }
