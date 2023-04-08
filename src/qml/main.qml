@@ -245,7 +245,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
-                text: "%1 · %2 · (c) %3 2020-2022".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
+                text: "%1 · %2 · (c) %3 2020-2023".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
             }
         }
     }
