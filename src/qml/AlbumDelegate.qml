@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 import org.gmp.model 1.0
 
@@ -20,6 +20,7 @@ ItemDelegate {
                 width: 48
                 height: 48
                 icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
+                focusPolicy: Qt.NoFocus
                 onClicked: root.playAlbum(model.album, 0)
                 highlighted: true
             }

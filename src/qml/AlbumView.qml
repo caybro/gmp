@@ -127,6 +127,7 @@ Page {
                         width: 64
                         height: 64
                         icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
+                        focusPolicy: Qt.NoFocus
                         onClicked: {
                             root.playAlbum(root.album, 0);
                             listview.positionViewAtBeginning();
@@ -139,6 +140,7 @@ Page {
                         width: 64
                         height: 64
                         icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                        focusPolicy: Qt.NoFocus
                         onClicked: {
                             root.shufflePlayAlbum(root.album);
                             listview.positionViewAtBeginning();
