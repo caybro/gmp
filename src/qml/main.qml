@@ -197,7 +197,7 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: 400
+        width: Math.max(400, window.width/3)
         height: window.height
 
         ColumnLayout {

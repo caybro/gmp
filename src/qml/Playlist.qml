@@ -45,6 +45,7 @@ Page {
             secondaryText: metadata.artist + " · " + metadata.album
             highlighted: isPlaying
             onClicked: Player.playlist.currentIndex = index
+
             ToolButton {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
