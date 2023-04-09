@@ -1,5 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import org.gmp.model 1.0
 
@@ -22,17 +23,16 @@ Page {
     }
 
     property var toolbarAction: Component {
-        Row {
-            width: searchField.visible ? searchField.width + searchButton.width + shufflePlayButton.width
-                                       : searchButton.width + shufflePlayButton.width
-            Behavior on width { PropertyAnimation { duration: 100 } }
+        RowLayout {
             TextField {
                 id: searchField
                 placeholderText: qsTr("Type to search...")
                 visible: false
+                width: visible ? implicitWidth : 0
                 onTextChanged: {
                     priv.searchText = text;
                 }
+                Behavior on width { PropertyAnimation { duration: 100 } }
             }
             ToolButton {
                 id: searchButton
@@ -62,7 +62,7 @@ Page {
                 onActivated: searchButton.clicked()
             }
             Shortcut {
-                sequence: "Esc"
+                sequence: StandardKey.Cancel
                 context: Qt.ApplicationShortcut
                 onActivated: {
                     searchField.visible = false;
