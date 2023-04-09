@@ -26,7 +26,7 @@ Dialog {
         nameFilters: [qsTr("Image Files (*.png *.jpg *.jpeg)")]
         selectExisting: true
         selectMultiple: false
-        folder: shortcuts.home
+        folder: shortcuts.pictures
         title: qsTr("Select new album cover")
         onFileUrlChanged: if (!!fileUrl) cover.source = fileUrl;
     }
