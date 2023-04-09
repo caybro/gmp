@@ -1,6 +1,6 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import org.gmp.model 1.0
 
@@ -53,12 +53,15 @@ Page {
         model: albumModel
         clip: true
         header: RowLayout {
-            spacing: 10
+            width: parent.width
+            spacing: 0
+
             AlbumCover {
                 id: cover
                 Layout.preferredWidth: 150
                 Layout.preferredHeight: 150
                 Layout.margins: 15
+                Layout.alignment: Qt.AlignTop
                 image: albumModel.coverImage
 
                 Connections {
@@ -69,13 +72,19 @@ Page {
                     }
                 }
             }
-            Column {
+            ColumnLayout {
+                Layout.topMargin: 12
+                Layout.fillWidth: true
                 Label {
+                    Layout.fillWidth: true
                     text: root.album
                     font.pixelSize: root.font.pixelSize * 1.2
+                    elide: Text.ElideRight
                 }
                 Label {
+                    Layout.fillWidth: true
                     text: "<a href=\"artist:/%2\">%1</a>".arg(root.artist).arg(escape(root.artist))
+                    elide: Text.ElideRight
                     onLinkActivated: {
                         if (link.startsWith("artist:/")) {
                             root.artistSelected(root.artist);
@@ -88,7 +97,9 @@ Page {
                     }
                 }
                 Label {
+                    Layout.fillWidth: true
                     text: "<a href=\"genre:/%2\">%1</a>".arg(root.genre).arg(escape(root.genre))
+                    elide: Text.ElideRight
                     onLinkActivated: {
                         if (link.startsWith("genre:/")) {
                             root.genreSelected(root.genre);
@@ -101,10 +112,14 @@ Page {
                     }
                 }
                 Label {
+                    Layout.fillWidth: true
                     text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count)).arg(formatSeconds(MusicIndexer.albumTracksDuration(root.album)))
+                    elide: Text.ElideRight
                 }
                 Label {
+                    Layout.fillWidth: true
                     text: root.year
+                    elide: Text.ElideRight
                 }
                 Row {
                     spacing: 10
