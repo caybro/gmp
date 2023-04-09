@@ -113,7 +113,7 @@ ToolBar {
                 HoverHandler {
                     acceptedButtons: Qt.NoButton
                     acceptedDevices: PointerDevice.GenericPointer
-                    cursorShape: Qt.PointingHandCursor
+                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : undefined
                 }
             }
             Label {
