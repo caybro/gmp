@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import org.gmp.model 1.0
 
@@ -13,8 +13,7 @@ Dialog {
     property url trackUrl
     property var metadata: ({})
 
-    GridLayout {
-        anchors.fill: parent
+    contentItem: GridLayout {
         columns: 2
         Label {
             text: qsTr("Title:")

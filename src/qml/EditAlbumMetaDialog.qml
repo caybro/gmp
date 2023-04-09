@@ -1,6 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
 import QtQuick.Dialogs 1.3 as OldDialogs
 
 import org.gmp.model 1.0
@@ -31,8 +32,7 @@ Dialog {
         onFileUrlChanged: if (!!fileUrl) cover.source = fileUrl;
     }
 
-    GridLayout {
-        anchors.fill: parent
+    contentItem: GridLayout {
         columns: 2
         Image {
             id: cover
