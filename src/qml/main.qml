@@ -205,7 +205,16 @@ ApplicationWindow {
             anchors.fill: parent
             ItemDelegate {
                 Layout.fillWidth: true
-                text: qsTr("Playlist")
+                text: qsTr("Library")
+                icon.source: "qrc:/icons/ic_library_music_48px.svg"
+                onClicked: {
+                    stackView.replace(null, "Library.qml");
+                    drawer.close();
+                }
+            }
+            ItemDelegate {
+                Layout.fillWidth: true
+                text: qsTr("Playlist (%1)").arg(Player.playlist.itemCount)
                 icon.source: "qrc:/icons/ic_queue_music_48px.svg"
                 onClicked: {
                     stackView.replace(null, "Playlist.qml");
@@ -218,15 +227,6 @@ ApplicationWindow {
                 icon.source: "qrc:/icons/ic_history_48px.svg"
                 onClicked: {
                     stackView.replace(null, "Last.qml"); // TODO implement me
-                    drawer.close();
-                }
-            }
-            ItemDelegate {
-                Layout.fillWidth: true
-                text: qsTr("Library")
-                icon.source: "qrc:/icons/ic_library_music_48px.svg"
-                onClicked: {
-                    stackView.replace(null, "Library.qml");
                     drawer.close();
                 }
             }
