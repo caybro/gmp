@@ -56,16 +56,19 @@ ApplicationWindow {
         RowLayout {
             width: parent.width
             ToolButton {
-                icon.source: stackView.depth > 1 ? "qrc:/icons/ic_arrow_back_48px.svg" : "qrc:/icons/ic_menu_48px.svg"
+                icon.source: "qrc:/icons/ic_menu_48px.svg"
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
-                onClicked: {
-                    if (stackView.depth > 1) {
-                        stackView.pop()
-                    } else {
-                        drawer.open()
-                    }
-                }
-                ToolTip.text: stackView.depth > 1 ? qsTr("Back") : qsTr("Menu")
+                onClicked: drawer.open()
+                ToolTip.text: qsTr("Menu")
+                ToolTip.visible: hovered
+            }
+
+            ToolButton {
+                visible: stackView.depth > 1
+                icon.source: "qrc:/icons/ic_arrow_back_48px.svg"
+                font.pixelSize: Qt.application.font.pixelSize * 1.5
+                onClicked: stackView.pop()
+                ToolTip.text: qsTr("Back")
                 ToolTip.visible: hovered
             }
 
@@ -73,7 +76,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
-                text: stackView.currentItem.title ?? "";
+                text: stackView.currentItem.title ?? ""
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
             }
 

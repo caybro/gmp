@@ -69,6 +69,6 @@ Dialog {
     }
 
     onAccepted: {
-        MusicIndexer.saveMetadata(trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.value, genreEdit.text);
+        MusicIndexer.saveMetadata(root.trackUrl, titleEdit.text, artistEdit.text, albumEdit.text, yearEdit.value, genreEdit.text);
     }
 }

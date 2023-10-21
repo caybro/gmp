@@ -12,9 +12,9 @@ ToolBar {
     focusPolicy: Qt.NoFocus
 
     readonly property var metadata: TracksModel.getMetadata(Player.currentPlayUrl)
-    readonly property string title: metadata.title ?? "";
-    readonly property string artist: metadata.artist ?? "";
-    readonly property string album: metadata.album ?? "";
+    readonly property string title: metadata.title ?? ""
+    readonly property string artist: metadata.artist ?? ""
+    readonly property string album: metadata.album ?? ""
 
     signal currentTrackChanged(string title, string artist, string album)
     signal artistSelected(string artist)
