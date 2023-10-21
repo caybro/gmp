@@ -354,4 +354,13 @@ ApplicationWindow {
             }
         }
     }
+
+    Shortcut {
+        context: Qt.ApplicationShortcut
+        sequence: "Ctrl+L"
+        onActivated: {
+
+            stackView.replace(null, "Library.qml")
+        }
+    }
 }
