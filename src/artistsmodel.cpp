@@ -15,7 +15,7 @@ void ArtistsModel::parse()
   beginResetModel();
   m_db.clear();
 
-  // get list of uniq artists
+  // get list of unique artists
   KDToolBox::DuplicateTracker<QString> artists;
   for (const auto &rec : std::as_const(m_indexer->database())) {
     artists.hasSeen(rec.artist);
@@ -36,8 +36,8 @@ void ArtistsModel::parse()
     m_db.push_back({artist, static_cast<uint>(albums.set().size())});
   }
 
-  emit countChanged();
   endResetModel();
+  emit countChanged();
 }
 
 QHash<int, QByteArray> ArtistsModel::roleNames() const
@@ -69,9 +69,4 @@ QVariant ArtistsModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
-}
-
-int ArtistsModel::count() const
-{
-  return rowCount();
 }

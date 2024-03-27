@@ -49,8 +49,8 @@ void AlbumsModel::parse()
     m_db.push_back(std::move(a));
   }
 
-  emit countChanged();
   endResetModel();
+  emit countChanged();
 }
 
 QHash<int, QByteArray> AlbumsModel::roleNames() const
@@ -94,9 +94,4 @@ QVariant AlbumsModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
-}
-
-int AlbumsModel::count() const
-{
-  return rowCount();
 }

@@ -30,8 +30,8 @@ void GenresModel::parse()
     m_db.push_back({genre, static_cast<uint>(numTracks)});
   }
 
-  emit countChanged();
   endResetModel();
+  emit countChanged();
 }
 
 QHash<int, QByteArray> GenresModel::roleNames() const
@@ -63,9 +63,4 @@ QVariant GenresModel::data(const QModelIndex &index, int role) const
   }
 
   return {};
-}
-
-int GenresModel::count() const
-{
-  return rowCount();
 }

@@ -77,11 +77,6 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
   return {};
 }
 
-int TracksModel::count() const
-{
-  return rowCount();
-}
-
 QJsonObject TracksModel::getMetadata(const QUrl &url) const
 {
   const auto &db = m_indexer->database();

@@ -8,7 +8,7 @@ class GenericProxyModel : public QSortFilterProxyModel
 
   Q_PROPERTY(QString filterString READ filterString WRITE setFilterString NOTIFY filterStringChanged)
 
-  Q_PROPERTY(int count READ count NOTIFY countChanged)
+  Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
  public:
   GenericProxyModel(QObject *parent = nullptr);
@@ -21,6 +21,4 @@ class GenericProxyModel : public QSortFilterProxyModel
   QString filterString() const;
   void setFilterString(const QString &filterString);
   QString m_filterString;
-
-  int count() const;
 };

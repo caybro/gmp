@@ -20,7 +20,7 @@ class MusicIndexer;
 class AlbumsModel : public QAbstractListModel
 {
   Q_OBJECT
-  Q_PROPERTY(int count READ count NOTIFY countChanged)
+  Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
  public:
   enum AlbumRole {
@@ -44,7 +44,6 @@ class AlbumsModel : public QAbstractListModel
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
  private:
-  int count() const;
   void parse();
   std::vector<Album> m_db;
   MusicIndexer *m_indexer;

@@ -32,8 +32,3 @@ void GenericProxyModel::setFilterString(const QString &filterString)
   emit filterStringChanged(m_filterString);
   emit countChanged();
 }
-
-int GenericProxyModel::count() const
-{
-  return rowCount();
-}
