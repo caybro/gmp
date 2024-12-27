@@ -38,15 +38,15 @@ void AlbumsModel::parse()
     a.album = album;
     a.artist = artist;
     if (!tracks.empty()) {
-      const auto firstTrack = tracks.cbegin();
-      a.year = firstTrack->year;
+      const auto& firstTrack = tracks.front();
+      a.year = firstTrack.year;
       a.numTracks = tracks.size();
-      a.genre = firstTrack->genre;
-      a.coverImage = m_indexer->coverArtImageForFile(firstTrack->path);
+      a.genre = firstTrack.genre;
+      a.coverImage = m_indexer->coverArtImageForFile(firstTrack.path);
     }
 
     // finally insert into our datastructure
-    m_db.push_back(std::move(a));
+    m_db.emplace_back(std::move(a));
   }
 
   endResetModel();

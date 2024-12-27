@@ -6,6 +6,8 @@
 
 struct Genre
 {
+  Genre(const QString& g, uint n)
+      : genre(std::move(g)), numTracks(std::move(n)) {}
   QString genre;
   uint numTracks{0};
 };

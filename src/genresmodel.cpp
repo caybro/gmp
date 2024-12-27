@@ -27,7 +27,7 @@ void GenresModel::parse()
   for (const auto &genre : std::as_const(genres.set())) {
     const auto numTracks = std::count_if(m_indexer->database().cbegin(), m_indexer->database().cend(),
                                          [genre](const auto &rec) { return rec.genre == genre; });
-    m_db.push_back({genre, static_cast<uint>(numTracks)});
+    m_db.emplace_back(genre, static_cast<uint>(numTracks));
   }
 
   endResetModel();

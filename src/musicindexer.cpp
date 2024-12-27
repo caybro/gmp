@@ -78,11 +78,11 @@ void MusicIndexer::parse(bool incremental)
     m_db.clear();
 
   TagLib::FileRef f;
+  const auto nameFilters = {QStringLiteral("*.mp3"), QStringLiteral("*.ogg"), QStringLiteral("*.oga"), QStringLiteral("*.wma"),
+                            QStringLiteral("*.wav"), QStringLiteral("*.flac"), QStringLiteral("*.m4a"),
+                            QStringLiteral("*.aac")}; // FIXME find out dynamically
   for (const auto &rootPath : qAsConst(m_rootPaths)) { // TODO watch paths for changes
-    QDirIterator it(rootPath,
-                    {QStringLiteral("*.mp3"), QStringLiteral("*.ogg"), QStringLiteral("*.oga"), QStringLiteral("*.wma"),
-                     QStringLiteral("*.wav"), QStringLiteral("*.flac"), QStringLiteral("*.m4a"),
-                     QStringLiteral("*.aac")}, // FIXME find out dynamically
+    QDirIterator it(rootPath, nameFilters,
                     QDir::Files | QDir::NoDotAndDotDot | QDir::Readable, QDirIterator::Subdirectories);
     while (it.hasNext()) {
       const QString filePath = it.next();
@@ -129,7 +129,7 @@ void MusicIndexer::parse(bool incremental)
           m_db.erase(old);
         }
       }
-      m_db.push_back(std::move(rec));
+      m_db.emplace_back(std::move(rec));
     }
   }
 
@@ -163,7 +163,7 @@ QList<QUrl> MusicIndexer::tracksByAlbum(const QString &album, bool ordered) cons
 
   for (const auto &rec : std::as_const(m_db)) {
     if (rec.album == album)
-      tracks.push_back(rec);
+      tracks.emplace_back(rec);
   }
 
   if (ordered) {
@@ -184,7 +184,7 @@ QList<QUrl> MusicIndexer::tracksByGenre(const QString &genre, bool ordered) cons
 
   for (const auto &rec : std::as_const(m_db)) {
     if (rec.genre == genre)
-      tracks.push_back(rec);
+      tracks.emplace_back(rec);
   }
 
   if (ordered) {

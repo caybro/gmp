@@ -33,7 +33,7 @@ void ArtistsModel::parse()
     }
 
     // finally insert into our datastructure
-    m_db.push_back({artist, static_cast<uint>(albums.set().size())});
+    m_db.emplace_back(artist, static_cast<uint>(albums.set().size()));
   }
 
   endResetModel();

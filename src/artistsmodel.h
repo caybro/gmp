@@ -6,6 +6,10 @@
 
 struct Artist
 {
+  Artist(const QString &a, uint n)
+      : artist(std::move(a))
+      , numAlbums(std::move(n))
+  {}
   QString artist;
   uint numAlbums{0};
 };
