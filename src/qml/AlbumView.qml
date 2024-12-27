@@ -81,23 +81,15 @@ Page {
                     font.pixelSize: root.font.pixelSize * 1.3
                     elide: Text.ElideRight
                 }
-                Label {
+                GmpLabel {
                     Layout.fillWidth: true
                     text: "<a href='#'>%1</a>".arg(root.artist)
-                    elide: Text.ElideRight
                     onLinkActivated: root.artistSelected(root.artist)
-                    HoverHandler {
-                        cursorShape: Qt.PointingHandCursor
-                    }
                 }
-                Label {
+                GmpLabel {
                     Layout.fillWidth: true
                     text: "<a href='#'>%1</a>".arg(root.genre)
-                    elide: Text.ElideRight
                     onLinkActivated: root.genreSelected(root.genre)
-                    HoverHandler {
-                        cursorShape: Qt.PointingHandCursor
-                    }
                 }
                 Label {
                     Layout.fillWidth: true
