@@ -39,7 +39,9 @@ int main(int argc, char *argv[])
     qputenv("QT_QUICK_CONTROLS_HOVER_ENABLED", QByteArrayLiteral("1"));
   }
 
+#ifdef QT_DEBUG
   QLoggingCategory::setFilterRules(QStringLiteral("*.debug=true\nqt.*.debug=false"));
+#endif
 
   app.setOrganizationName(QStringLiteral("caybro"));
   app.setApplicationDisplayName(QStringLiteral("G Music Player"));
