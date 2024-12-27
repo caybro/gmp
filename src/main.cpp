@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
   }
 
 #ifdef QT_DEBUG
-  QLoggingCategory::setFilterRules(QStringLiteral("*.debug=true\nqt.*.debug=false"));
+  QLoggingCategory::setFilterRules(QStringLiteral("*.debug=true\nqt.*.debug=false\nkf.*.debug=false"));
 #endif
 
   app.setOrganizationName(QStringLiteral("caybro"));

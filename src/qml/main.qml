@@ -18,6 +18,8 @@ ApplicationWindow {
 
     readonly property bool isMobileOS: ["ios", "android", "winrt"].includes(Qt.platform.os)
 
+    title: Player.playing ? "%1 - %2".arg(playbar.title).arg(playbar.artist) : Qt.application.displayName
+
     function formatSeconds(secs) {
         const sec_num = parseInt(secs, 10);
         var hours   = Math.floor(sec_num / 3600);
@@ -84,6 +86,7 @@ ApplicationWindow {
     }
 
     footer: Playbar {
+        id: playbar
         visible: Player.playlist.itemCount
         onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
@@ -351,7 +354,6 @@ ApplicationWindow {
         context: Qt.ApplicationShortcut
         sequence: "Ctrl+L"
         onActivated: {
-
             stackView.replace(null, "Library.qml")
         }
     }

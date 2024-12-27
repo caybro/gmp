@@ -30,6 +30,7 @@ Page {
                 Layout.fillWidth: visible
                 id: searchField
                 placeholderText: qsTr("Type to search...")
+                placeholderTextColor: "white"
                 visible: false
                 onTextChanged: {
                     priv.searchText = text;
