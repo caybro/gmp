@@ -34,5 +34,6 @@
         <file>icons/create-black-48dp.svg</file>
         <file>qml/AlbumCover.qml</file>
         <file>icons/stop.svg</file>
+        <file>qml/GmpLabel.qml</file>
     </qresource>
 </RCC>

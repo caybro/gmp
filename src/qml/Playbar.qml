@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.15
-import QtQuick.Controls.Material 2.15
 import QtMultimedia 5.15
 
 import org.gmp.model 1.0
@@ -91,39 +90,34 @@ ToolBar {
             Layout.margins: 5
             Layout.fillWidth: true
             Label {
+                width: parent.width
                 text: root.title
                 font.pixelSize: Qt.application.font.pixelSize * 1.2
                 maximumLineCount: 1
                 elide: Text.ElideRight
-                width: parent.width
             }
-            Label {
-                text: "<a href=\"artist:/%2\">%1</a> · <a href=\"album:/%4\">%3</a>"
-                  .arg(root.artist).arg(escape(root.artist))
-                  .arg(root.album).arg(escape(root.album))
+            RowLayout {
                 width: parent.width
-                maximumLineCount: 1
-                elide: Text.ElideRight
-                linkColor: !!hoveredLink ? Material.accent : Material.foreground
-                Behavior on linkColor { ColorAnimation { duration: 100 } }
-                onLinkActivated: {
-                    if (link.startsWith("artist:/")) {
-                        root.artistSelected(root.artist);
-                    } else if (link.startsWith("album:/")) {
-                        root.albumSelected(root.album, root.artist);
-                    }
+                GmpLabel {
+                    text: "<a href='#'>%1</a>".arg(root.artist)
+                    maximumLineCount: 1
+                    onLinkActivated: root.artistSelected(root.artist)
                 }
-                HoverHandler {
-                    acceptedButtons: Qt.NoButton
-                    acceptedDevices: PointerDevice.GenericPointer
-                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : undefined
+                Label {
+                    text: "·"
                 }
+                GmpLabel {
+                    text: "<a href='#'>%1</a>".arg(root.album)
+                    maximumLineCount: 1
+                    onLinkActivated: root.albumSelected(root.album, root.artist)
+                }
+                Item { Layout.fillWidth: true }
             }
             Label {
                 width: parent.width
-                maximumLineCount: 1
-                elide: Text.ElideRight
                 text: "%1 / %2".arg(formatSeconds(Player.position/1000)).arg(formatSeconds(Player.duration/1000))
+                maximumLineCount: 1
+                elide: Text.ElideRight
             }
         }
         
