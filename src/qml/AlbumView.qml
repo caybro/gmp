@@ -78,36 +78,24 @@ Page {
                 Label {
                     Layout.fillWidth: true
                     text: root.album
-                    font.pixelSize: root.font.pixelSize * 1.2
+                    font.pixelSize: root.font.pixelSize * 1.3
                     elide: Text.ElideRight
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: "<a href=\"artist:/%2\">%1</a>".arg(root.artist).arg(escape(root.artist))
+                    text: "<a href='#'>%1</a>".arg(root.artist)
                     elide: Text.ElideRight
-                    onLinkActivated: {
-                        if (link.startsWith("artist:/")) {
-                            root.artistSelected(root.artist);
-                        }
-                    }
+                    onLinkActivated: root.artistSelected(root.artist)
                     HoverHandler {
-                        acceptedButtons: Qt.NoButton
-                        acceptedDevices: PointerDevice.GenericPointer
                         cursorShape: Qt.PointingHandCursor
                     }
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: "<a href=\"genre:/%2\">%1</a>".arg(root.genre).arg(escape(root.genre))
+                    text: "<a href='#'>%1</a>".arg(root.genre)
                     elide: Text.ElideRight
-                    onLinkActivated: {
-                        if (link.startsWith("genre:/")) {
-                            root.genreSelected(root.genre);
-                        }
-                    }
+                    onLinkActivated: root.genreSelected(root.genre)
                     HoverHandler {
-                        acceptedButtons: Qt.NoButton
-                        acceptedDevices: PointerDevice.GenericPointer
                         cursorShape: Qt.PointingHandCursor
                     }
                 }
