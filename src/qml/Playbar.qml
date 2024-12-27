@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.15
+import QtQuick.Controls.Material 2.15
 import QtMultimedia 5.15
 
 import org.gmp.model 1.0
@@ -98,11 +99,13 @@ ToolBar {
             }
             Label {
                 text: "<a href=\"artist:/%2\">%1</a> · <a href=\"album:/%4\">%3</a>"
-                .arg(root.artist).arg(escape(root.artist))
-                .arg(root.album).arg(escape(root.album))
+                  .arg(root.artist).arg(escape(root.artist))
+                  .arg(root.album).arg(escape(root.album))
                 width: parent.width
                 maximumLineCount: 1
                 elide: Text.ElideRight
+                linkColor: !!hoveredLink ? Material.accent : Material.foreground
+                Behavior on linkColor { ColorAnimation { duration: 100 } }
                 onLinkActivated: {
                     if (link.startsWith("artist:/")) {
                         root.artistSelected(root.artist);
