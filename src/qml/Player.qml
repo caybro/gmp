@@ -24,6 +24,6 @@ Audio {
     }
 
     onError: {
-        console.warn("!!! ERROR in audio playback:", errorString, "; code:", error);
+        console.error("!!! ERROR in audio playback:", errorString, "; code:", error);
     }
 }

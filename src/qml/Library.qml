@@ -7,7 +7,7 @@ import org.gmp.model 1.0
 Page {
     id: root
     objectName: "LibraryPage"
-    title: qsTr("Library")
+    title: priv.searchVisible ? "" : qsTr("Library")
 
     signal playRequested(url playFileUrl)
     signal artistSelected(string artist)
@@ -20,19 +20,20 @@ Page {
     QtObject {
         id: priv
         property string searchText
+        property bool searchVisible
     }
 
     property var toolbarAction: Component {
         RowLayout {
+            Layout.fillWidth: searchField.visible
             TextField {
+                Layout.fillWidth: visible
                 id: searchField
                 placeholderText: qsTr("Type to search...")
                 visible: false
-                width: visible ? implicitWidth : 0
                 onTextChanged: {
                     priv.searchText = text;
                 }
-                Behavior on width { PropertyAnimation { duration: 100 } }
             }
             ToolButton {
                 id: searchButton
@@ -45,6 +46,7 @@ Page {
                         searchField.clear();
                         root.parent.forceActiveFocus();
                     }
+                    priv.searchVisible = searchField.visible
                 }
                 ToolTip.text: qsTr("Search")
                 ToolTip.visible: hovered
@@ -67,6 +69,7 @@ Page {
                 onActivated: {
                     searchField.visible = false;
                     searchField.clear();
+                    priv.searchVisible = false;
                     root.parent.forceActiveFocus();
                 }
             }
@@ -116,7 +119,7 @@ Page {
         id: artistsModel
         sourceModel: ArtistsModel
         filterRole: ArtistsModel.RoleArtist
-        filterString: tabbar.currentIndex == 0 ? priv.searchText : ""
+        filterString: priv.searchText
         sortRole: ArtistsModel.RoleArtist
     }
 
@@ -124,7 +127,7 @@ Page {
         id: albumsModel
         sourceModel: AlbumsModel
         filterRole: AlbumsModel.RoleAlbum
-        filterString: tabbar.currentIndex == 1 ? priv.searchText : ""
+        filterString: priv.searchText
         sortRole: AlbumsModel.RoleAlbum
     }
 
@@ -132,7 +135,7 @@ Page {
         id: tracksModel
         sourceModel: TracksModel
         filterRole: TracksModel.RoleTitle
-        filterString: tabbar.currentIndex == 2 ? priv.searchText : ""
+        filterString: priv.searchText
         sortRole: TracksModel.RoleTitle
     }
 
@@ -140,7 +143,7 @@ Page {
         id: genresModel
         sourceModel: GenresModel
         filterRole: GenresModel.RoleGenre
-        filterString: tabbar.currentIndex == 3 ? priv.searchText : ""
+        filterString: priv.searchText
         sortRole: GenresModel.RoleGenre
     }
 

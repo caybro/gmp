@@ -56,24 +56,19 @@ ApplicationWindow {
         RowLayout {
             width: parent.width
             ToolButton {
-                icon.source: "qrc:/icons/ic_menu_48px.svg"
+                icon.source: stackView.depth > 1 ? "qrc:/icons/ic_arrow_back_48px.svg"
+                                                 : "qrc:/icons/ic_menu_48px.svg"
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
-                onClicked: drawer.open()
-                ToolTip.text: qsTr("Menu")
-                ToolTip.visible: hovered
-            }
-
-            ToolButton {
-                visible: stackView.depth > 1
-                icon.source: "qrc:/icons/ic_arrow_back_48px.svg"
-                font.pixelSize: Qt.application.font.pixelSize * 1.5
-                onClicked: stackView.pop()
-                ToolTip.text: qsTr("Back")
+                onClicked: stackView.depth > 1 ? stackView.pop() : drawer.open()
+                onPressAndHold: drawer.open()
+                ToolTip.text: stackView.depth > 1 ? qsTr("Back") : qsTr("Menu")
                 ToolTip.visible: hovered
             }
 
             Label {
+                anchors.centerIn: parent
                 Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
                 text: stackView.currentItem.title ?? ""
@@ -81,7 +76,7 @@ ApplicationWindow {
             }
 
             Loader {
-                id: toolbarAction
+                Layout.fillWidth: stackView.currentItem && stackView.currentItem.title === ""
                 active: stackView.currentItem && typeof stackView.currentItem.toolbarAction !== 'undefined'
                 sourceComponent: stackView.currentItem.toolbarAction
             }
@@ -89,12 +84,11 @@ ApplicationWindow {
     }
 
     footer: Playbar {
-        id: playbar
         visible: Player.playlist.itemCount
         onAlbumSelected: stackViewConnections.onAlbumSelected(album, artist)
         onArtistSelected: stackViewConnections.onArtistSelected(artist)
         onCurrentTrackChanged: trayIcon.showMessage(Qt.application.name,
-                                                    qsTr("Now playing %1 on %2 by %3".arg(title).arg(album).arg(artist)));
+                                                    qsTr("Now playing: '%1' on '%2' by '%3'".arg(title).arg(album).arg(artist)));
     }
 
     Connections {
@@ -108,10 +102,10 @@ ApplicationWindow {
             Player.play();
         }
         function onAlbumSelected(album, artist) {
-            stackView.push("AlbumView.qml", {"album": album, "artist": artist});
+            stackView.push("AlbumView.qml", {album, artist});
         }
         function onArtistSelected(artist) {
-            stackView.push("AlbumsOverview.qml", {"artist": artist});
+            stackView.push("AlbumsOverview.qml", {artist});
         }
         function onPlayAlbum(album, index) {
             Player.playlist.clear();
@@ -132,7 +126,7 @@ ApplicationWindow {
             Player.playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
-            stackView.push("GenreOverview.qml", {"genre": genre});
+            stackView.push("GenreOverview.qml", {genre});
         }
         function onPlayGenre(genre) {
             Player.playlist.clear();
@@ -314,18 +308,16 @@ ApplicationWindow {
         }
         menu: Platform.Menu {
             Platform.MenuItem {
-                visible: Player.playlist.itemCount > 0
                 enabled: Player.canPlayPrevious
                 text: "⏮ " + qsTr("P&revious")
                 onTriggered: Player.playlist.previous()
             }
             Platform.MenuItem {
-                visible: Player.playlist.itemCount > 0
+                enabled: Player.playlist.itemCount > 0
                 text: Player.playing ? "⏸ " + qsTr("&Pause") : "⯈ " + qsTr("&Play")
                 onTriggered: Player.playing ? Player.pause() : Player.play()
             }
             Platform.MenuItem {
-                visible: Player.playlist.itemCount > 0
                 enabled: Player.canPlayNext
                 text: "⏭ " + qsTr("&Next")
                 onTriggered: Player.playlist.next()
