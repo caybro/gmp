@@ -6,6 +6,8 @@ DirectImage::DirectImage(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
   setFlag(ItemHasContents);
+  setAntialiasing(true);
+  setMipmap(true);
   setRenderTarget(FramebufferObject);
 }
 

@@ -58,9 +58,9 @@ Page {
 
             AlbumCover {
                 id: cover
-                Layout.preferredWidth: 150
-                Layout.preferredHeight: 150
-                Layout.margins: 15
+                Layout.preferredWidth: height
+                Layout.preferredHeight: textLayout.height
+                Layout.margins: 16
                 Layout.alignment: Qt.AlignTop
                 image: albumModel.coverImage
 
@@ -73,6 +73,7 @@ Page {
                 }
             }
             ColumnLayout {
+                id: textLayout
                 Layout.topMargin: 12
                 Layout.fillWidth: true
                 Label {
