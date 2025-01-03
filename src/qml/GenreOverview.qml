@@ -32,6 +32,9 @@ Page {
     signal shufflePlayGenre(string genre)
     signal editTrackMetadata(url track)
 
+    signal enqueueTrack(url track)
+    signal enqueueTrackNext(url track)
+
     ListView {
         id: listview
         anchors.fill: parent
@@ -55,11 +58,34 @@ Page {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                onClicked: root.editTrackMetadata(model.url)
-                ToolTip.text: qsTr("Edit Track Metadata")
-                ToolTip.visible: hovered
+                onClicked: {
+                    contextMenu.trackUrl = model.url
+                    contextMenu.popup()
+                }
             }
         }
         ScrollIndicator.vertical: ScrollIndicator {}
+    }
+
+    Menu {
+        id: contextMenu
+
+        property url trackUrl
+
+        MenuItem {
+            text: qsTr("Edit...")
+            icon.source: "qrc:/icons/create-black-48dp.svg"
+            onClicked: root.editTrackMetadata(contextMenu.trackUrl)
+        }
+        MenuItem {
+            text: qsTr("Add to queue")
+            icon.source: "qrc:/icons/add_to_queue.svg"
+            onClicked: root.enqueueTrack(contextMenu.trackUrl)
+        }
+        MenuItem {
+            text: qsTr("Play next")
+            icon.source: "qrc:/icons/queue_play_next.svg"
+            onClicked: root.enqueueTrackNext(contextMenu.trackUrl)
+        }
     }
 }

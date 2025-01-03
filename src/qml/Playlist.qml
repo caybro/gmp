@@ -14,6 +14,8 @@ Page {
 
     signal editTrackMetadata(url track)
 
+    signal dequeueTrack(int index)
+
     property var toolbarAction: Component {
         Row {
             ToolButton {
@@ -50,12 +52,32 @@ Page {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                onClicked: root.editTrackMetadata(model.source)
-                ToolTip.text: qsTr("Edit Track Metadata")
-                ToolTip.visible: hovered
+                onClicked: {
+                    contextMenu.trackUrl = model.source
+                    contextMenu.trackIndex = index
+                    contextMenu.popup()
+                }
             }
         }
 
         ScrollIndicator.vertical: ScrollIndicator {}
+    }
+
+    Menu {
+        id: contextMenu
+
+        property url trackUrl
+        property int trackIndex
+
+        MenuItem {
+            text: qsTr("Edit...")
+            icon.source: "qrc:/icons/create-black-48dp.svg"
+            onClicked: root.editTrackMetadata(contextMenu.trackUrl)
+        }
+        MenuItem {
+            text: qsTr("Remove")
+            icon.source: "qrc:/icons/remove_from_queue.svg"
+            onClicked: root.dequeueTrack(contextMenu.trackIndex)
+        }
     }
 }

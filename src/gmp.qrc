@@ -35,5 +35,8 @@
         <file>qml/AlbumCover.qml</file>
         <file>icons/stop.svg</file>
         <file>qml/GmpLabel.qml</file>
+        <file>icons/add_to_queue.svg</file>
+        <file>icons/queue_play_next.svg</file>
+        <file>icons/remove_from_queue.svg</file>
     </qresource>
 </RCC>

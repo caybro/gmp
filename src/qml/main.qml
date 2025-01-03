@@ -177,6 +177,22 @@ ApplicationWindow {
             editAlbumMetaDialog.artist = artist;
             editAlbumMetaDialog.open();
         }
+        function onEnqueueTrack(trackUrl) {
+            console.debug("Enqueue track:", trackUrl)
+            Player.playlist.addItem(trackUrl)
+            if (!Player.playing)
+                Player.play()
+        }
+        function onEnqueueTrackNext(trackUrl) {
+            console.debug("Enqueue track next:", trackUrl)
+            Player.playlist.insertItem(Player.playlist.itemCount ? Player.playlist.currentIndex + 1 : 0, trackUrl)
+            if (!Player.playing)
+                Player.play()
+        }
+        function onDequeueTrack(trackIndex) {
+            console.debug("Dequeue track:", trackIndex)
+            Player.playlist.removeItem(trackIndex)
+        }
     }
 
     EditMetaDialog {
