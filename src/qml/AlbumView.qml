@@ -97,7 +97,7 @@ Page {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count)).arg(formatSeconds(MusicIndexer.albumTracksDuration(root.album)))
+                    text: "%1 · %2".arg(qsTr("%n track(s)", "", listview.count)).arg(formatSeconds(albumModel.tracksDuration))
                     elide: Text.ElideRight
                 }
                 Label {

@@ -40,7 +40,6 @@ class MusicIndexer : public QObject
   Q_INVOKABLE QList<QUrl> tracksByGenre(const QString &genre, bool ordered = false) const;
   Q_INVOKABLE QList<QUrl> tracksByArtist(const QString &artist) const;
   Q_INVOKABLE int tracksDuration(const QList<QUrl> &urls) const;
-  Q_INVOKABLE int albumTracksDuration(const QString &album) const;
 
   QImage coverArtImageForFile(const QString &file) const;
   Q_INVOKABLE QUrl coverArtForFile(const QUrl &fileUrl) const;

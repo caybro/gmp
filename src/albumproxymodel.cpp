@@ -63,6 +63,16 @@ QImage AlbumProxyModel::coverImage() const
   return data(index(0, 0), TracksModel::RoleCoverImage).value<QImage>();
 }
 
+int AlbumProxyModel::tracksDuration() const {
+  int result = 0;
+
+  for (int i = 0; i < rowCount(); i++) {
+    result += data(index(i, 0), TracksModel::RoleLength).toInt();
+  }
+
+  return result;
+}
+
 bool AlbumProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
   if (sourceParent.isValid()) {

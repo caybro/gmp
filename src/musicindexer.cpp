@@ -226,18 +226,6 @@ int MusicIndexer::tracksDuration(const QList<QUrl> &urls) const
   return result;
 }
 
-int MusicIndexer::albumTracksDuration(const QString &album) const
-{
-  int result = 0;
-
-  for (const auto &rec : std::as_const(m_db)) {
-    if (rec.album == album)
-      result += rec.length;
-  }
-
-  return result;
-}
-
 QImage MusicIndexer::coverArtImageForFile(const QString &file) const
 {
   TagLib::MPEG::File f(QFile::encodeName(file)); // TODO extend also beyond MP3
