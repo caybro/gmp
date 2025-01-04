@@ -46,7 +46,11 @@ Page {
             text: (isPlaying ? "⯈ " : "") + (index + 1) + " · " + metadata.title
             secondaryText: metadata.artist + " · " + metadata.album
             highlighted: isPlaying
-            onClicked: Player.playlist.currentIndex = index
+            onClicked: {
+                Player.playlist.currentIndex = index
+                if (!Player.playing)
+                    Player.play()
+            }
 
             ToolButton {
                 anchors.right: parent.right

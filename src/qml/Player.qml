@@ -3,6 +3,8 @@ pragma Singleton
 import QtQuick 2.15
 import QtMultimedia 5.15
 
+import org.gmp.model 1.0
+
 Audio {
     id: root
     objectName: "AudioPlayer"
@@ -21,6 +23,16 @@ Audio {
         id: playlist
         property int duration
         playbackMode: Playlist.Sequential
+
+        readonly property var allUrls: {
+            var urls = []
+            for (let i = 0; i < itemCount; i++) {
+                urls.push(itemSource(i))
+            }
+            return urls
+        }
+
+        onAllUrlsChanged: duration = MusicIndexer.tracksDuration(allUrls)
     }
 
     onError: {

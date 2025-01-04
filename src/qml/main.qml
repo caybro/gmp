@@ -116,8 +116,6 @@ ApplicationWindow {
             Player.playlist.addItems(urls);
             Player.currentPlaylistIndex = index;
             Player.play();
-            const duration = MusicIndexer.tracksDuration(urls);
-            Player.playlist.duration = Number(duration);
         }
         function onShufflePlayAlbum(album) {
             Player.playlist.clear();
@@ -125,8 +123,6 @@ ApplicationWindow {
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = MusicIndexer.tracksDuration(urls);
-            Player.playlist.duration = Number(duration);
         }
         function onGenreSelected(genre) {
             stackView.push("GenreOverview.qml", {genre});
@@ -136,8 +132,6 @@ ApplicationWindow {
             const urls = MusicIndexer.tracksByGenre(genre, true);
             Player.playlist.addItems(urls);
             Player.play();
-            const duration = MusicIndexer.tracksDuration(urls);
-            Player.playlist.duration = Number(duration);
         }
         function onShufflePlayGenre(genre) {
             Player.playlist.clear();
@@ -145,8 +139,6 @@ ApplicationWindow {
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = MusicIndexer.tracksDuration(urls);
-            Player.playlist.duration = Number(duration);
         }
         function onShufflePlay() {
             Player.playlist.clear();
@@ -154,8 +146,6 @@ ApplicationWindow {
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = MusicIndexer.tracksDuration(urls);
-            Player.playlist.duration = Number(duration);
         }
         function onShufflePlayArtist(artist) {
             Player.playlist.clear();
@@ -163,8 +153,6 @@ ApplicationWindow {
             Player.playlist.addItems(urls);
             Player.playlist.shuffle();
             Player.play();
-            const duration = MusicIndexer.tracksDuration(urls);
-            Player.playlist.duration = Number(duration);
         }
         function onEditTrackMetadata(trackUrl) {
             console.debug("Edit track metadata:", trackUrl);
