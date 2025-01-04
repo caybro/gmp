@@ -16,6 +16,8 @@ Page {
     signal shufflePlay()
     signal playAlbum(string album, int index)
     signal editTrackMetadata(url track)
+    signal enqueueTrack(url track)
+    signal enqueueTrackNext(url track)
 
     QtObject {
         id: priv
@@ -205,13 +207,50 @@ Page {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     icon.source: "qrc:/icons/more_vert-black-48dp.svg"
-                    onClicked: root.editTrackMetadata(model.url)
-                    ToolTip.text: qsTr("Edit Track Metadata")
-                    ToolTip.visible: hovered
+                    onClicked: {
+                        trackContextMenu.trackUrl = model.url
+                        trackContextMenu.artist = model.artist
+                        trackContextMenu.album = model.album
+                        trackContextMenu.popup()
+                    }
                 }
             }
 
             ScrollIndicator.vertical: ScrollIndicator {}
+
+            Menu {
+                id: trackContextMenu
+
+                property url trackUrl
+                property string artist
+                property string album
+
+                MenuItem {
+                    text: qsTr("Edit...")
+                    icon.source: "qrc:/icons/create-black-48dp.svg"
+                    onClicked: root.editTrackMetadata(trackContextMenu.trackUrl)
+                }
+                MenuItem {
+                    text: qsTr("Add to queue")
+                    icon.source: "qrc:/icons/add_to_queue.svg"
+                    onClicked: root.enqueueTrack(trackContextMenu.trackUrl)
+                }
+                MenuItem {
+                    text: qsTr("Play next")
+                    icon.source: "qrc:/icons/queue_play_next.svg"
+                    onClicked: root.enqueueTrackNext(trackContextMenu.trackUrl)
+                }
+                MenuItem {
+                    text: qsTr("Visit Artist")
+                    icon.source: "qrc:/icons/artist.svg"
+                    onClicked: root.artistSelected(trackContextMenu.artist)
+                }
+                MenuItem {
+                    text: qsTr("Visit Album")
+                    icon.source: "qrc:/icons/ic_album_48px.svg"
+                    onClicked: root.albumSelected(trackContextMenu.album, trackContextMenu.artist)
+                }
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 #include "artistsmodel.h"
 
-#include "musicindexer.h"
 #include "duplicatetracker.h"
+#include "musicindexer.h"
 
 ArtistsModel::ArtistsModel(MusicIndexer *indexer)
     : QAbstractListModel{indexer}

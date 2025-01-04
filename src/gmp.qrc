@@ -38,5 +38,6 @@
         <file>icons/add_to_queue.svg</file>
         <file>icons/queue_play_next.svg</file>
         <file>icons/remove_from_queue.svg</file>
+        <file>icons/artist.svg</file>
     </qresource>
 </RCC>
