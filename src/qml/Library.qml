@@ -40,7 +40,7 @@ Page {
             }
             ToolButton {
                 id: searchButton
-                icon.source: "qrc:/icons/ic_search_48px.svg"
+                icon.source: "qrc:/icons/search.svg"
                 onClicked: {
                     searchField.visible = !searchField.visible;
                     if (searchField.visible)
@@ -56,7 +56,7 @@ Page {
             }
             ToolButton {
                 id: shufflePlayButton
-                icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                icon.source: "qrc:/icons/shuffle.svg"
                 onClicked: root.shufflePlay();
                 ToolTip.text: qsTr("Shuffle Play")
                 ToolTip.visible: hovered
@@ -206,7 +206,7 @@ Page {
                 ToolButton {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    icon.source: "qrc:/icons/more_vert-black-48dp.svg"
+                    icon.source: "qrc:/icons/more_vert.svg"
                     onClicked: {
                         trackContextMenu.trackUrl = model.url
                         trackContextMenu.artist = model.artist
@@ -227,7 +227,7 @@ Page {
 
                 MenuItem {
                     text: qsTr("Edit...")
-                    icon.source: "qrc:/icons/create-black-48dp.svg"
+                    icon.source: "qrc:/icons/edit_note.svg"
                     onClicked: root.editTrackMetadata(trackContextMenu.trackUrl)
                 }
                 MenuItem {
@@ -247,7 +247,7 @@ Page {
                 }
                 MenuItem {
                     text: qsTr("Visit Album")
-                    icon.source: "qrc:/icons/ic_album_48px.svg"
+                    icon.source: "qrc:/icons/album.svg"
                     onClicked: root.albumSelected(trackContextMenu.album, trackContextMenu.artist)
                 }
             }

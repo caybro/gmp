@@ -275,7 +275,7 @@ QUrl MusicIndexer::coverArtForAlbum(const QString &album) const
 
   // fallback
   if (result.isEmpty())
-    result = QStringLiteral("qrc:/icons/ic_album_48px.svg");
+    result = QStringLiteral("qrc:/icons/album.svg");
 
   return result;
 }

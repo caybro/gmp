@@ -126,7 +126,7 @@ ToolBar {
         }
         
         ToolButton {
-            icon.source: "qrc:/icons/ic_skip_previous_48px.svg"
+            icon.source: "qrc:/icons/skip_previous.svg"
             enabled: Player.canPlayPrevious
             onClicked: Player.playlist.previous()
             ToolTip.text: qsTr("Previous Track")
@@ -135,7 +135,7 @@ ToolBar {
         }
         
         RoundButton {
-            icon.source: Player.playing ? "qrc:/icons/ic_pause_48px.svg" : "qrc:/icons/ic_play_arrow_48px.svg"
+            icon.source: Player.playing ? "qrc:/icons/pause.svg" : "qrc:/icons/play.svg"
             onClicked: Player.playing ? Player.pause() : Player.play()
             highlighted: true
             ToolTip.text: Player.playing ? qsTr("Pause") : qsTr("Play")
@@ -144,7 +144,7 @@ ToolBar {
         }
         
         ToolButton {
-            icon.source: "qrc:/icons/ic_skip_next_48px.svg"
+            icon.source: "qrc:/icons/skip_next.svg"
             enabled: Player.canPlayNext
             onClicked: Player.playlist.next()
             ToolTip.text: qsTr("Next Track")

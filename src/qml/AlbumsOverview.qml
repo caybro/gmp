@@ -24,13 +24,13 @@ Page {
             ToolButton {
                 checkable: true
                 checked: false
-                icon.source: "qrc:/icons/sort_by_alpha-black-48dp.svg"
+                icon.source: "qrc:/icons/sort_by_alpha.svg"
                 onToggled: priv.alphaSort = checked;
                 ToolTip.text: qsTr("Sort alphabetically")
                 ToolTip.visible: hovered
             }
             ToolButton {
-                icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                icon.source: "qrc:/icons/shuffle.svg"
                 onClicked: root.shufflePlayArtist(root.artist)
                 ToolTip.text: qsTr("Shuffle play all the artist's songs")
                 ToolTip.visible: hovered

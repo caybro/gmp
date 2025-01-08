@@ -58,8 +58,8 @@ ApplicationWindow {
         RowLayout {
             width: parent.width
             ToolButton {
-                icon.source: stackView.depth > 1 ? "qrc:/icons/ic_arrow_back_48px.svg"
-                                                 : "qrc:/icons/ic_menu_48px.svg"
+                icon.source: stackView.depth > 1 ? "qrc:/icons/arrow_back.svg"
+                                                 : "qrc:/icons/menu.svg"
                 font.pixelSize: Qt.application.font.pixelSize * 1.5
                 onClicked: stackView.depth > 1 ? stackView.pop() : drawer.open()
                 onPressAndHold: drawer.open()
@@ -210,7 +210,7 @@ ApplicationWindow {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Library")
-                icon.source: "qrc:/icons/ic_library_music_48px.svg"
+                icon.source: "qrc:/icons/library.svg"
                 onClicked: {
                     stackView.replace(null, "Library.qml");
                     drawer.close();
@@ -219,7 +219,7 @@ ApplicationWindow {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Playlist (%1)").arg(Player.playlist.itemCount)
-                icon.source: "qrc:/icons/ic_queue_music_48px.svg"
+                icon.source: "qrc:/icons/queue_music.svg"
                 onClicked: {
                     stackView.replace(null, "Playlist.qml");
                     drawer.close();
@@ -228,7 +228,7 @@ ApplicationWindow {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Last Played")
-                icon.source: "qrc:/icons/ic_history_48px.svg"
+                icon.source: "qrc:/icons/history.svg"
                 onClicked: {
                     stackView.replace(null, "Last.qml"); // TODO implement me
                     drawer.close();
@@ -237,7 +237,7 @@ ApplicationWindow {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Settings")
-                icon.source: "qrc:/icons/ic_settings_48px.svg"
+                icon.source: "qrc:/icons/settings.svg"
                 onClicked: {
                     stackView.replace(null, "Settings.qml");
                     drawer.close();

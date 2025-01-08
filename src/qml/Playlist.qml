@@ -19,14 +19,14 @@ Page {
     property var toolbarAction: Component {
         Row {
             ToolButton {
-                icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                icon.source: "qrc:/icons/shuffle.svg"
                 enabled: !root.isEmpty
                 onClicked: Player.playlist.shuffle()
                 ToolTip.text: qsTr("Shuffle Playlist")
                 ToolTip.visible: hovered
             }
             ToolButton {
-                icon.source: "qrc:/icons/clear_all-black-48dp.svg"
+                icon.source: "qrc:/icons/clear_all.svg"
                 enabled: !root.isEmpty
                 onClicked: Player.playlist.clear()
                 ToolTip.text: qsTr("Clear Playlist")
@@ -55,7 +55,7 @@ Page {
             ToolButton {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                icon.source: "qrc:/icons/more_vert-black-48dp.svg"
+                icon.source: "qrc:/icons/more_vert.svg"
                 onClicked: {
                     contextMenu.trackUrl = model.source
                     contextMenu.trackIndex = index
@@ -75,7 +75,7 @@ Page {
 
         MenuItem {
             text: qsTr("Edit...")
-            icon.source: "qrc:/icons/create-black-48dp.svg"
+            icon.source: "qrc:/icons/edit_note.svg"
             onClicked: root.editTrackMetadata(contextMenu.trackUrl)
         }
         MenuItem {

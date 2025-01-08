@@ -12,32 +12,31 @@
         <file>qml/GenreOverview.qml</file>
         <file>qml/Playbar.qml</file>
         <file>qml/AlbumDelegate.qml</file>
-        <file>icons/ic_album_48px.svg</file>
-        <file>icons/ic_arrow_back_48px.svg</file>
-        <file>icons/ic_history_48px.svg</file>
-        <file>icons/ic_menu_48px.svg</file>
-        <file>icons/ic_pause_48px.svg</file>
-        <file>icons/ic_play_arrow_48px.svg</file>
-        <file>icons/ic_search_48px.svg</file>
-        <file>icons/ic_settings_48px.svg</file>
-        <file>icons/ic_shuffle_48px.svg</file>
-        <file>icons/ic_skip_next_48px.svg</file>
-        <file>icons/ic_skip_previous_48px.svg</file>
-        <file>icons/ic_library_music_48px.svg</file>
-        <file>icons/ic_queue_music_48px.svg</file>
-        <file>icons/clear_all-black-48dp.svg</file>
         <file>qml/Player.qml</file>
-        <file>icons/sort_by_alpha-black-48dp.svg</file>
-        <file>icons/more_vert-black-48dp.svg</file>
         <file>qml/EditMetaDialog.qml</file>
         <file>qml/EditAlbumMetaDialog.qml</file>
-        <file>icons/create-black-48dp.svg</file>
         <file>qml/AlbumCover.qml</file>
-        <file>icons/stop.svg</file>
         <file>qml/GmpLabel.qml</file>
         <file>icons/add_to_queue.svg</file>
         <file>icons/queue_play_next.svg</file>
         <file>icons/remove_from_queue.svg</file>
         <file>icons/artist.svg</file>
+        <file>icons/clear_all.svg</file>
+        <file>icons/edit_note.svg</file>
+        <file>icons/album.svg</file>
+        <file>icons/arrow_back.svg</file>
+        <file>icons/history.svg</file>
+        <file>icons/library.svg</file>
+        <file>icons/menu.svg</file>
+        <file>icons/pause.svg</file>
+        <file>icons/play.svg</file>
+        <file>icons/queue_music.svg</file>
+        <file>icons/search.svg</file>
+        <file>icons/settings.svg</file>
+        <file>icons/shuffle.svg</file>
+        <file>icons/skip_next.svg</file>
+        <file>icons/skip_previous.svg</file>
+        <file>icons/more_vert.svg</file>
+        <file>icons/sort_by_alpha.svg</file>
     </qresource>
 </RCC>

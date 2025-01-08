@@ -13,13 +13,13 @@ Page {
     property var toolbarAction: Component {
         Row {
             ToolButton {
-                icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
+                icon.source: "qrc:/icons/play.svg"
                 onClicked: root.playGenre(root.genre)
                 ToolTip.text: qsTr("Play Genre")
                 ToolTip.visible: hovered
             }
             ToolButton {
-                icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                icon.source: "qrc:/icons/shuffle.svg"
                 onClicked: root.shufflePlayGenre(root.genre)
                 ToolTip.text: qsTr("Play Genre in Random Order")
                 ToolTip.visible: hovered
@@ -57,7 +57,7 @@ Page {
             ToolButton {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                icon.source: "qrc:/icons/more_vert-black-48dp.svg"
+                icon.source: "qrc:/icons/more_vert.svg"
                 onClicked: {
                     contextMenu.trackUrl = model.url
                     contextMenu.popup()
@@ -74,7 +74,7 @@ Page {
 
         MenuItem {
             text: qsTr("Edit...")
-            icon.source: "qrc:/icons/create-black-48dp.svg"
+            icon.source: "qrc:/icons/edit_note.svg"
             onClicked: root.editTrackMetadata(contextMenu.trackUrl)
         }
         MenuItem {

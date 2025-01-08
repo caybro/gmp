@@ -28,7 +28,7 @@ Page {
         ToolButton {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            icon.source: "qrc:/icons/create-black-48dp.svg"
+            icon.source: "qrc:/icons/edit_note.svg"
             onClicked: root.editAlbumMetadata(root.album, root.artist)
             ToolTip.text: qsTr("Edit Album Metadata")
             ToolTip.visible: hovered
@@ -110,7 +110,7 @@ Page {
                     RoundButton {
                         width: 64
                         height: 64
-                        icon.source: "qrc:/icons/ic_play_arrow_48px.svg"
+                        icon.source: "qrc:/icons/play.svg"
                         focusPolicy: Qt.NoFocus
                         onClicked: {
                             root.playAlbum(root.album, 0);
@@ -123,7 +123,7 @@ Page {
                     RoundButton {
                         width: 64
                         height: 64
-                        icon.source: "qrc:/icons/ic_shuffle_48px.svg"
+                        icon.source: "qrc:/icons/shuffle.svg"
                         focusPolicy: Qt.NoFocus
                         onClicked: {
                             root.shufflePlayAlbum(root.album);
@@ -149,7 +149,7 @@ Page {
             ToolButton {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                icon.source: "qrc:/icons/more_vert-black-48dp.svg"
+                icon.source: "qrc:/icons/more_vert.svg"
                 onClicked: {
                     contextMenu.trackUrl = model.url
                     contextMenu.popup()
@@ -167,7 +167,7 @@ Page {
 
         MenuItem {
             text: qsTr("Edit...")
-            icon.source: "qrc:/icons/create-black-48dp.svg"
+            icon.source: "qrc:/icons/edit_note.svg"
             onClicked: root.editTrackMetadata(contextMenu.trackUrl)
         }
         MenuItem {
