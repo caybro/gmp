@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
   app.setOrganizationName(QStringLiteral("caybro"));
   app.setApplicationDisplayName(QStringLiteral("G Music Player"));
-  app.setApplicationVersion(QStringLiteral("0.0.2"));
+  app.setApplicationVersion(QStringLiteral("0.0.3"));
 
   if (app.platformName() == QLatin1String("wayland"))
     app.setDesktopFileName(QStringLiteral("gmp.desktop"));
