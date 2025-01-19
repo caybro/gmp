@@ -57,9 +57,8 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert.svg"
                 onClicked: {
-                    contextMenu.trackUrl = model.source
-                    contextMenu.trackIndex = index
-                    contextMenu.popup()
+                    const menu = contextMenuComponent.createObject(root, {trackUrl: model.source, trackIndex: index})
+                    menu.popup()
                 }
             }
         }
@@ -67,21 +66,25 @@ Page {
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 
-    Menu {
-        id: contextMenu
+    Component {
+        id: contextMenuComponent
+        Menu {
+            id: contextMenu
 
-        property url trackUrl
-        property int trackIndex
+            property url trackUrl
+            property int trackIndex
 
-        MenuItem {
-            text: qsTr("Edit...")
-            icon.source: "qrc:/icons/edit_note.svg"
-            onClicked: root.editTrackMetadata(contextMenu.trackUrl)
-        }
-        MenuItem {
-            text: qsTr("Remove")
-            icon.source: "qrc:/icons/remove_from_queue.svg"
-            onClicked: root.dequeueTrack(contextMenu.trackIndex)
+            MenuItem {
+                text: qsTr("Edit...")
+                icon.source: "qrc:/icons/edit_note.svg"
+                onClicked: root.editTrackMetadata(contextMenu.trackUrl)
+            }
+            MenuItem {
+                text: qsTr("Remove")
+                icon.source: "qrc:/icons/remove_from_queue.svg"
+                onClicked: root.dequeueTrack(contextMenu.trackIndex)
+            }
+            onClosed: destroy()
         }
     }
 }

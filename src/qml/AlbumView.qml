@@ -151,8 +151,8 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/more_vert.svg"
                 onClicked: {
-                    contextMenu.trackUrl = model.url
-                    contextMenu.popup()
+                    const menu = contextMenuComponent.createObject(root, {trackUrl: model.url})
+                    menu.popup()
                 }
             }
         }
@@ -160,25 +160,29 @@ Page {
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 
-    Menu {
-        id: contextMenu
+    Component {
+        id: contextMenuComponent
+        Menu {
+            id: contextMenu
 
-        property url trackUrl
+            property url trackUrl
 
-        MenuItem {
-            text: qsTr("Edit...")
-            icon.source: "qrc:/icons/edit_note.svg"
-            onClicked: root.editTrackMetadata(contextMenu.trackUrl)
-        }
-        MenuItem {
-            text: qsTr("Add to queue")
-            icon.source: "qrc:/icons/add_to_queue.svg"
-            onClicked: root.enqueueTrack(contextMenu.trackUrl)
-        }
-        MenuItem {
-            text: qsTr("Play next")
-            icon.source: "qrc:/icons/queue_play_next.svg"
-            onClicked: root.enqueueTrackNext(contextMenu.trackUrl)
+            MenuItem {
+                text: qsTr("Edit...")
+                icon.source: "qrc:/icons/edit_note.svg"
+                onClicked: root.editTrackMetadata(contextMenu.trackUrl)
+            }
+            MenuItem {
+                text: qsTr("Add to queue")
+                icon.source: "qrc:/icons/add_to_queue.svg"
+                onClicked: root.enqueueTrack(contextMenu.trackUrl)
+            }
+            MenuItem {
+                text: qsTr("Play next")
+                icon.source: "qrc:/icons/queue_play_next.svg"
+                onClicked: root.enqueueTrackNext(contextMenu.trackUrl)
+            }
+            onClosed: destroy()
         }
     }
 }

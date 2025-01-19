@@ -191,6 +191,7 @@ Page {
     Component {
         id: tracksListViewComponent
         ListView {
+            id: tracksListView
             model: tracksModel
             clip: true
             delegate: CustomItemDelegate {
@@ -208,47 +209,50 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     icon.source: "qrc:/icons/more_vert.svg"
                     onClicked: {
-                        trackContextMenu.trackUrl = model.url
-                        trackContextMenu.artist = model.artist
-                        trackContextMenu.album = model.album
-                        trackContextMenu.popup()
+                        const menu = trackContextMenuComponent.createObject(tracksListView,
+                                                                            {trackUrl: model.url, artist: model.artist, album: model.album})
+                        menu.popup()
                     }
                 }
             }
 
             ScrollIndicator.vertical: ScrollIndicator {}
 
-            Menu {
-                id: trackContextMenu
+            Component {
+                id: trackContextMenuComponent
+                Menu {
+                    id: trackContextMenu
 
-                property url trackUrl
-                property string artist
-                property string album
+                    property url trackUrl
+                    property string artist
+                    property string album
 
-                MenuItem {
-                    text: qsTr("Edit...")
-                    icon.source: "qrc:/icons/edit_note.svg"
-                    onClicked: root.editTrackMetadata(trackContextMenu.trackUrl)
-                }
-                MenuItem {
-                    text: qsTr("Add to queue")
-                    icon.source: "qrc:/icons/add_to_queue.svg"
-                    onClicked: root.enqueueTrack(trackContextMenu.trackUrl)
-                }
-                MenuItem {
-                    text: qsTr("Play next")
-                    icon.source: "qrc:/icons/queue_play_next.svg"
-                    onClicked: root.enqueueTrackNext(trackContextMenu.trackUrl)
-                }
-                MenuItem {
-                    text: qsTr("Visit Artist")
-                    icon.source: "qrc:/icons/artist.svg"
-                    onClicked: root.artistSelected(trackContextMenu.artist)
-                }
-                MenuItem {
-                    text: qsTr("Visit Album")
-                    icon.source: "qrc:/icons/album.svg"
-                    onClicked: root.albumSelected(trackContextMenu.album, trackContextMenu.artist)
+                    MenuItem {
+                        text: qsTr("Edit...")
+                        icon.source: "qrc:/icons/edit_note.svg"
+                        onClicked: root.editTrackMetadata(trackContextMenu.trackUrl)
+                    }
+                    MenuItem {
+                        text: qsTr("Add to queue")
+                        icon.source: "qrc:/icons/add_to_queue.svg"
+                        onClicked: root.enqueueTrack(trackContextMenu.trackUrl)
+                    }
+                    MenuItem {
+                        text: qsTr("Play next")
+                        icon.source: "qrc:/icons/queue_play_next.svg"
+                        onClicked: root.enqueueTrackNext(trackContextMenu.trackUrl)
+                    }
+                    MenuItem {
+                        text: qsTr("Visit Artist")
+                        icon.source: "qrc:/icons/artist.svg"
+                        onClicked: root.artistSelected(trackContextMenu.artist)
+                    }
+                    MenuItem {
+                        text: qsTr("Visit Album")
+                        icon.source: "qrc:/icons/album.svg"
+                        onClicked: root.albumSelected(trackContextMenu.album, trackContextMenu.artist)
+                    }
+                    onClosed: destroy()
                 }
             }
         }
