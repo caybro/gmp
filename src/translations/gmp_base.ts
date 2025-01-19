@@ -267,12 +267,12 @@
 <context>
     <name>MusicIndexer</name>
     <message>
-        <location filename="../musicindexer.cpp" line="108"/>
+        <location filename="../musicindexer.cpp" line="112"/>
         <source>Unknown album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../musicindexer.cpp" line="111"/>
+        <location filename="../musicindexer.cpp" line="115"/>
         <source>Unknown genre</source>
         <translation type="unfinished"></translation>
     </message>
@@ -331,75 +331,85 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../qml/Settings.qml" line="7"/>
+        <location filename="../qml/Settings.qml" line="13"/>
         <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Settings.qml" line="23"/>
+        <source>Music directory: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Settings.qml" line="26"/>
+        <source>Change...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="68"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="68"/>
         <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="230"/>
+        <location filename="../qml/main.qml" line="232"/>
         <source>Last Played</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="212"/>
+        <location filename="../qml/main.qml" line="214"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="221"/>
+        <location filename="../qml/main.qml" line="223"/>
         <source>Playlist (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="239"/>
+        <location filename="../qml/main.qml" line="242"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="319"/>
+        <location filename="../qml/main.qml" line="324"/>
         <source>P&amp;revious</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="324"/>
+        <location filename="../qml/main.qml" line="329"/>
         <source>&amp;Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="324"/>
+        <location filename="../qml/main.qml" line="329"/>
         <source>&amp;Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="334"/>
         <source>&amp;Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="339"/>
         <source>&amp;Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="343"/>
+        <location filename="../qml/main.qml" line="348"/>
         <source>&amp;Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="350"/>
+        <location filename="../qml/main.qml" line="355"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>

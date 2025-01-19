@@ -19,14 +19,20 @@ TagLib::String toTString(const QString &str)
   return {str.toUtf8().constData(), TagLib::String::UTF8};
 }
 
-QString fromTString(const TagLib::String &string) {
+QString fromTString(const TagLib::String &string)
+{
   return QString::fromStdString(string.to8Bit(true));
 }
+
+const auto kCfgMusicRootPaths = QStringLiteral("MusicRootPaths");
 } // namespace
 
 MusicIndexer::MusicIndexer(QObject *parent)
     : QObject{parent}
-{}
+{
+  setRootPaths(m_settings.value(kCfgMusicRootPaths, {QStandardPaths::standardLocations(QStandardPaths::MusicLocation)})
+                   .toStringList());
+}
 
 QStringList MusicIndexer::rootPaths() const
 {
@@ -35,19 +41,17 @@ QStringList MusicIndexer::rootPaths() const
 
 void MusicIndexer::setRootPaths(const QStringList &rootPaths)
 {
-  if (m_rootPaths == rootPaths)
+  QStringList tmpPaths; // potentially convert QList<QUrl> -> QStringList (urls -> local paths)
+  for (const auto &path : rootPaths) {
+    const auto u = QUrl::fromUserInput(path);
+    tmpPaths.append(u.toLocalFile());
+  }
+
+  if (m_rootPaths == tmpPaths)
     return;
 
-  m_rootPaths = rootPaths;
-  emit rootPathsChanged(m_rootPaths);
-}
-
-void MusicIndexer::addRootPath(const QString &rootPath)
-{
-  if (m_rootPaths.contains(rootPath))
-    return;
-
-  m_rootPaths.append(rootPath);
+  m_rootPaths = tmpPaths;
+  m_settings.setValue(kCfgMusicRootPaths, m_rootPaths);
   emit rootPathsChanged(m_rootPaths);
 }
 
@@ -78,12 +82,12 @@ void MusicIndexer::parse(bool incremental)
     m_db.clear();
 
   TagLib::FileRef f;
-  const auto nameFilters = {QStringLiteral("*.mp3"), QStringLiteral("*.ogg"), QStringLiteral("*.oga"), QStringLiteral("*.wma"),
-                            QStringLiteral("*.wav"), QStringLiteral("*.flac"), QStringLiteral("*.m4a"),
-                            QStringLiteral("*.aac")}; // FIXME find out dynamically
-  for (const auto &rootPath : qAsConst(m_rootPaths)) { // TODO watch paths for changes
-    QDirIterator it(rootPath, nameFilters,
-                    QDir::Files | QDir::NoDotAndDotDot | QDir::Readable, QDirIterator::Subdirectories);
+  const auto nameFilters = {QStringLiteral("*.mp3"), QStringLiteral("*.ogg"), QStringLiteral("*.oga"),
+                            QStringLiteral("*.wma"), QStringLiteral("*.wav"), QStringLiteral("*.flac"),
+                            QStringLiteral("*.m4a"), QStringLiteral("*.aac")}; // FIXME find out dynamically
+  for (const auto &rootPath : qAsConst(m_rootPaths)) {
+    QDirIterator it(rootPath, nameFilters, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable,
+                    QDirIterator::Subdirectories);
     while (it.hasNext()) {
       const QString filePath = it.next();
       //qDebug() << "Found audio file:" << filePath;
@@ -151,8 +155,7 @@ QList<QUrl> MusicIndexer::allTracks() const
   QList<QUrl> result;
   result.reserve(m_db.size());
 
-  std::transform(m_db.cbegin(), m_db.cend(), std::back_inserter(result),
-                 [](const auto &rec) { return rec.url; });
+  std::transform(m_db.cbegin(), m_db.cend(), std::back_inserter(result), [](const auto &rec) { return rec.url; });
 
   return result;
 }

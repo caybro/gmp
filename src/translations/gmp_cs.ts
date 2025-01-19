@@ -370,12 +370,12 @@
 <context>
     <name>MusicIndexer</name>
     <message>
-        <location filename="../musicindexer.cpp" line="108"/>
+        <location filename="../musicindexer.cpp" line="112"/>
         <source>Unknown album</source>
         <translation>Neznámé album</translation>
     </message>
     <message>
-        <location filename="../musicindexer.cpp" line="111"/>
+        <location filename="../musicindexer.cpp" line="115"/>
         <source>Unknown genre</source>
         <translation>Neznámý žánr</translation>
     </message>
@@ -449,9 +449,19 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../qml/Settings.qml" line="7"/>
+        <location filename="../qml/Settings.qml" line="13"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
+    </message>
+    <message>
+        <location filename="../qml/Settings.qml" line="23"/>
+        <source>Music directory: %1</source>
+        <translation>Adresář s hudbou: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/Settings.qml" line="26"/>
+        <source>Change...</source>
+        <translation>Změnit...</translation>
     </message>
 </context>
 <context>
@@ -461,12 +471,12 @@
         <translation type="vanished">Právě se přehrává / Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="68"/>
         <source>Back</source>
         <translation>Zpět</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="66"/>
+        <location filename="../qml/main.qml" line="68"/>
         <source>Menu</source>
         <translation>Nabídka</translation>
     </message>
@@ -519,57 +529,57 @@
         <translation type="vanished">Seznam skladeb</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="230"/>
+        <location filename="../qml/main.qml" line="232"/>
         <source>Last Played</source>
         <translation>Naposledy přehráno</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="212"/>
+        <location filename="../qml/main.qml" line="214"/>
         <source>Library</source>
         <translation>Knihovna</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="221"/>
+        <location filename="../qml/main.qml" line="223"/>
         <source>Playlist (%1)</source>
         <translation>Playlist (%1)</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="239"/>
+        <location filename="../qml/main.qml" line="242"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="319"/>
+        <location filename="../qml/main.qml" line="324"/>
         <source>P&amp;revious</source>
         <translation>Před&amp;chozí</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="324"/>
+        <location filename="../qml/main.qml" line="329"/>
         <source>&amp;Pause</source>
         <translation>&amp;Pauza</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="324"/>
+        <location filename="../qml/main.qml" line="329"/>
         <source>&amp;Play</source>
         <translation>&amp;Přehrát</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="334"/>
         <source>&amp;Next</source>
         <translation>&amp;Další</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="339"/>
         <source>&amp;Show</source>
         <translation>&amp;Zobrazit</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="343"/>
+        <location filename="../qml/main.qml" line="348"/>
         <source>&amp;Hide</source>
         <translation>&amp;Skrýt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="350"/>
+        <location filename="../qml/main.qml" line="355"/>
         <source>&amp;Quit</source>
         <translation>U&amp;končit</translation>
     </message>

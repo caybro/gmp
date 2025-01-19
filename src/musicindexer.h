@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QUrl>
 
@@ -60,12 +61,13 @@ class MusicIndexer : public QObject
  private:
   QStringList rootPaths() const;
   void setRootPaths(const QStringList &rootPaths);
-  void addRootPath(const QString &rootPath);
 
   bool isIndexing() const;
   void setIndexing(bool indexing);
 
-  QStringList m_rootPaths{QStandardPaths::standardLocations(QStandardPaths::MusicLocation)};
+  QSettings m_settings;
+
+  QStringList m_rootPaths;
   bool m_indexing{false};
 
   MusicDatabase m_db;

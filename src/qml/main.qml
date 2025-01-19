@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia 5.15
 import QtQuick.VirtualKeyboard 2.15
@@ -48,10 +47,13 @@ ApplicationWindow {
     }
 
     Settings {
+        id: settings
         property alias x: window.x
         property alias y: window.y
         property alias width: window.width
         property alias height: window.height
+
+        property real volume: Player.volume
     }
 
     header: ToolBar {
@@ -229,6 +231,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 text: qsTr("Last Played")
                 icon.source: "qrc:/icons/history.svg"
+                visible: false // TODO finish
                 onClicked: {
                     stackView.replace(null, "Last.qml"); // TODO implement me
                     drawer.close();
@@ -238,8 +241,9 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 text: qsTr("Settings")
                 icon.source: "qrc:/icons/settings.svg"
+                //visible: false // TODO finish
                 onClicked: {
-                    stackView.replace(null, "Settings.qml");
+                    stackView.replace(null, "Settings.qml", {settings});
                     drawer.close();
                 }
             }
@@ -249,7 +253,8 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 horizontalAlignment: Label.AlignHCenter
                 elide: Label.ElideMiddle
-                text: "%1 · %2 · (c) %3 2020-2023".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
+                text: "%1 · %2 · (c) %3 2020—%4".arg(Qt.application.name).arg(Qt.application.version).arg(Qt.application.organization)
+                                                .arg(new Date().getFullYear())
             }
         }
     }
